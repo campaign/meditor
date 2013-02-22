@@ -474,3 +474,83 @@
         }
     });
 })(Zepto);
+
+Zepto.fn.iscroll = function(opt) {
+    var me = this.css('overflow', 'hidden')[0],
+        scroller = me.children[0],
+        M = Math, scrolling = false, top = 0, containerH, scrollerH, bottom, touch, stamp, startX, startY, isVertical, isTested, movedY, baseY, nowY, stopY;
+    me.addEventListener('touchstart', function(e) {
+        if(scrolling) {
+            e.preventDefault();
+            stopY = parseInt(getComputedStyle(scroller, null)['-webkit-transform'].substr(22));
+            if(stopY > bottom && stopY < 0) {
+                scroller.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(0,' + stopY + 'px,0)';
+                top = stopY;
+                scrolling = false;
+            }
+        }
+        touch = e.touches[0], stamp = Date.now(), startX = touch.pageX, startY = touch.pageY, isVertical = isTested = false, movedY = 0, baseY = top;
+    });
+    me.addEventListener('touchmove', function(e) {
+        touch = e.touches[0];
+        if(!isTested) {
+            isVertical = M.abs(touch.pageX - startX) < M.abs(touch.pageY - startY);
+            isVertical && (scroller.style.webkitTransition = '0ms', scrolling = false);
+            isTested = true;
+        }
+        if(isVertical) {
+            e.preventDefault();
+            opt && opt.stopPropagation && e.stopPropagation();
+            movedY = touch.pageY - startY;
+            nowY = top + movedY;
+            nowY = nowY > 0 ? 0.3 * nowY : nowY < bottom ? bottom - 0.3 * (bottom - nowY) : nowY;
+            (e.timeStamp - stamp > 300) && (stamp = e.timeStamp, baseY = nowY);
+            scroller.style.webkitTransform = 'translate3d(0,' + nowY + 'px, 0)';
+        }
+    });
+    me.addEventListener('touchend', touchEnd);
+    me.addEventListener('touchcancel', touchEnd);
+    function touchEnd() {
+        if(isVertical) {
+            top += movedY;
+            var deltaY = top - baseY, time = Date.now() - stamp;
+            if(top < bottom) roll(300, bottom);
+            else if(top > 0) roll(300, 0);
+            else{
+                var t = -top,
+                    b = top - bottom,
+                    v = M.abs(deltaY) / time,
+                    dist = v * v / 0.0012;
+                if (deltaY > 0 && dist > t) {
+                    t += containerH * dist * 0.0001 / v;
+                    v *= t / dist;
+                    dist = t;
+                } else if (deltaY < 0 && dist > b) {
+                    b += containerH * dist * 0.0001 / v;
+                    v *= b / dist;
+                    dist = b;
+                }
+                roll(M.round(v / 0.0006), dist * (deltaY < 0 ? -1 : 1) + top);
+            }
+        }
+    }
+    function roll(time, to) {
+        scrolling = true;
+        top = to;
+        scroller.style.cssText += '-webkit-transition:' + time + 'ms cubic-bezier(0.33,0.66,0.66,1);-webkit-transform:translate3d(0,' + to + 'px,0)';
+    }
+    me.addEventListener('webkitTransitionEnd', function() {
+        top > 0 ? roll(300, 0) : top < bottom ? roll(300, bottom) : scrolling = false;
+    });
+    (function(handler) {
+        containerH = me.offsetHeight;
+        scrollerH = scroller.offsetHeight;
+        bottom = M.min(0, containerH - scrollerH);
+        top < bottom && roll(300, bottom);
+        if(handler) {
+            window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', arguments.callee);
+            me[handler] = arguments.callee; // 调用：$('#ID')[0]._refresh() ||  widget.root()._refresh();
+        }
+    }('_refresh'));
+    return this;
+};
