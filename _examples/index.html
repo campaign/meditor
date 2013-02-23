@@ -4,24 +4,38 @@
     <title>完整demo</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <script src="../zepto.js"></script>
-    <script src="../hammer.js"></script>
-    <script src="../zepto.hammer.js"></script>
+    <script src="../_src/zepto.js"></script>
+    <script src="../_src/hammer.js"></script>
+    <script src="../_src/zepto.hammer.js"></script>
     <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
-
-    <!--使用版-->
-    <!--<script type="text/javascript" charset="utf-8" src="../editor_all.js"></script>-->
-
-    <!--开发版-->
     <script type="text/javascript" charset="utf-8" src="editor_api.js">
     </script>
 </head>
 <body>
 <div>
-    <script  id="editor" type="text/plain">这里可以书写，编辑器的初始内容</script>
+    <br/>
+    <br/>
+    <div  id="editor" style="border:1px solid #000;width:400px;float:left">这里可以书写，编辑器的初始内容</div>
+    <br/>
+    <br/>
+    <button id="bold" >bold</button>
+    <button id="left">《</button>
+    <button id="right">》</button>
 </div>
 <script>
-
+    var me = new ME.Editor({
+        height:300
+    });
+    me.render('editor');
+    $('#bold').click(function(){
+        me.execCommand('bold')
+    })
+    $('#left').click(function(){
+        me.execCommand('moverange','left')
+    })
+    $('#right').click(function(){
+        me.execCommand('moverange','right')
+    })
 </script>
 </body>
 </html>

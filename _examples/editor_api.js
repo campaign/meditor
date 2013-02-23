@@ -11,11 +11,8 @@
             'core/Range.js',
             'core/Selection.js',
             'core/Editor.js',
-            'core/ajax.js',
-            'core/filterword.js',
-            'core/node.js',
-            'core/htmlparser.js',
-            'core/filternode.js'
+            'plugins/moverange.js',
+            'plugins/basestyle.js'
 
         ],
         baseURL = '../_src/';
