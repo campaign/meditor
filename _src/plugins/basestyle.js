@@ -8,7 +8,7 @@
  * @name baidu.editor.execCommands
  * @param    {String}    cmdName    bold加粗。italic斜体。subscript上标。superscript下标。
 */
-UE.plugins['basestyle'] = function(){
+ME.plugins['basestyle'] = function(){
 
     var basestyles = {
             'bold':['strong','b'],
@@ -20,23 +20,8 @@ UE.plugins['basestyle'] = function(){
             return domUtils.filterNodeList(editor.selection.getStartElementPath(),tagNames);
         },
         me = this;
-    //添加快捷键
-    me.addshortcutkey({
-        "Bold" : "ctrl+66",//^B
-        "Italic" : "ctrl+73", //^I
-        "Underline" : "ctrl+85"//^U
-    });
-    me.addInputRule(function(root){
-        utils.each(root.getNodesByTagName('b i'),function(node){
-            switch (node.tagName){
-                case 'b':
-                    node.tagName = 'strong';
-                    break;
-                case 'i':
-                    node.tagName = 'em';
-            }
-        });
-    });
+
+
     for ( var style in basestyles ) {
         (function( cmd, tagNames ) {
             me.commands[cmd] = {

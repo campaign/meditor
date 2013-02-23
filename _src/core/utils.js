@@ -5,7 +5,7 @@
  * @desc UEditor封装使用的静态工具函数
  * @import editor.js
  */
-var utils = UE.utils = {
+var utils = ME.utils = {
     /**
      * 遍历数组，对象，nodeList
      * @name each
@@ -491,27 +491,13 @@ var utils = UE.utils = {
                 doReady(doc);
             }else{
                 doc.isReady && doReady(doc);
-                if (browser.ie) {
-                    (function () {
-                        if (doc.isReady) return;
-                        try {
-                            doc.documentElement.doScroll("left");
-                        } catch (error) {
-                            setTimeout(arguments.callee, 0);
-                            return;
-                        }
-                        doReady(doc);
-                    })();
-                    win.attachEvent('onload', function(){
-                        doReady(doc)
-                    });
-                } else {
-                    doc.addEventListener("DOMContentLoaded", function () {
-                        doc.removeEventListener("DOMContentLoaded", arguments.callee, false);
-                        doReady(doc);
-                    }, false);
-                    win.addEventListener('load', function(){doReady(doc)}, false);
-                }
+
+                doc.addEventListener("DOMContentLoaded", function () {
+                    doc.removeEventListener("DOMContentLoaded", arguments.callee, false);
+                    doReady(doc);
+                }, false);
+                win.addEventListener('load', function(){doReady(doc)}, false);
+
             }
 
         }
@@ -524,29 +510,7 @@ var utils = UE.utils = {
      * @grammar UE.utils.cssRule('body') =>样式的字符串  //取得key值为body的样式的内容,如果没有找到key值先关的样式将返回空，例如刚才那个背景颜色，将返回 body{background:#ccc}
      * @grammar UE.utils.cssRule('body','') =>null //清空给定的key值的背景颜色
      */
-    cssRule : browser.ie ? function(key,style,doc){
-            var indexList,index;
-            doc = doc || document;
-            if(doc.indexList){
-                indexList = doc.indexList;
-            }else{
-                indexList = doc.indexList =  {};
-            }
-            var sheetStyle;
-            if(!indexList[key]){
-                if(style === undefined){
-                    return ''
-                }
-                sheetStyle = doc.createStyleSheet('',index = doc.styleSheets.length);
-                indexList[key] = index;
-            }else{
-                sheetStyle = doc.styleSheets[indexList[key]];
-            }
-            if(style === undefined){
-                return sheetStyle.cssText
-            }
-            sheetStyle.cssText = style || ''
-        }:function(key,style,doc){
+    cssRule : function(key,style,doc){
             doc = doc || document;
             var head = doc.getElementsByTagName('head')[0],node;
             if(!(node = doc.getElementById(key))){
@@ -568,28 +532,9 @@ var utils = UE.utils = {
         }
 
 };
-/**
- * 判断str是否为字符串
- * @name isString
- * @grammar UE.utils.isString(str) => true|false
- */
-/**
- * 判断array是否为数组
- * @name isArray
- * @grammar UE.utils.isArray(obj) => true|false
- */
-/**
- * 判断obj对象是否为方法
- * @name isFunction
- * @grammar UE.utils.isFunction(obj)  => true|false
- */
-/**
- * 判断obj对象是否为数字
- * @name isNumber
- * @grammar UE.utils.isNumber(obj)  => true|false
- */
+
 utils.each(['String','Function','Array','Number','RegExp','Object'],function(v){
-    UE.utils['is' + v] = function(obj){
+    ME.utils['is' + v] = function(obj){
         return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
     }
 });

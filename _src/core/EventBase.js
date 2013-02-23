@@ -6,7 +6,7 @@
  * @desc UE采用的事件基类，继承此类的对应类将获取addListener,removeListener,fireEvent方法。
  * 在UE中，Editor以及所有ui实例都继承了该类，故可以在对应的ui对象以及editor对象上使用上述方法。
  */
-var EventBase = UE.EventBase = function () {};
+var EventBase = ME.EventBase = function () {};
 
 EventBase.prototype = {
     /**

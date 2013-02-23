@@ -6,7 +6,7 @@
  * @constructor
  * @namespace dtd
  */
-var dtd = dom.dtd = (function() {
+var dtd = ME.dom.dtd = (function() {
     function _( s ) {
         for (var k in s) {
             s[k.toUpperCase()] = s[k];
