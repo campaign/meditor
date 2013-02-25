@@ -90,6 +90,7 @@ var QUnit = {
 		}
 
 		synchronize(function() {
+			config.stopCount = 0;
 			QUnit.testStart( testName );
 
 			testEnvironment = extend({
@@ -121,7 +122,13 @@ var QUnit = {
 			}
 
 			try {
-				callback.call(testEnvironment);
+				setTimeout(function() {
+                    callback.call(testEnvironment);
+                    if (config.stopCount == 1) {
+                        start();
+                    }
+                }, 100);
+				
 			} catch(e) {
 				fail("Test " + name + " died, exception and test follows", e, callback);
 				QUnit.ok( false, "Died on test #" + (config.assertions.length + 1) + ": " + e.message );
@@ -318,12 +325,14 @@ var QUnit = {
 			}, 13);
 		} else {
 			config.blocking = false;
+			config.stopCount--;
 			process();
 		}
 	},
 	
 	stop: function(timeout) {
 		config.blocking = true;
+		config.stopCount++;
 
 		if ( timeout && window.setTimeout ) {
 			config.timeout = window.setTimeout(function() {
@@ -394,7 +403,9 @@ var config = {
 	queue: [],
 
 	// block until document ready
-	blocking: true
+	blocking: true,
+	
+	stopCount :0
 };
 //failed detail for each test done
 var failedDetail = '';

@@ -21,57 +21,50 @@ if(!ConfigTest::$DEBUG){
  * 此外，本脚本支持引入一个包所有文件（其实也就是一个目录下的所有js文件，**不递归**）
  * IE下，get请求不能超过2083字节，请注意。
  */
-$cov = array_key_exists('cov', $_GET) ? $_GET['cov'] : false;
-$f = explode(',', $_GET['f']);//explode() 函数把字符串分割为数组,此处$f=baidu.ajax.form
-$e = (array_key_exists('e', $_GET) && $_GET['e']!='') ? explode(",", $_GET['e']) : array();
-
-require_once dirname(__FILE__).'/analysis.php';
-$analysis = new Analysis();
-$IGNORE = array();
-foreach ($e as $d){
-    $d = preg_replace('/\s*/','',$d).'.js'; //jiangshuguang修改
-    if(ConfigTest::$DEBUG)var_dump($d);
-    $IGNORE = array_merge($IGNORE, array_keys($analysis->get_import_srcs($d)));
-}
-if(ConfigTest::$DEBUG)var_dump($IGNORE);
-
-function importSrc($d, $cov=false){
-    global $IGNORE;
-    global $analysis; //jiangshuguang添加
-    foreach($IGNORE as $idx=>$domain)
-        if($domain == $d)
-            return "";
-    array_push($IGNORE, $d);
-//	$ccnt = Analysis::get_src_cnt($d, $cov);
-//  return $ccnt['c'];
-//	return preg_replace("/\/\/\/import\s+([\w\-\$]+(\.[\w\-\$]+)*);?/ies", "importSrc('\\1')", $ccnt['c']);
-    $ccnt = $analysis->get_import_srcs($d); //jiangshuguang修改 返回某个js所有的依赖的js
-    return implode($ccnt,";");
+$cov = array_key_exists('cov', $_GET) ? true : false;
+$import = 'import.js';
+function importSrc($cov){
+	global $import;
+	$source = '';
+	if(file_exists(ConfigTest::$testdir.$import)){
+		$cnt = file_get_contents(ConfigTest::$testdir.$import);
+	}
+	if($cnt == ''){
+		if(ConfigTest::$DEBUG)
+		print "fail read file : ".ConfigTest::$testdir.$import;
+		return '';
+	}
+	$is = array();
+	//正则匹配，提取所有(///import xxx;)中的xxx
+	preg_match_all('/\/\/\/import\s+([^;]+);?/ies', $cnt, $is, PREG_PATTERN_ORDER);
+	foreach($is[1] as $i) {
+//        $dd = $i;
+		//$path = join('/', explode('.', $i)).'.js';
+		$path = $i.'.js'; //为了支持xx.xx.js类型的文件名而修改 田丽丽
+		if($cov){
+			$covpath = ConfigTest::$covdir.$path;
+			if(file_exists($covpath)){
+				if(ConfigTest::$DEBUG) var_dump($covpath);
+                $_source=file_get_contents($covpath);
+                $source.= $_source;
+			}
+			else if(ConfigTest::$DEBUG)print "fail read file : ".ConfigTest::$covdir.$path;
+		}
+		else {
+		    foreach(ConfigTest::$srcdir as $i=>$d){
+//                if(preg_match("/editorui/",$dd)){
+//                    echo "*************".file_get_contents($d.$path)."************";
+//                }
+			    if(file_exists($d.$path)){
+					$source.= file_get_contents($d.$path);
+					$source.="\n";//读取文件内容必须加个回车
+					break;
+		        }
+		    }
+		}
+	}
+	return $source;
 }
 //update by bell 2011-03-25, 更新覆盖率相关逻辑
-if(!$cov){
-    $cnt = "";
-    foreach($f as $d){
-        $d = preg_replace('/\s*/','',$d).'.js'; //jiangshuguang修改
-        $cnt.=";".importSrc($d, $cov);
-    }
-    echo $cnt;
-}else{
-    $IMPORT_LIST = array();
-    foreach($f as $d){
-        if(ConfigTest::$DEBUG)var_dump($d);
-        $d = preg_replace('/\s*/','',$d).'.js'; //jiangshuguang修改
-        $IMPORT_LIST = array_merge($IMPORT_LIST, array_keys($analysis->get_import_srcs($d)));
-    }
-    if(ConfigTest::$DEBUG)
-        var_dump('after analysis', $IMPORT_LIST);
-    else
-        foreach($IMPORT_LIST as $d) {
-//            if(array_search($d, $IGNORE)) //jiangshuguang 这种判断方式有问题，假如第一个元素匹配，返回的key为0
-            if(in_array($d, $IGNORE)) //jiangshuguang修改
-                continue;
-            $c = Analysis::get_src_cnt($d);
-            echo ";".$c['cc']."\n";
-        }
-}
-
+echo importSrc($cov);
+?>
