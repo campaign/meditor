@@ -42,7 +42,7 @@
     background: rgba(238, 238, 238, 1);
     border-radius: 2px;
     padding: 0.3em 0.3em 0.2em;
-    margin-right: 0.2em;
+    margin: 0.2em 0.2em 0 0;
     cursor: pointer;
     -webkit-user-select: none;
 }
