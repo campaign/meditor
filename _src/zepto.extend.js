@@ -476,7 +476,9 @@
 })(Zepto);
 
 Zepto.fn.iscroll = function(opt) {
-    var me = this.css('overflow', 'hidden')[0],
+    if(this.attr('_iscroll-initialized')) return;
+    var that = this,
+        me = this.attr('_iscroll-initialized',true).css({'overflow': 'hidden','-webkit-user-select': 'none'})[0],
         scroller = me.children[0],
         M = Math, scrolling = false, top = 0, containerH, scrollerH, bottom, touch, stamp, startX, startY, isVertical, isTested, movedY, baseY, nowY, stopY;
     me.addEventListener('touchstart', function(e) {
@@ -549,9 +551,9 @@ Zepto.fn.iscroll = function(opt) {
         top < bottom && roll(300, bottom);
         if(handler) {
             window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', arguments.callee);
-            me[handler] = arguments.callee; // 调用：$('#ID')[0]._refresh() ||  widget.root()._refresh();
+            me[handler] = that[handler] = arguments.callee;
         }
-    }('_refresh'));
+    }('refresh'));
     return this;
 };
 
