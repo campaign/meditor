@@ -191,7 +191,7 @@
                         //设置段落间距
                         'p{margin:5px 0;}'
                         + ( options.initialStyle || '' ) +
-                        '</style></head><body class="view"></body>';
+                        '</style></head><body class="view"  spellcheck="false" contentEditable="true" autocapitalize="none" autocorrect="off" autocomplete="off" ></body>';
                 if (options.customDomain && document.domain != location.hostname) {
                     html += '<script>window.parent.ME.instants[\'ueditorInstant' + me.uid + '\']._setup(document);</script></html>';
                     container.appendChild(domUtils.createElement(document, 'iframe', {
@@ -226,8 +226,10 @@
                 options = me.options;
 
 
-            doc.body.contentEditable = true;
-            doc.body.spellcheck = false;
+//            doc.body.contentEditable = true;
+//            doc.body.spellcheck = false;
+//            doc.body.autocorrect="off";
+//            doc.body.autocapitalize="off";
 
             me.document = doc;
             me.window = doc.defaultView || doc.parentWindow;
@@ -235,7 +237,7 @@
             me.body = doc.body;
             //设置编辑器最小高度
             me.setHeight(options.height);
-            me.selection = new ME.dom.Selection(doc);
+            me.selection = new ME.Selection(doc);
 
             this._initEvents();
             if (options.initialContent) {
@@ -494,20 +496,20 @@
          * @ignore
          */
         _initEvents:function () {
-            var me = this,
-                doc = me.document,
-                win = me.window;
-            me._proxyDomEvent = utils.bind(me._proxyDomEvent, me);
-            domUtils.on(doc, ['click', 'contextmenu', 'mousedown', 'keydown', 'keyup', 'keypress', 'mouseup', 'mouseover', 'mouseout', 'selectstart'], me._proxyDomEvent);
-            domUtils.on(win, ['focus', 'blur'], me._proxyDomEvent);
-            domUtils.on(doc, ['mouseup', 'keydown'], function (evt) {
-                //特殊键不触发selectionchange
-                if (evt.type == 'keydown' && (evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)) {
-                    return;
-                }
-                if (evt.button == 2)return;
-                me._selectionChange(250, evt);
-            });
+//            var me = this,
+//                doc = me.document,
+//                win = me.window;
+//            me._proxyDomEvent = utils.bind(me._proxyDomEvent, me);
+//            domUtils.on(doc, ['click', 'mousedown', 'keydown', 'keyup', 'keypress', 'mouseup', 'mouseover', 'mouseout', 'selectstart'], me._proxyDomEvent);
+//            domUtils.on(win, ['focus', 'blur'], me._proxyDomEvent);
+//            domUtils.on(doc, ['mouseup', 'keydown'], function (evt) {
+//                //特殊键不触发selectionchange
+//                if (evt.type == 'keydown' && (evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)) {
+//                    return;
+//                }
+//                if (evt.button == 2)return;
+//                me._selectionChange(250, evt);
+//            });
 
 
         },

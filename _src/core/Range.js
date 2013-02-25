@@ -1,17 +1,3 @@
-///import editor.js
-///import core/utils.js
-///import core/browser.js
-///import core/dom/dom.js
-///import core/dom/dtd.js
-///import core/dom/domUtils.js
-/**
- * @file
- * @name UE.dom.Range
- * @anthor zhanyi
- * @short Range
- * @import meditor.js,core/utils.js,core/browser.js,core/dom/domUtils.js,core/dom/dtd.js
- * @desc Range范围实现类，本类是UEditor底层核心类，统一w3cRange和ieRange之间的差异，包括接口和属性
- */
 (function () {
     var guid = 0,
         fillChar = domUtils.fillChar,
@@ -163,7 +149,7 @@
      * - ***document*** 跟range关联的document对象
      * - ***collapsed*** 是否是闭合状态
      */
-    var Range = ME.dom.Range = function (document) {
+    var Range = ME.Range = function (document) {
         var me = this;
         me.startContainer =
             me.startOffset =
@@ -1017,22 +1003,7 @@
             }
             return this;
         },
-        /**
-         * 滚动条跳到当然range开始的位置
-         * @name scrollToView
-         * @grammar range.scrollToView([win,offset]) => Range //针对window对象，若不指定，将以编辑区域的窗口为准,offset偏移量
-         */
-        scrollToView:function (win, offset) {
-            win = win ? window : domUtils.getWindow(this.document);
-            var me = this,
-                span = me.document.createElement('span');
-            //trace:717
-            span.innerHTML = '&nbsp;';
-            me.cloneRange().insertNode(span);
-            domUtils.scrollToView(span, win, offset);
-            domUtils.remove(span);
-            return me;
-        },
+
         inFillChar : function(){
             var start = this.startContainer;
             if(this.collapsed && start.nodeType == 3
@@ -1135,16 +1106,6 @@
             getNode(addr.startAddress,true);
             !ignoreEnd && addr.endAddress &&  getNode(addr.endAddress);
             return me;
-        },
-        equals : function(rng){
-            for(var p in this){
-                if(this.hasOwnProperty(p)){
-                    if(this[p] !== rng[p])
-                        return false
-                }
-            }
-            return true;
-
         }
     };
 })();

@@ -9,7 +9,7 @@
  */
 (function () {
 
-    var Selection = ME.dom.Selection = function ( doc ) {
+    var Selection = ME.Selection = function ( doc ) {
         this.document = doc;
     };
 
@@ -101,7 +101,7 @@
             if ( me._cachedRange != null ) {
                 return this._cachedRange;
             }
-            var range = new ME.dom.Range( me.document );
+            var range = new ME.Range( me.document );
 
             var sel = me.getNative();
             if ( sel && sel.rangeCount ) {

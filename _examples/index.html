@@ -36,6 +36,8 @@
     $('#right').click(function(){
         me.execCommand('moverange','right')
     })
+    document.body.addEventListener('touchstart',function(){},false)
+    me.body.addEventListener('touchend',function(e){me.selection.getRange().select()},false)
 </script>
 </body>
 </html>

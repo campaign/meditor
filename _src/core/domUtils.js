@@ -31,7 +31,7 @@ var attrFix = {
         'table-row' , 'table-column-group' , 'table-column' ,
         'table-cell' , 'table-caption'
     ]);
-var domUtils = ME.dom.domUtils = {
+var domUtils = ME.domUtils = {
     //节点常量
     NODE_ELEMENT:1,
     NODE_DOCUMENT:9,
