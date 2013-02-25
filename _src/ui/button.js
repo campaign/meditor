@@ -1,14 +1,14 @@
 (function($, ui){
     ui.define('button', {
         _options: {
-            key: '',
+            name: '',
             title: '按钮',
             diabled: false,
             highlight: false
         },
 
         _create: function(){
-            var opt = this._options, key = opt.key;
+            var opt = this._options, key = opt.name;
             this.root($('<div class="mui-button'+(key?' mui-button-'+key:'')+'" title="'+opt.title+'">' +
                 '<span class="icon"></span>'+
                 '</div>'));
