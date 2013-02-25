@@ -86,7 +86,9 @@ baidu.meditor = baidu.meditor || {};
          * $.ui.widgetName(options);
          * </code>
          */
-        _create: function() {},
+        _create: function() {
+            return this.root($('<div></div>'));
+        },
 
         _init: function () {},
 
@@ -95,14 +97,14 @@ baidu.meditor = baidu.meditor || {};
         /**
          * @name root
          * @grammar root() ⇒ value
-         * @grammar root(el) ⇒ value
+         * @grammar root(el) ⇒ self
          * @desc 设置或者获取根节点
          * @example
          * $('a#btn').button({label: '按钮'});
          * console.log($('a#btn').button('root'));// => a#btn
          */
         root: function(el) {
-            return this._el = el || this._el;
+            return $.isUndefined(el)? this._el: (this._el = el, this);
         },
 
         /**
@@ -112,7 +114,7 @@ baidu.meditor = baidu.meditor || {};
          * @desc 设置或者获取组件id
          */
         id: function(id) {
-            return this._id = id || this._id;
+            return $.isUndefined(id)? this._id: (this._id = id, this);
         },
 
         /**
@@ -123,8 +125,8 @@ baidu.meditor = baidu.meditor || {};
          */
         option: function(key, val) {
             var _options = this._options;
-            if ($.isObject(key)) return $.extend(_options, key);
-            else return !$.isUndefined(val) ? _options[key] = val : _options[key];
+            if ($.isObject(key)) return ($.extend(_options, key), this);
+            else return $.isUndefined(val) ? _options[key] : (_options[key] = val, this);
         },
 
         /**
@@ -133,12 +135,10 @@ baidu.meditor = baidu.meditor || {};
          * @desc 注销组件
          */
         destroy: function() {
-            var That = this,$el;
-
-            $el = this.trigger('destroy').off().root();
-            $el.find('*').off();
+            var That = this;
+            this.trigger('destroy');
             this.__proto__ = null;
-            $.each(this, function(key, val) {
+            $.each(this, function(key) {
                 delete That[key];
             });
         },
@@ -172,7 +172,7 @@ baidu.meditor = baidu.meditor || {};
          */
         trigger: function(event, data) {
             event = $.isString(event) ? $.Event(event) : event;
-            var onEvent = this._options[event.type],result;
+            var onEvent = this._options[event.type], result;
             if( onEvent && $.isFunction(onEvent) ){
                 event.data = data;
                 result = onEvent.apply(this, [event].concat(data));
