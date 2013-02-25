@@ -5,13 +5,15 @@
         _options: {
             node:       null,
             renderFn:   null,
-            height:     300,
+            height:     150,
             width:      200,
-            zIndex:     0,
             unCount:    false,
             _isShow:    false,
             _isClicked: false
         },
+        _allCombox: [],
+        _inited: false,
+        _needCloseAll: true,
 
         _create: function () {
             var me = this,
@@ -29,6 +31,7 @@
         _init: function () {
             var me = this,
                 opt = me._options,
+                proto = me.__proto__,
                 root = me.root(),
                 highLightCls = 'meditor-ui-combox-highlight';
 
@@ -41,21 +44,19 @@
 
             //autohide
             root.on('tap', function (e) {
-                opt._isClicked = true;
+                proto._needCloseAll = false;
+                me._closeOthers();
                 var li = $(e.target).closest('li');
                 me.trigger('itemClick', [li.index(), li.children().attr('value')]);
-            });
-            $(document).on('tap', function () {
-                if (!opt._isClicked) {
-                    me.hide();
-                }
-                opt._isClicked = false;
-            });
 
-            //公共索引
-            opt.unCount || (me.__proto__._allCombox = me.__proto__._allCombox || []).push(me);
-            //console.log(this.__proto__);
-
+            });
+            if(!proto._inited) {
+                $(document).on('tap', function () {
+                    proto._needCloseAll && me.closeAll();
+                    proto._needCloseAll = true;
+                });
+                proto._inited = true;
+            }
             //缓存查询
             var items = root.find('li'),
                 children = items.children();
@@ -81,18 +82,25 @@
 
         _closeOthers: function () {
             var me = this,
-                allCombox = me.__proto__._allCombox;
-            allCombox.forEach(function() {
-                me._options.zIndex > this._options.zindex || this.hide();
-            });
+                allCombox = me._allCombox,
+                item;
+            while(item = allCombox[allCombox.length - 1]){
+                 if(item._options.showTime > me._options.showTime) {
+                     item.hide();
+                     allCombox.pop();
+                 } else break;
+            }
         },
 
         closeAll: function() {
             var me = this,
-                allCombox = me.__proto__._allCombox;
-            allCombox.forEach(function() {
-                this.hide();
+                proto = me.__proto__,
+                allCombox = proto._allCombox;
+            allCombox.forEach(function(item) {
+                item.hide();
             });
+            proto._allCombox = [];
+            return me;
         },
 
         select: function (index, _needed) {
@@ -127,8 +135,12 @@
         },
 
         show: function () {
-            var me = this;
+            var me = this,
+                opt = me._options;
             me._fitSize().root().show().iscroll();
+            //公共索引
+            me.option('showTime', Date.now());
+            opt.unCount || me._allCombox.push(me);
             return me;
         },
 
