@@ -1,17 +1,3 @@
-///import editor.js
-///import core/utils.js
-///import core/browser.js
-///import core/dom/dom.js
-///import core/dom/dtd.js
-///import core/dom/domUtils.js
-/**
- * @file
- * @name UE.dom.Range
- * @anthor zhanyi
- * @short Range
- * @import editor.js,core/utils.js,core/browser.js,core/dom/domUtils.js,core/dom/dtd.js
- * @desc Range范围实现类，本类是UEditor底层核心类，统一w3cRange和ieRange之间的差异，包括接口和属性
- */
 (function () {
     var guid = 0,
         fillChar = domUtils.fillChar,
@@ -163,7 +149,7 @@
      * - ***document*** 跟range关联的document对象
      * - ***collapsed*** 是否是闭合状态
      */
-    var Range = dom.Range = function (document) {
+    var Range = ME.Range = function (document) {
         var me = this;
         me.startContainer =
             me.startOffset =
@@ -184,9 +170,7 @@
                 if (!fillData.nodeValue.replace(fillCharReg, '').length) {
                     var tmpNode = fillData.parentNode;
                     domUtils.remove(fillData);
-                    while (tmpNode && domUtils.isEmptyInlineElement(tmpNode) &&
-                        //safari的contains有bug
-                        (browser.safari ? !(domUtils.getPosition(tmpNode,excludeNode) & domUtils.POSITION_CONTAINS) : !tmpNode.contains(excludeNode))
+                    while (tmpNode && domUtils.isEmptyInlineElement(tmpNode) && !tmpNode.contains(excludeNode)
                         ) {
                         fillData = tmpNode.parentNode;
                         domUtils.remove(tmpNode);
@@ -245,12 +229,10 @@
             if (!this.collapsed) {
                 execContentsAction(this, 1);
             }
-            if (browser.webkit) {
-                txt = this.startContainer;
-                if (txt.nodeType == 3 && !txt.nodeValue.length) {
-                    this.setStartBefore(txt).collapse(true);
-                    domUtils.remove(txt);
-                }
+            txt = this.startContainer;
+            if (txt.nodeType == 3 && !txt.nodeValue.length) {
+                this.setStartBefore(txt).collapse(true);
+                domUtils.remove(txt);
             }
             return this;
         },
@@ -961,56 +943,7 @@
          * @name select
          * @grammar range.select();  => Range
          */
-        select:browser.ie ? function (noFillData, textRange) {
-            var nativeRange;
-            if (!this.collapsed)
-                this.shrinkBoundary();
-            var node = this.getClosedNode();
-            if (node && !textRange) {
-                try {
-                    nativeRange = this.document.body.createControlRange();
-                    nativeRange.addElement(node);
-                    nativeRange.select();
-                } catch (e) {}
-                return this;
-            }
-            var bookmark = this.createBookmark(),
-                start = bookmark.start,
-                end;
-            nativeRange = this.document.body.createTextRange();
-            nativeRange.moveToElementText(start);
-            nativeRange.moveStart('character', 1);
-            if (!this.collapsed) {
-                var nativeRangeEnd = this.document.body.createTextRange();
-                end = bookmark.end;
-                nativeRangeEnd.moveToElementText(end);
-                nativeRange.setEndPoint('EndToEnd', nativeRangeEnd);
-            } else {
-                if (!noFillData && this.startContainer.nodeType != 3) {
-                    //使用<span>|x<span>固定住光标
-                    var tmpText = this.document.createTextNode(fillChar),
-                        tmp = this.document.createElement('span');
-                    tmp.appendChild(this.document.createTextNode(fillChar));
-                    start.parentNode.insertBefore(tmp, start);
-                    start.parentNode.insertBefore(tmpText, start);
-                    //当点b,i,u时，不能清除i上边的b
-                    removeFillData(this.document, tmpText);
-                    fillData = tmpText;
-                    mergeSibling(tmp, 'previousSibling');
-                    mergeSibling(start, 'nextSibling');
-                    nativeRange.moveStart('character', -1);
-                    nativeRange.collapse(true);
-                }
-            }
-            this.moveToBookmark(bookmark);
-            tmp && domUtils.remove(tmp);
-            //IE在隐藏状态下不支持range操作，catch一下
-            try {
-                nativeRange.select();
-            } catch (e) {
-            }
-            return this;
-        } : function (notInsertFillData) {
+        select:function (notInsertFillData) {
             function checkOffset(rng){
 
                 function check(node,offset,dir){
@@ -1026,18 +959,13 @@
                 txtNode;
             //FF下关闭自动长高时滚动条在关闭dialog时会跳
             //ff下如果不body.focus将不能定位闭合光标到编辑器内
-            browser.gecko ? this.document.body.focus() : win.focus();
+            win.focus();
             if (sel) {
                 sel.removeAllRanges();
                 // trace:870 chrome/safari后边是br对于闭合得range不能定位 所以去掉了判断
                 // this.startContainer.nodeType != 3 &&! ((child = this.startContainer.childNodes[this.startOffset]) && child.nodeType == 1 && child.tagName == 'BR'
                 if (this.collapsed && !notInsertFillData) {
-//                    //opear如果没有节点接着，原生的不能够定位,不能在body的第一级插入空白节点
-//                    if (notInsertFillData && browser.opera && !domUtils.isBody(this.startContainer) && this.startContainer.nodeType == 1) {
-//                        var tmp = this.document.createTextNode('');
-//                        this.insertNode(tmp).setStart(tmp, 0).collapse(true);
-//                    }
-//
+
                     //处理光标落在文本节点的情况
                     //处理以下的情况
                     //<b>|xxxx</b>
@@ -1062,31 +990,11 @@
                         mergeSibling(txtNode, 'previousSibling');
                         mergeSibling(txtNode, 'nextSibling');
                         fillData = txtNode;
-                        this.setStart(txtNode, browser.webkit ? 1 : 0).collapse(true);
+                        this.setStart(txtNode, 1).collapse(true);
                     }
                 }
                 var nativeRange = this.document.createRange();
-                if(this.collapsed && browser.opera && this.startContainer.nodeType == 1){
-                    var child = this.startContainer.childNodes[this.startOffset];
-                    if(!child){
-                        //往前靠拢
-                        child = this.startContainer.lastChild;
-                        if( child && domUtils.isBr(child)){
-                            this.setStartBefore(child).collapse(true);
-                        }
-                    }else{
-                        //向后靠拢
-                        while(child && domUtils.isBlockElm(child)){
-                            if(child.nodeType == 1 && child.childNodes[0]){
-                                child = child.childNodes[0]
-                            }else{
-                                break;
-                            }
-                        }
-                        child && this.setStartBefore(child).collapse(true)
-                    }
 
-                }
                 //是createAddress最后一位算的不准，现在这里进行微调
                 checkOffset(this);
                 nativeRange.setStart(this.startContainer, this.startOffset);
@@ -1095,22 +1003,7 @@
             }
             return this;
         },
-        /**
-         * 滚动条跳到当然range开始的位置
-         * @name scrollToView
-         * @grammar range.scrollToView([win,offset]) => Range //针对window对象，若不指定，将以编辑区域的窗口为准,offset偏移量
-         */
-        scrollToView:function (win, offset) {
-            win = win ? window : domUtils.getWindow(this.document);
-            var me = this,
-                span = me.document.createElement('span');
-            //trace:717
-            span.innerHTML = '&nbsp;';
-            me.cloneRange().insertNode(span);
-            domUtils.scrollToView(span, win, offset);
-            domUtils.remove(span);
-            return me;
-        },
+
         inFillChar : function(){
             var start = this.startContainer;
             if(this.collapsed && start.nodeType == 3
@@ -1213,16 +1106,6 @@
             getNode(addr.startAddress,true);
             !ignoreEnd && addr.endAddress &&  getNode(addr.endAddress);
             return me;
-        },
-        equals : function(rng){
-            for(var p in this){
-                if(this.hasOwnProperty(p)){
-                    if(this[p] !== rng[p])
-                        return false
-                }
-            }
-            return true;
-
         }
     };
 })();

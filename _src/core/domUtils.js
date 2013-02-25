@@ -20,19 +20,7 @@ function getDomNode(node, start, ltr, startFromChild, fn, guard) {
     }
     return tmpNode;
 }
-var attrFix = ie && browser.version < 9 ? {
-        tabindex:"tabIndex",
-        readonly:"readOnly",
-        "for":"htmlFor",
-        "class":"className",
-        maxlength:"maxLength",
-        cellspacing:"cellSpacing",
-        cellpadding:"cellPadding",
-        rowspan:"rowSpan",
-        colspan:"colSpan",
-        usemap:"useMap",
-        frameborder:"frameBorder"
-    } : {
+var attrFix = {
         tabindex:"tabIndex",
         readonly:"readOnly"
     },
@@ -43,7 +31,7 @@ var attrFix = ie && browser.version < 9 ? {
         'table-row' , 'table-column-group' , 'table-column' ,
         'table-cell' , 'table-caption'
     ]);
-var domUtils = dom.domUtils = {
+var domUtils = ME.domUtils = {
     //节点常量
     NODE_ELEMENT:1,
     NODE_DOCUMENT:9,
@@ -59,7 +47,7 @@ var domUtils = dom.domUtils = {
     POSITION_IS_CONTAINED:8,
     POSITION_CONTAINS:16,
     //ie6使用其他的会有一段空白出现
-    fillChar:ie && browser.version == '6' ? '\ufeff' : '\u200B',
+    fillChar:'\u200B',
     //-------------------------Node部分--------------------------------
     keys:{
         /*Backspace*/ 8:1, /*Delete*/ 46:1,
@@ -319,19 +307,7 @@ var domUtils = dom.domUtils = {
      * @grammar UE.dom.domUtils.split(node,offset)  =>  TextNode  //返回从切分位置开始的后一个文本节点
      */
     split:function (node, offset) {
-        var doc = node.ownerDocument;
-        if (browser.ie && offset == node.nodeValue.length) {
-            var next = doc.createTextNode('');
-            return domUtils.insertAfter(node, next);
-        }
-        var retval = node.splitText(offset);
-        //ie8下splitText不会跟新childNodes,我们手动触发他的更新
-        if (browser.ie8) {
-            var tmpNode = doc.createTextNode('');
-            domUtils.insertAfter(retval, tmpNode);
-            domUtils.remove(tmpNode);
-        }
-        return retval;
+        return node.splitText(offset);
     },
 
     /**
@@ -374,29 +350,7 @@ var domUtils = dom.domUtils = {
             k = types.length;
         if (k) while (k--) {
             type = types[k];
-            if (element.addEventListener) {
-                element.addEventListener(type, handler, false);
-            } else {
-                if (!handler._d) {
-                    handler._d = {
-                        els : []
-                    };
-                }
-                var key = type + handler.toString(),index = utils.indexOf(handler._d.els,element);
-                if (!handler._d[key] || index == -1) {
-                    if(index == -1){
-                        handler._d.els.push(element);
-                    }
-                    if(!handler._d[key]){
-                        handler._d[key] = function (evt) {
-                            return handler.call(evt.srcElement, evt || window.event);
-                        };
-                    }
-
-
-                    element.attachEvent('on' + type, handler._d[key]);
-                }
-            }
+            element.addEventListener(type, handler, false);
         }
         element = null;
     },
@@ -410,21 +364,7 @@ var domUtils = dom.domUtils = {
             k = types.length;
         if (k) while (k--) {
             type = types[k];
-            if (element.removeEventListener) {
-                element.removeEventListener(type, handler, false);
-            } else {
-                var key = type + handler.toString();
-                try{
-                    element.detachEvent('on' + type, handler._d ? handler._d[key] : handler);
-                }catch(e){}
-                if (handler._d && handler._d[key]) {
-                    var index = utils.indexOf(handler._d.els,element);
-                    if(index!=-1){
-                        handler._d.els.splice(index,1);
-                    }
-                    handler._d.els.length == 0 && delete handler._d[key];
-                }
-            }
+            element.removeEventListener(type, handler, false);
         }
     },
 
@@ -442,7 +382,7 @@ var domUtils = dom.domUtils = {
         }
         var thisAttrs = nodeA.attributes,
             otherAttrs = nodeB.attributes;
-        if (!ie && thisAttrs.length != otherAttrs.length) {
+        if (thisAttrs.length != otherAttrs.length) {
             return false;
         }
         var attrA, attrB, al = 0, bl = 0;
@@ -457,28 +397,8 @@ var domUtils = dom.domUtils = {
                     return false;
                 }
             }
-            if (ie) {
-                if (attrA.specified) {
-                    al++;
-                    attrB = otherAttrs.getNamedItem(attrA.nodeName);
-                } else {
-                    continue;
-                }
-            } else {
-                attrB = nodeB.attributes[attrA.nodeName];
-            }
+            attrB = nodeB.attributes[attrA.nodeName];
             if (!attrB.specified || attrA.nodeValue != attrB.nodeValue) {
-                return false;
-            }
-        }
-        // 有可能attrB的属性包含了attrA的属性之外还有自己的属性
-        if (ie) {
-            for (i = 0; attrB = otherAttrs[i++];) {
-                if (attrB.specified) {
-                    bl++;
-                }
-            }
-            if (al != bl) {
                 return false;
             }
         }
@@ -493,21 +413,7 @@ var domUtils = dom.domUtils = {
     isSameStyle:function (nodeA, nodeB) {
         var styleA = nodeA.style.cssText.replace(/( ?; ?)/g, ';').replace(/( ?: ?)/g, ':'),
             styleB = nodeB.style.cssText.replace(/( ?; ?)/g, ';').replace(/( ?: ?)/g, ':');
-        if (browser.opera) {
-            styleA = nodeA.style;
-            styleB = nodeB.style;
-            if (styleA.length != styleB.length)
-                return false;
-            for (var p in styleA) {
-                if (/^(\d+|csstext)$/i.test(p)) {
-                    continue;
-                }
-                if (styleA[p] != styleB[p]) {
-                    return false;
-                }
-            }
-            return true;
-        }
+
         if (!styleA || !styleB) {
             return styleA == styleB;
         }
@@ -683,8 +589,8 @@ var domUtils = dom.domUtils = {
      */
     getElementsByTagName:function (node, name,filter) {
         if(filter && utils.isString(filter)){
-           var className = filter;
-           filter =  function(node){return domUtils.hasClass(node,className)}
+            var className = filter;
+            filter =  function(node){return domUtils.hasClass(node,className)}
         }
         name = utils.trim(name).replace(/[ ]{2,}/g,' ').split(' ');
         var arr = [];
@@ -765,29 +671,7 @@ var domUtils = dom.domUtils = {
      * @name unSelectable
      * @grammar UE.dom.domUtils.unSelectable(node)
      */
-    unSelectable:ie || browser.opera ? function (node) {
-        //for ie9
-        node.onselectstart = function () {
-            return false;
-        };
-        node.onclick = node.onkeyup = node.onkeydown = function () {
-            return false;
-        };
-        node.unselectable = 'on';
-        node.setAttribute("unselectable", "on");
-        for (var i = 0, ci; ci = node.all[i++];) {
-            switch (ci.tagName.toLowerCase()) {
-                case 'iframe' :
-                case 'textarea' :
-                case 'input' :
-                case 'select' :
-                    break;
-                default :
-                    ci.unselectable = 'on';
-                    node.setAttribute("unselectable", "on");
-            }
-        }
-    } : function (node) {
+    unSelectable:function (node) {
         node.style.MozUserSelect =
             node.style.webkitUserSelect =
                 node.style.KhtmlUserSelect = 'none';
@@ -814,7 +698,7 @@ var domUtils = dom.domUtils = {
                     break;
                 case 'style':
                     node.style.cssText = '';
-                    !browser.ie && node.removeAttributeNode(node.getAttributeNode('style'))
+                    node.removeAttributeNode(node.getAttributeNode('style'))
             }
             node.removeAttribute(ci);
         }
@@ -877,23 +761,8 @@ var domUtils = dom.domUtils = {
         if (element.nodeType == 3) {
             element = element.parentNode;
         }
-        //ie下font-size若body下定义了font-size，则从currentStyle里会取到这个font-size. 取不到实际值，故此修改.
-        if (browser.ie && browser.version < 9 && styleName == 'font-size' && !element.style.fontSize &&
-            !dtd.$empty[element.tagName] && !dtd.$nonChild[element.tagName]) {
-            var span = element.ownerDocument.createElement('span');
-            span.style.cssText = 'padding:0;border:0;font-family:simsun;';
-            span.innerHTML = '.';
-            element.appendChild(span);
-            var result = span.offsetHeight;
-            element.removeChild(span);
-            span = null;
-            return result + 'px';
-        }
         try {
-            var value = domUtils.getStyle(element, styleName) ||
-                (window.getComputedStyle ? domUtils.getWindow(element).getComputedStyle(element, '').getPropertyValue(styleName) :
-                    ( element.currentStyle || element.style )[utils.cssStyleToDomStyle(styleName)]);
-
+            var value = domUtils.getStyle(element, styleName) ||domUtils.getWindow(element).getComputedStyle(element, '').getPropertyValue(styleName)
         } catch (e) {
             return "";
         }
@@ -969,14 +838,10 @@ var domUtils = dom.domUtils = {
      * @grammar UE.dom.domUtils.removeStyle(element,name)        删除的样式名称
      */
     removeStyle:function (element, name) {
-        if(browser.ie && browser.version > 8){
-            element.style.cssText = element.style.cssText.replace(new RegExp(name + '\s*:\s*[^;]+;?'),'')
-        }else{
-            if (element.style.removeProperty) {
-                element.style.removeProperty (name);
-            }else {
-                element.style.removeAttribute (utils.cssStyleToDomStyle(name));
-            }
+        if (element.style.removeProperty) {
+            element.style.removeProperty (name);
+        }else {
+            element.style.removeAttribute (utils.cssStyleToDomStyle(name));
         }
 
 
@@ -1173,7 +1038,7 @@ var domUtils = dom.domUtils = {
     },
     isEmptyBlock:function (node) {
         var reg = new RegExp('[ \t\r\n' + domUtils.fillChar + ']', 'g');
-        if (node[browser.ie ? 'innerText' : 'textContent'].replace(reg, '').length > 0) {
+        if (node.textContent.replace(reg, '').length > 0) {
             return 0;
         }
         for (var n in dtd.$isNotEmpty) {
@@ -1198,7 +1063,7 @@ var domUtils = dom.domUtils = {
         }
     },
     fillNode:function (doc, node) {
-        var tmpNode = browser.ie ? doc.createTextNode(domUtils.fillChar) : doc.createElement('br');
+        var tmpNode = doc.createElement('br');
         node.innerHTML = '';
         node.appendChild(tmpNode);
     },
@@ -1213,7 +1078,7 @@ var domUtils = dom.domUtils = {
     },
     //判断是否有额外属性
     hasNoAttributes:function (node) {
-        return browser.ie ? /^<\w+\s*?>/.test(node.outerHTML) : node.attributes.length == 0;
+        return node.attributes.length == 0;
     },
     //判断是否是编辑器自定义的参数
     isCustomeNode:function (node) {
