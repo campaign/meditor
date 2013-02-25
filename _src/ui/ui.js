@@ -24,10 +24,8 @@ baidu.meditor = baidu.meditor || {};
 
     //创建构造器:继承father.prototype，将data扩展到prototype中
     function _createClass(Class, data) {
-        var father = data.inherit || _widget, proto;
-
-        father = $.isString(father) ? ns.ui[father] || _widget: father;
-        proto = father.prototype;
+        var father = data.inherit || _widget,
+            proto = father.prototype;
 
         $.extend(Class.prototype, _createObject(proto, {
             $super: function (name) {
@@ -43,7 +41,7 @@ baidu.meditor = baidu.meditor || {};
     ns.ui = ns.ui || {
         version: '1.0.0',
         define: function(name, data, superClass) {
-            if(superClass) data.inherit = superClass;
+            if(superClass) data.inherit = $.isString(superClass)?ns.ui[superClass]:superClass;
             var Class = ns.ui[name] = _createClass(function(options) {
                 var obj = _createObject(Class.prototype, {
                     _id: name + '-' + _guid()
@@ -53,8 +51,6 @@ baidu.meditor = baidu.meditor || {};
             }, data);
         }
     };
-
-
 
     /**
      * @name widget基类
