@@ -1,4 +1,4 @@
-(function (){
+/*(function (){
     var utils = baidu.editor.utils,
         uiUtils = baidu.editor.ui.uiUtils,
         UIBase = baidu.editor.ui.UIBase,
@@ -37,4 +37,15 @@
     };
     utils.inherits(Toolbar, UIBase);
 
-})();
+})();*/
+
+(function ($) {
+    baidu.meditor.ui.define('Toolbar', {
+        fn: function () {},
+        attr:1,
+        _create: function () {
+            this._el = $('<div></div>').appendTo('body');
+        }
+    });
+
+})(Zepto);
