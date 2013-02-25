@@ -103,7 +103,7 @@ baidu.meditor = baidu.meditor || {};
          * console.log($('a#btn').button('root'));// => a#btn
          */
         root: function(el) {
-            return $.isUndefined(el)? this._el: (this._el = el, this);
+            return $.isUndefined(el)? this._el: (this._el = $(el), this);
         },
 
         /**
