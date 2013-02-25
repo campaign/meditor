@@ -8,7 +8,7 @@ baidu.meditor = baidu.meditor || {};
  * @desc 所有UI组件的基类，通过它可以简单的快速的创建新的组件。
  * @import core/zepto.js, core/zepto.extend.js
  */
-(function($, undefined) {
+(function($, ns, undefined) {
     var id = 1;
 
     function _guid() {
@@ -24,8 +24,10 @@ baidu.meditor = baidu.meditor || {};
 
     //创建构造器:继承father.prototype，将data扩展到prototype中
     function _createClass(Class, data) {
-        var father = data.inherit || _widget,
-            proto = father.prototype;
+        var father = data.inherit || _widget, proto;
+
+        father = $.isString(father) ? ns.ui[father] || _widget: father;
+        proto = father.prototype;
 
         $.extend(Class.prototype, _createObject(proto, {
             $super: function (name) {
@@ -38,11 +40,11 @@ baidu.meditor = baidu.meditor || {};
         return Class;
     }
 
-    baidu.meditor.ui = baidu.meditor.ui || {
+    ns.ui = ns.ui || {
         version: '1.0.0',
         define: function(name, data, superClass) {
             if(superClass) data.inherit = superClass;
-            var Class = baidu.meditor.ui[name] = _createClass(function(options) {
+            var Class = ns.ui[name] = _createClass(function(options) {
                 var obj = _createObject(Class.prototype, {
                     _id: name + '-' + _guid()
                 })
@@ -65,9 +67,9 @@ baidu.meditor = baidu.meditor || {};
          */
         _createWidget: function(opts) {
             var me = this;
-            me._data = $.extend({}, opts, {
+            me._options = $.extend({
                 theme: 'default'
-            });
+            }, me._options, opts);
             me._create();
             me.trigger('create');
             me._init();
@@ -111,6 +113,18 @@ baidu.meditor = baidu.meditor || {};
          */
         id: function(id) {
             return this._id = id || this._id;
+        },
+
+        /**
+         * @name data
+         * @grammar data(key) ⇒ value
+         * @grammar data(key, value) ⇒ value
+         * @desc 设置或者获取options, 所有组件中的配置项都可以通过此方法得到。
+         */
+        option: function(key, val) {
+            var _options = this._options;
+            if ($.isObject(key)) return $.extend(_options, key);
+            else return !$.isUndefined(val) ? _options[key] = val : _options[key];
         },
 
         /**
@@ -158,7 +172,7 @@ baidu.meditor = baidu.meditor || {};
          */
         trigger: function(event, data) {
             event = $.isString(event) ? $.Event(event) : event;
-            var onEvent = this._data[event.type],result;
+            var onEvent = this._options[event.type],result;
             if( onEvent && $.isFunction(onEvent) ){
                 event.data = data;
                 result = onEvent.apply(this, [event].concat(data));
@@ -170,4 +184,4 @@ baidu.meditor = baidu.meditor || {};
             return this;
         }
     });
-})(Zepto);
+})(Zepto, baidu.meditor);
