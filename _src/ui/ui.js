@@ -92,7 +92,10 @@ baidu.meditor = baidu.meditor || {};
 
         _init: function () {},
 
-        render: function () {},
+        render: function (el) {
+            $(el).append(this.root());
+            return this;
+        },
 
         /**
          * @name root
@@ -126,7 +129,7 @@ baidu.meditor = baidu.meditor || {};
         option: function(key, val) {
             var _options = this._options;
             if ($.isObject(key)) return ($.extend(_options, key), this);
-            else return $.isUndefined(val) ? _options[key] : (_options[key] = val, this);
+            else return $.isUndefined(val) ? key?_options[key]:_options : (_options[key] = val, this);
         },
 
         /**
@@ -136,7 +139,7 @@ baidu.meditor = baidu.meditor || {};
          */
         destroy: function() {
             var That = this;
-            this.trigger('destroy');
+            this.trigger('destroy').root().off().remove();
             this.__proto__ = null;
             $.each(this, function(key) {
                 delete That[key];
