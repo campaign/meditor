@@ -1,10 +1,13 @@
 /* 工具栏 */
+/*
 .edui-default .edui-toolbar {
     cursor: default;
     -webkit-user-select: none;
     -moz-user-select: none;
     padding: 1px;
-    overflow: hidden; /*全屏下单独一行不占位*/
+    overflow: hidden; */
+/*全屏下单独一行不占位*//*
+
     zoom: 1;
 }
 
@@ -13,4 +16,64 @@
 .edui-default .edui-toolbar .edui-menubutton,
 .edui-default .edui-toolbar .edui-combox {
     margin: 1px;
+}*/
+
+.mui-default .mui-toolbar {
+    width: 50px;
+    height: 350px;
+    overflow: hidden;
+    border: 1px solid #cccccc;
+}
+
+.mui-default .mui-toolbar .mui-toolbar-showArrow{
+    position: absolute;
+    right: 0;
+    top: 150px;
+    border: 1px solid red;
+    background: #ccc;
+    display: block;
+    width: 5px;
+    height: 50px;
+}
+.mui-default .mui-toolbar .mui-toolbar-mask{
+    width: 50px;
+    height: 350px;
+    position: relative;
+}
+.mui-default .mui-toolbar .mui-toolbar-toolBox{
+
+}
+.mui-default .mui-toolbar .mui-toolbar-wrap{
+    display: -webkit-box;
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 200ms;
+    -webkit-transition-timing-function:linear;
+    -webkit-transform: translateX(0);
+
+}
+/*.mui-default .mui-toolbar .mui-toolbar-anim{
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 10s;
+    -webkit-transition-timing-function:linear;
+    -webkit-transform: translateX(0);
+}*/
+
+/* keyframes for slidein from sides */
+@-webkit-keyframes slideinfromright {
+    from { -webkit-transform: translateX(100%); }
+    to { -webkit-transform: translateX(0); }
+}
+@-webkit-keyframes slideouttoright {
+    from { -webkit-transform: translateX(0); }
+    to { -webkit-transform: translateX(80%); }
+}
+.mui-default .mui-toolbar .mui-toolbar-animFromRight, .mui-default .mui-toolbar .mui-toolbar-animToRight {
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-duration: 2s;
+}
+.mui-default .mui-toolbar .mui-toolbar-animFromRight{
+    -webkit-animation-name: slideinfromright;
+}
+.mui-default .mui-toolbar .mui-toolbar-animToRight{
+    -webkit-animation-name: slideouttoright;
 }
