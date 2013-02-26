@@ -74,7 +74,23 @@
 })(Zepto);
 
 (function($){
-    var rootNodeRE = /^(?:body|html)$/i;
+    var rootNodeRE = /^(?:body|html)$/i,
+        slice = Array.prototype.slice,
+        isPlainObject = $.isPlainObject,
+        isArray = $.isArray;
+
+    function extend(target, source, deep) {
+        for (var key in source)
+            if (deep && (isPlainObject(source[key]) || isArray(source[key]))) {
+                if (isPlainObject(source[key]) && !isPlainObject(target[key]))
+                    target[key] = {}
+                if (isArray(source[key]) && !isArray(target[key]))
+                    target[key] = []
+                extend(target[key], source[key], deep)
+            }
+            else if (source[key] !== undefined) target[key] = source[key]
+    }
+
     $.extend($.fn, {
         offsetParent: function() {
             return $($.map(this, function(el){
@@ -99,6 +115,16 @@
             return parent.compareDocumentPosition
                 ? !!(parent.compareDocumentPosition(node) & 16)
                 : parent !== node && parent.contains(node)
+        },
+
+        extend: function(target){
+            var deep, args = slice.call(arguments, 1)
+            if (typeof target == 'boolean') {
+                deep = target
+                target = args.shift()
+            }
+            args.forEach(function(arg){ extend(target, arg, deep) })
+            return target
         }
     });
 })(Zepto);

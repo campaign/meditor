@@ -34,7 +34,7 @@ baidu.meditor = baidu.meditor || {};
             }
         }));
 
-        $.isObject(data) && $.extend(Class.prototype, data);
+        $.isObject(data) && $.extend(true, Class.prototype, data);
         return Class;
     }
 
