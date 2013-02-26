@@ -4,8 +4,8 @@
         $.fn[m] = function(callback){
             return this.each(function(){
                 var hammer = new Hammer(this), el = this;
-                hammer['on' + m] = function(){
-                    $(el).bind(m, callback)
+                hammer['on' + m] = function(e,prop){
+                    callback.call(el, $.Event(e.type,$.extend(prop||{},e)))
                 }
             })
         }
