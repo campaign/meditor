@@ -46,7 +46,7 @@
 	<key>Creator</key>
 	<string>liaoxuezhi</string>
 	<key>DisplayScale</key>
-	<string>1 0/72 in = 1 0/72 in</string>
+	<string>1 0/72 in = 1.0000 in</string>
 	<key>GraphDocumentVersion</key>
 	<integer>8</integer>
 	<key>GraphicsList</key>
@@ -195,7 +195,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 
-\f0\fs22 \cf0 options\
+\f0\fs22 \cf0 _options\
     content}</string>
 							</dict>
 							<key>TextPlacement</key>
@@ -319,8 +319,8 @@
 			<real>-1</real>
 			<key>Points</key>
 			<array>
-				<string>{384.22792834947876, 394.45470622354321}</string>
-				<string>{316, 298.16652085927052}</string>
+				<string>{384.2255824441711, 394.45473484535762}</string>
+				<string>{316, 298.19006770240367}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -455,7 +455,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 
-\f0\fs22 \cf0 options\
+\f0\fs22 \cf0 _options\
     mode: 'default' | 'swipe'\
     items: [\
         Button item1,\
@@ -710,8 +710,8 @@
 			<real>-1</real>
 			<key>Points</key>
 			<array>
-				<string>{657.21912327971688, 379.81457741933224}</string>
-				<string>{316, 243.5608484659744}</string>
+				<string>{657.21865222817735, 379.81457936744141}</string>
+				<string>{316, 243.56268935046569}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -751,8 +751,8 @@
 			<real>4</real>
 			<key>Points</key>
 			<array>
-				<string>{275.06670879482454, 704.50018322495339}</string>
-				<string>{266.22472223943322, 378}</string>
+				<string>{275.06670659873549, 704.50018322495339}</string>
+				<string>{266.22467522886365, 377.99999999999994}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -792,8 +792,8 @@
 			<real>-1</real>
 			<key>Points</key>
 			<array>
-				<string>{275.50000274916454, 895.49999998616977}</string>
-				<string>{275.50000673980452, 842.1373390557942}</string>
+				<string>{275.50000274980943, 895.49999998616977}</string>
+				<string>{275.50000674260036, 842.1373390557942}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -928,7 +928,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 
-\f0\fs22 \cf0 options\
+\f0\fs22 \cf0 _options\
     selcted: fn | index\
     items: [ \
         \{label: '', val: ''\},\
@@ -1109,7 +1109,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 
-\f0\fs22 \cf0 options\
+\f0\fs22 \cf0 _options\
     content}</string>
 							</dict>
 							<key>TextPlacement</key>
@@ -1328,7 +1328,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 
-\f0\fs22 \cf0 options\
+\f0\fs22 \cf0 _options\
    items: \{\
      key: content,\
      key: content\
@@ -1413,8 +1413,8 @@
 			<real>9</real>
 			<key>Points</key>
 			<array>
-				<string>{619.12622683562881, 567.65226109496166}</string>
-				<string>{315.99999999999994, 274.26448819660646}</string>
+				<string>{619.12619714893799, 567.65226144003668}</string>
+				<string>{316, 274.26505559256725}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -1549,7 +1549,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 
-\f0\fs22 \cf0 options\
+\f0\fs22 \cf0 _options\
     title\
     content\
     button: \{key: fn\}}</string>
@@ -1759,8 +1759,8 @@
 			<real>90.000015258789062</real>
 			<key>Points</key>
 			<array>
-				<string>{527.00002596768536, 163.05015465267383}</string>
-				<string>{316, 209.96516676216461}</string>
+				<string>{527.00002596768536, 163.05558691132345}</string>
+				<string>{316, 209.98757986105335}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -1895,7 +1895,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 
-\f0\fs22 \cf0 options\
+\f0\fs22 \cf0 _options\
     showCount: 3\
     items: []}</string>
 							</dict>
@@ -2146,7 +2146,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 
-\f0\fs22 \cf0 options\
+\f0\fs22 \cf0 _options\
     items: []}</string>
 							</dict>
 							<key>TextPlacement</key>
@@ -2491,8 +2491,8 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 
-\f0\fs22 \cf0 options\
-    className\
+\f0\fs22 \cf0 _options\
+    name\
     title\
     disabled\
     highlight}</string>
@@ -2823,7 +2823,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720
 
-\f0\fs22 \cf0 options\
+\f0\fs22 \cf0 _options\
     theme}</string>
 					</dict>
 					<key>TextPlacement</key>
@@ -3269,7 +3269,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-02-22 10:10:19 +0000</string>
+	<string>2013-02-25 09:16:39 +0000</string>
 	<key>Modifier</key>
 	<string>liaoxuezhi</string>
 	<key>NotesVisible</key>
@@ -3354,6 +3354,8 @@
 				<string>Canvas 1</string>
 			</dict>
 		</array>
+		<key>Frame</key>
+		<string>{{170, 88}, {940, 690}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
@@ -3366,14 +3368,16 @@
 		<true/>
 		<key>SidebarWidth</key>
 		<integer>120</integer>
+		<key>VisibleRegion</key>
+		<string>{{-8, 3.0612244302161002}, {821.4285554413201, 562.2448870163571}}</string>
 		<key>Zoom</key>
-		<real>1</real>
+		<real>0.98000001907348633</real>
 		<key>ZoomValues</key>
 		<array>
 			<array>
 				<string>Canvas 1</string>
-				<real>1</real>
-				<real>2</real>
+				<real>0.98000001907348633</real>
+				<real>0.97000002861022949</real>
 			</array>
 		</array>
 	</dict>
