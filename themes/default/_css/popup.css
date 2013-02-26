@@ -1,0 +1,19 @@
+.meditor-ui-popup {
+    display: none;
+}
+
+
+.meditor-ui-popup-content {
+    border: 1px solid #ccc;
+    background: #fff;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
+}
+
+.meditor-ui-popup-arrow {
+    position: absolute;
+    right: 0;
+    top:0;
+    width:10px;
+    height: 25px;
+    background: url(../images/cursor_v.png) center center no-repeat;
+}

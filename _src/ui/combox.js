@@ -3,29 +3,26 @@
     baidu.meditor.ui.define('combox', {
 
         _options: {
-            node:       null,
-            renderFn:   null,
-            height:     150,
-            width:      200,
-            unCount:    false,
-            _isShow:    false,
-            _isClicked: false
+            renderFn:       null,
+            height:         150,
+            width:          200,
+            _iscrollInited:  false
         },
-        _allCombox: [],
-        _inited: false,
-        _needCloseAll: true,
+        _allCombox:         [],
+        _inited:            false,
+        _needCloseAll:      true,
 
         _create: function () {
             var me = this,
                 opt = me._options,
                 root = me._el = $('<div class="meditor-ui-combox"></div>').appendTo('body'),
-                i = 0, j, html = '<ul>';
+                i = 0, j, html = '<div class="meditor-ui-combox-content"><ul>';
             while(true) {
                 j = opt.renderFn(i++);
                 if(!j) break;
                 html += '<li>' + j + '</li>';
             }
-            root.html(html + '</ul><div class="meditor-ui-combox-arrow"></div>');
+            root.html(html + '</ul></div><div class="meditor-ui-combox-arrow"></div>');
         },
 
         _init: function () {
@@ -47,7 +44,7 @@
                 proto._needCloseAll = false;
                 me._closeOthers();
                 var li = $(e.target).closest('li');
-                me.trigger('itemClick', [li.index(), li.children().attr('value')]);
+                me.trigger('itemClick', [li.index(), li.children().attr('value'), li]);
 
             });
             if(!proto._inited) {
@@ -66,16 +63,21 @@
             });
         },
 
-        _fitSize: function () {
+        _fitSize: function (node) {
             var me = this,
                 opt = me._options,
-                rect = opt.node.getBoundingClientRect();
+                rect = (node.nodeType === 1 ? node : node[0]).getBoundingClientRect();
             me.root().css({
                 position:   'absolute',
                 top:        rect.top,
-                left:       rect.left - opt.width,
+                left:       rect.left - opt.width - 10,
+                height:     opt.height,
+                width:      opt.width + 10
+            }).children().first().css({
                 height:     opt.height,
                 width:      opt.width
+            }).siblings().last().css({
+                top:rect.height / 2 - 10
             });
             return me;
         },
@@ -85,7 +87,7 @@
                 allCombox = me._allCombox,
                 item;
             while(item = allCombox[allCombox.length - 1]){
-                 if(item._options.showTime > me._options.showTime) {
+                 if(item._options.stamp > me._options.stamp) {
                      item.hide();
                      allCombox.pop();
                  } else break;
@@ -134,25 +136,23 @@
             return this._options.children.eq(index).attr('value', value);
         },
 
-        show: function () {
+        show: function (node) {
             var me = this,
                 opt = me._options;
-            me._fitSize().root().show().iscroll();
+            me._fitSize(node).root().show();
+            if(!opt._iscrollInited) {
+                me.root().children().first().iscroll();
+                opt._iscrollInited  = true;
+            }
             //公共索引
-            me.option('showTime', Date.now());
-            opt.unCount || me._allCombox.push(me);
+            me.option('stamp', Date.now());
+            me._allCombox.push(me);
             return me;
         },
 
         hide: function () {
             var me = this;
             me.root().hide();
-            return me;
-        },
-
-        toggle: function () {
-            var me = this;
-            me._options._isShow ? me.hide() : me.show();
             return me;
         }
 
