@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta charset="utf-8">
+    <title>弹出框Test</title>
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/dialog.css" />
+    <style>
+    </style>
+    <script type="text/javascript" src="../../_src/zepto.js"></script>
+    <script type="text/javascript" src="../../_src/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../_src/ui/ui.js"></script>
+    <script type="text/javascript" src="../../_src/ui/button.js"></script>
+    <script type="text/javascript" src="../../_src/ui/dialog.js"></script>
+</head>
+<body>
+<script>
+    var ui = baidu.meditor.ui;
+
+    var dialog = ui.dialog({
+        mask: true,
+        title: '标题',
+        content: '内容'
+    }).open();
+</script>
+</body>
+</html>

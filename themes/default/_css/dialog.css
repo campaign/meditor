@@ -1,0 +1,77 @@
+.mui-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #888;
+    opacity: 0.5;
+    display: none;
+    z-index: 1001;
+    -webkit-transform: translateZ(0);
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+
+.mui-dialog{
+    overflow: hidden;
+    margin: 0 auto;
+    z-index: 1002;
+    position:absolute;
+    display: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    background-color: white;
+    -webkit-transform: translateZ(0);
+    min-width: 400px;
+    min-height: 200px;
+    background-image: -webkit-gradient(linear,0% 0%, 0% 100%, from(#E2E5EA), to(#D3D5DB));
+    -webkit-box-shadow:0 0 5px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+}
+
+.mui-dialog-header {
+    position: relative;
+    height: 35px;
+    line-height: 37px;
+    overflow: hidden;
+    background-image: -webkit-gradient(linear,0% 0%, 0% 100%, from(#ffffff), to(#a5a9b6), color-stop(0.5,#dfe1e6));
+    border-bottom: 1px solid #80868f;
+    border-radius: 3px 3px 0 0;
+    text-align: center;
+    overflow: hidden;
+}
+
+.mui-dialog-header .mui-dialog-btnOk, .mui-dialog-header .mui-dialog-btnCancel {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    margin-top: -12px;
+    height: 15px;
+    line-height: 15px;
+    padding: 0 10px;
+    border-width: 5px 5px 4px 5px;
+    font-size: 12px;
+    font-weight: normal;
+    text-shadow: rgba(0, 0, 0, 0.8) 0 -1px 0;
+    color: white;
+    -webkit-border-image: url(../images/cancel.png) 10 10 8 10;
+    cursor: pointer;
+    -webkit-user-select: none;
+}
+.mui-dialog-header .mui-dialog-btnOk.mui-state-hover, .mui-dialog-header .mui-dialog-btnCancel.mui-state-hover {
+    opacity: 0.4;
+}
+.mui-dialog-header .mui-dialog-btnOk {
+    left: auto;
+    right: 8px;
+    -webkit-border-image: url(../images/confirm.png) 10 10 8 10;
+}
+.mui-dialog-header h3 {
+    padding: 0;
+    margin: 0;
+    color: #717880;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: rgba(255, 255, 255, 0.8) 0 1px 1;
+}
+
+.mui-dialog-body {
+    padding: 1em;
+}
