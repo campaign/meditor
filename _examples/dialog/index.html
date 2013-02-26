@@ -21,7 +21,12 @@
         mask: true,
         title: '标题',
         content: '内容'
-    }).open();
+    }).open().on('confirm', function(e){
+                alert('confirm');
+                e.preventDefault();
+            }).on('cancel', function(){
+                alert('Cancel');
+            });
 </script>
 </body>
 </html>
