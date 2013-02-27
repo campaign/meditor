@@ -188,4 +188,4 @@
             return me;
         }
     });
-})(Zepto, baidu.meditor.ui);
+})(Zepto, ME.ui);
