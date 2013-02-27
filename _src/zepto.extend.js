@@ -506,13 +506,14 @@ Zepto.fn.iscroll = function(opt) {
     var that = this,
         me = this.attr('_iscroll-initialized',true).css({'overflow': 'hidden','-webkit-user-select': 'none'})[0],
         scroller = me.children[0],
-        M = Math, scrolling = false, top = 0, containerH, scrollerH, bottom, touch, stamp, startX, startY, isVertical, isTested, movedY, baseY, nowY, stopY;
+        M = Math, scrolling = false, top = 0, containerH, scrollerH, bottom, touch, stamp, startX, startY, isVertical, isTested, movedY, baseY, nowY, stopY, TID;
     me.addEventListener('touchstart', function(e) {
         if(scrolling) {
             e.preventDefault();
             stopY = parseInt(getComputedStyle(scroller, null)['-webkit-transform'].substr(22));
             if(stopY > bottom && stopY < 0) {
-                scroller.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(0,' + stopY + 'px,0)';
+                clearTimeout(TID);
+                scroller.style.webkitTransform = 'translate(0,' + stopY + 'px) translateZ(0px)';
                 top = stopY;
                 scrolling = false;
             }
@@ -533,7 +534,7 @@ Zepto.fn.iscroll = function(opt) {
             nowY = top + movedY;
             nowY = nowY > 0 ? 0.3 * nowY : nowY < bottom ? bottom - 0.3 * (bottom - nowY) : nowY;
             (e.timeStamp - stamp > 300) && (stamp = e.timeStamp, baseY = nowY);
-            scroller.style.webkitTransform = 'translate3d(0,' + nowY + 'px, 0)';
+            scroller.style.webkitTransform = 'translate(0,' + nowY + 'px) translateZ(0px)';
         }
     });
     me.addEventListener('touchend', touchEnd);
@@ -542,8 +543,8 @@ Zepto.fn.iscroll = function(opt) {
         if(isVertical) {
             top += movedY;
             var deltaY = top - baseY, time = Date.now() - stamp;
-            if(top < bottom) roll(300, bottom);
-            else if(top > 0) roll(300, 0);
+            if(top < bottom) roll(400, bottom);
+            else if(top > 0) roll(400, 0);
             else{
                 var t = -top,
                     b = top - bottom,
@@ -558,23 +559,37 @@ Zepto.fn.iscroll = function(opt) {
                     v *= b / dist;
                     dist = b;
                 }
-                roll(M.round(v / 0.0006), dist * (deltaY < 0 ? -1 : 1) + top);
+                roll(M.round(v / 0.0006), M.round(dist * (deltaY < 0 ? -1 : 1) + top));
             }
         }
     }
     function roll(time, to) {
-        scrolling = true;
+        if (scrolling) return;
+        if (to == nowY) time = 0;
         top = to;
-        scroller.style.cssText += '-webkit-transition:' + time + 'ms cubic-bezier(0.33,0.66,0.66,1);-webkit-transform:translate3d(0,' + to + 'px,0)';
+        scrolling = true;
+        var startTime = Date.now(),
+            animate = function () {
+                var now = Date.now(), newY;
+                if (now >= startTime + time) {
+                    scroller.style.webkitTransform = 'translate(0,' + to + 'px) translateZ(0px)';
+                    scrolling = false;
+                    nowY = to;
+                    top > 0 ? roll(400, 0) : top < bottom ? roll(400, bottom) :'';
+                    return;
+                }
+                now = (now - startTime) / time - 1;
+                newY = (to - nowY) * M.sqrt(1 - now * now) + nowY;
+                scroller.style.webkitTransform = 'translate(0,' + newY + 'px) translateZ(0px)';
+                if (scrolling) TID = setTimeout(animate, 1);
+            };
+        animate();
     }
-    me.addEventListener('webkitTransitionEnd', function() {
-        top > 0 ? roll(300, 0) : top < bottom ? roll(300, bottom) : scrolling = false;
-    });
     (function(handler) {
         containerH = me.offsetHeight;
         scrollerH = scroller.offsetHeight;
         bottom = M.min(0, containerH - scrollerH);
-        top < bottom && roll(300, bottom);
+        top < bottom && roll(400, bottom);
         if(handler) {
             window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', arguments.callee);
             me[handler] = that[handler] = arguments.callee;
