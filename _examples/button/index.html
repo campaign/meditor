@@ -11,6 +11,7 @@
             padding: 0.5em;
         }
     </style>
+    <script type="text/javascript" src="../../_src/meditor.js"></script>
     <script type="text/javascript" src="../../_src/zepto.js"></script>
     <script type="text/javascript" src="../../_src/zepto.extend.js"></script>
     <script type="text/javascript" src="../../_src/ui/ui.js"></script>
@@ -19,7 +20,7 @@
 <body>
     <div id="toolbar"></div>
 <script>
-    var ui = baidu.meditor.ui;
+    var ui = ME.ui;
 
     ui.button({name: 'bold'}).render('#toolbar');
     ui.button({name: 'italic', disabled: true}).render('#toolbar');

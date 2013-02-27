@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+            font-size: 14px;
+        }
+        body {
+            height: 500px;
+            width:700px;
+        }
+        #btn {
+            position: absolute;
+            top:20px;
+            right: 20px;
+            padding: 3px 10px;
+            background: #eee;
+        }
+
+    </style>
+    <script type="text/javascript" src="../../_src/zepto.js"></script>
+    <script type="text/javascript" src="../../_src/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../_src/ui/ui.js"></script>
+    <script type="text/javascript" src="../../_src/ui/combox.js"></script>
+    <link rel="stylesheet" href="../../themes/default/_css/combox.css" />
+</head>
+<body>
+<button id="btn">btn</button>
+
+<script type="text/javascript">
+    $(function(){
+        combox1 = ME.ui.combox({
+                        itemClick: function (e, index, value, node) {
+                            this.select(value);
+                            index == 1 && combox2.toggle(node);
+                            index == 2 && combox3.toggle(node);
+                        },
+                        renderFn: function (index) {
+                            if(index < 10) {
+                                return '<span value="a' + index + '">第 ' + index + ' 行</span>';
+                            }
+                        }
+                    });
+        $('#btn').tap(function() {
+            combox1.toggle($('#btn'));
+        });
+        combox2 =
+                ME.ui.combox({
+                    itemClick: function (e, index, value, node) {
+                        this.select(value);
+                        combox4.toggle(node);
+                    },
+                    renderFn: function (index) {
+                        if(index < 10) {
+                            return '<span value="a' + index + '">第 ' + index + ' 行</span>';
+                        }
+                    }
+                });
+        var combox3 =
+                ME.ui.combox({
+                    itemClick: function (e, index, value, node) {
+                        this.select(value);
+                        combox4.toggle(node);
+                    },
+                    renderFn: function (index) {
+                        if(index < 10) {
+                            return '<span value="a' + index + '">第 ' + index + ' 行</span>';
+                        }
+                    }
+                });
+        var combox4 =
+                ME.ui.combox({
+                    itemClick: function (e, index, value, node) {
+                        this.select(value);
+                    },
+                    renderFn: function (index) {
+                        if(index < 10) {
+                            return '<span value="a' + index + '">第 ' + index + ' 行</span>';
+                        }
+                    }
+                });
+    });
+</script>
+</body>
+</html>

@@ -1,29 +1,31 @@
 
 (function ($) {
-    baidu.meditor.ui.define('combox', {
+    ME.ui.define('combox', {
 
         _options: {
             renderFn:       null,
             height:         150,
             width:          200,
             needIscroll:    true,
+            _isShow:        false,
             _iscrollInited: false
         },
         _allShowedCombox:   [],
         _addEventInited:    false,
-        _needCloseChildren: true,
+        _needCloseAll:      true,
+        _sibling:           null,
 
         _create: function () {
             var me = this,
                 opt = me._options,
-                root = me._el = $('<div class="meditor-ui-combox"></div>').appendTo('body'),
-                i = 0, j, html = '<div class="meditor-ui-combox-content"><ul>';
+                root = me._el = $('<div class="mui-combox"></div>').appendTo('body'),
+                i = 0, j, html = '<div class="mui-combox-content"><ul>';
             while(true) {
                 j = opt.renderFn(i++);
                 if(!j) break;
                 html += '<li>' + j + '</li>';
             }
-            root.html(html + '</ul></div><div class="meditor-ui-combox-arrow"></div>');
+            root.html(html + '</ul></div><div class="mui-combox-arrow"></div>');
         },
 
         _init: function () {
@@ -32,7 +34,7 @@
                 proto = me.__proto__,
                 root = me.root(),
                 content = root.children().first(),
-                highLightCls = 'meditor-ui-combox-highlight';
+                highLightCls = 'mui-combox-highlight';
             //设置宽高
             root.css({
                 height:     opt.height,
@@ -47,15 +49,15 @@
 
             //autohide
             content.on('tap', function (e) {
-                proto._needCloseChildren = false;
                 me.closeChildren();
+                proto._needCloseAll = false;
                 var li = $(e.target).closest('li');
                 me.trigger('itemClick', [li.index(), li.children().attr('value'), li]);
             });
             if(!proto._addEventInited) {
                 $(document).on('tap', function () {
-                    proto._needCloseChildren && me.closeAll();
-                    proto._needCloseChildren = true;
+                    proto._needCloseAll && me.closeAll();
+                    proto._needCloseAll = true;
                 });
                 proto._addEventInited = true;
             }
@@ -89,11 +91,12 @@
         closeChildren: function () {
             var me = this,
                 allCombox = me._allShowedCombox,
+                proto = me.__proto__,
                 item;
             while(item = allCombox[allCombox.length - 1]){
                  if(item._options.stamp > me._options.stamp) {
                      item.hide();
-                     allCombox.pop();
+                     proto._sibling = item;
                  } else break;
             }
             return me;
@@ -145,6 +148,7 @@
             var me = this,
                 opt = me._options;
             me._fitSize(node).root().show();
+            opt._isShow = true;
             if(opt.needIscroll && !opt._iscrollInited) {
                 me.root().children().first().iscroll();
                 opt._iscrollInited  = true;
@@ -156,8 +160,27 @@
         },
 
         hide: function () {
-            var me = this;
+            var me = this,
+                opt = me._options,
+                allCombox = me.__proto__._allShowedCombox;
+            me.closeChildren();
             me.root().hide();
+            if(me === allCombox[allCombox.length - 1]) {
+                allCombox.pop();
+            }
+            opt._isShow = false;
+            return me;
+        },
+
+        toggle: function (node) {
+            var me = this,
+                proto = me.__proto__;
+            if(me === proto._sibling) {
+                proto._sibling = null;
+                return me;
+            }
+            me._options._isShow ? me.hide() : me.show(node);
+            proto._needCloseAll = false;
             return me;
         }
     });

@@ -41,13 +41,7 @@ var utils = ME.utils = {
         }
     },
 
-    makeInstance:function (obj) {
-        var noop = new Function();
-        noop.prototype = obj;
-        obj = new noop;
-        noop.prototype = null;
-        return obj;
-    },
+
     /**
      * 将source对象中的属性扩展到target对象上
      * @name extend
@@ -76,33 +70,7 @@ var utils = ME.utils = {
         }
         return t;
     },
-    /**
-     * 模拟继承机制，subClass继承superClass
-     * @name inherits
-     * @grammar UE.utils.inherits(subClass,superClass) => subClass
-     * @example
-     * function SuperClass(){
-     *     this.name = "小李";
-     * }
-     * SuperClass.prototype = {
-     *     hello:function(str){
-     *         console.log(this.name + str);
-     *     }
-     * }
-     * function SubClass(){
-     *     this.name = "小张";
-     * }
-     * UE.utils.inherits(SubClass,SuperClass);
-     * var sub = new SubClass();
-     * sub.hello("早上好!"); ==> "小张早上好！"
-     */
-    inherits:function (subClass, superClass) {
-        var oldP = subClass.prototype,
-            newP = utils.makeInstance(superClass.prototype);
-        utils.extend(newP, oldP, true);
-        subClass.prototype = newP;
-        return (newP.constructor = subClass);
-    },
+
 
     /**
      * 用指定的context作为fn上下文，也就是this

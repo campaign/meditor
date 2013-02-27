@@ -79,16 +79,19 @@
         isPlainObject = $.isPlainObject,
         isArray = $.isArray;
 
-    function extend(target, source, deep) {
+    function extend(target, source, deep,override) {
         for (var key in source)
             if (deep && (isPlainObject(source[key]) || isArray(source[key]))) {
                 if (isPlainObject(source[key]) && !isPlainObject(target[key]))
                     target[key] = {}
                 if (isArray(source[key]) && !isArray(target[key]))
                     target[key] = []
-                extend(target[key], source[key], deep)
+                extend(target[key], source[key], deep,override)
             }
-            else if (source[key] !== undefined) target[key] = source[key]
+            else if (source[key] !== undefined) {
+                if(override || !target.hasOwnProperty(key))
+                    target[key] = source[key]
+            }
     }
 
     $.extend($.fn, {
@@ -118,12 +121,18 @@
         },
 
         extend: function(target){
-            var deep, args = slice.call(arguments, 1)
+            var deep, args = slice.call(arguments, 1),override;
             if (typeof target == 'boolean') {
                 deep = target
                 target = args.shift()
             }
-            args.forEach(function(arg){ extend(target, arg, deep) })
+            override = args.pop();
+            if(typeof override == 'boolean'){
+                override = !override
+            }else{
+                args.push(override)
+            }
+            args.forEach(function(arg){ extend(target, arg, deep,override)})
             return target
         }
     });
@@ -287,6 +296,7 @@
         debounce: function(delay, fn, t) {
             return fn === undefined ? $.throttle(250, delay, false) : $.throttle(delay, fn, t === undefined ? false : t !== false);
         }
+
     });
 
     /**

@@ -1,6 +1,3 @@
-var baidu = baidu || {};
-baidu.meditor = baidu.meditor || {};
-
 /**
  * @file 所有UI组件的基类，通过它可以简单的快速的创建新的组件。
  * @name UI 基类
@@ -183,4 +180,4 @@ baidu.meditor = baidu.meditor || {};
             return this;
         }
     });
-})(Zepto, baidu.meditor);
+})(Zepto, ME);

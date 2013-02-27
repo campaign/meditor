@@ -41,6 +41,40 @@
 
 
 (function ($, ui) {
+    ui.define('group', {
+        _options: {
+            items: []
+        },
+        _init: function () {
+            this.$super('_init');
+            this.root().on('buttonclick', $.proxy(this._showPopup, this));
+        },
+        _showPopup: function () {
+            (this._subBar || this._createPopup()).toggle(this.root());
+        },
+        _createPopup: function () {
+            var me = this,
+                items = this._options.items,
+                $subBarWrap = $('<div class="mui-group-wrap"></div> ');
+
+            me._$subBarWrap = $subBarWrap;
+            $.each(items, function (i, item) {
+                me.addItem(item);
+            });
+            return me._subBar = ui.popup({
+                content: $subBarWrap,
+                width: 'auto'
+            });
+        },
+        _isInstance: function (instance) {
+            return instance instanceof ui.button || instance instanceof ui.group || instance instanceof ui.scrollbox;
+        },
+        addItem: function (item) {
+            this._isInstance(item) && item.render(this._$subBarWrap);
+            return this;
+        }
+    }, ui.button);
+
     ui.define('scrollbox', {
         _options: {
             showCount: 4,
@@ -50,85 +84,41 @@
             var me = this,
                 opts = me._options, $scroller;
 
-            me.root($('<div class="mui-scrollbox"></div>').append($scroller = $('<div class="mui-scrollBox-scroller"></div>'))),
+            me.root($('<div class="mui-scrollbox"></div>').append($scroller = $('<div class="mui-scrollBox-scroller"></div>')));
             $.each(opts.items, function (key, item) {
                 me._isInstance(item) && item.render($scroller);
             });
             me._$scroller = $scroller;
-
             return me;
         },
-        _getSize: function () {
+        _getHeight: function () {
             var me = this,
-                widths = [],
                 opts = me._options,
-                height = 0, width;
+                height = 0;
 
-            $.each(opts.items, function (i, item) {
+            $.each(opts.items.slice(0, Math.min(opts.showCount, opts.items.length)), function (i, item) {
                 var $item = item.root();
-                widths.push($item.width());
-                i < opts.showCount && (height += $item.height() + parseInt($item.css('margin-top')) + parseInt($item.css('margin-bottom')));
+                height += $item.height() + parseInt($item.css('margin-top')) + parseInt($item.css('margin-bottom'));
             });
-            return [Math.max.apply(Math, widths), height];
+            return height;
         },
-        _enableScroll: function () {
-            var me = this,
-                size = me._getSize();
-
-            me.iscroll = me.root().css({
-                width: size[0],
-                height: size[1]
-            }).iscroll().iscroll('_refresh');
-            return me;
+        _initIscroll: function () {
+            this.iscroll = this.root().css('height', this._getHeight()).iscroll().iscroll('_refresh');
+            return this;
         },
         addItem: function (item) {
             var me = this;
-            me._isInstance(item) && item.render(me.root()).iscroll._refresh();
+            me._isInstance(item) && item.render(me._$scroller).iscroll().iscroll('_refresh');
             return me;
         },
         _isInstance: function (instance) {
-            return instance instanceof ui.Button || instance instanceof ui.Group;
+            return instance instanceof ui.button || instance instanceof ui.group;
         },
         render: function (container) {
-            var me = this;
-            me.root().appendTo(container || document.body);
-            return me._enableScroll();
+            this.$super('render', container);
+            return this._initIscroll();
         }
     });
-
-    ui.define('group', {
-        _options: {
-            name: '',
-            items: []
-        },
-        _init: function () {
-            var me = this;
-
-            me.$super('_init');
-            me.root().on('buttonClick', $.proxy(me._showPopup, me));
-        },
-
-        _showPopup: function () {
-            var me = this,
-                items = this._options.items,
-                $subBarWrap = $('<div class="mui-group-wrap"></div> ');
-
-            me._$subBarWrap = $subBarWrap;
-            $.each(items, function (i, item) {
-                me.addItem(item);
-            });
-            me._subBar = ui.Popup({
-                content: $subBarWrap
-            });
-        },
-        _isInstance: function (instance) {
-            return instance instanceof ui.Button || instance instanceof ui.Group || instance instanceof ui.ScrollBox;
-        },
-        addItem: function (item) {
-            this._isInstance(item) && item.render(this._$subBarWrap);
-            return this;
-        }
-    }, ui.button);
 
     ui.define('toolbar', {
         _options: {
@@ -138,43 +128,39 @@
         },
         _create: function () {
             var me = this,
-                opts = me._options;
+                opts = me._options, $el;
 
-            me.root($('<div class="mui-toolbar"></div>').append(me._$boxWrap = $('<div class="mui-toolbar-wrap"></div>').append(me._$toolBox = $('<div class="mui-toolbar-toolBox"></div>'))));
-            opts.mode == 'swipe' && me._$boxWrap.prepend(me._$mask = $('<div class="mui-toolbar-mask"><span class="mui-toolbar-showArrow"></span></div>'));
-            $.each(opts.items, function (key, item) {
-                me.addItem(item);
-            });
+            me.root($el = $('<div class="mui-toolbar"></div>').append(me._$toolBox = $('<div class="mui-toolbar-toolBox"></div>')));
+            opts.mode == 'swipe' && $el.prepend('<span class="mui-toolbar-showArrow"></span>');
         },
         _init: function () {
             var me = this;
-            me._options.mode == 'swipe' ? me.root().on('swipe', $.proxy(me._eventHandler, me)) : me.show();
+            me._options.mode == 'swipe' ? me.root().hammer().on('swipe', $.proxy(me._eventHandler, me)) : me.show();
             return this;
         },
         _eventHandler: function (e) {
             var me = this;
             switch (e.type) {
                 case 'swipe':
-                    console.log(e);
                     e.direction == 'right' ? me.hide(function () {
-                        me._$boxWrap.css('-webkit-transform', 'translateX(0px)');
+                        me.root().removeClass('mui-toolbar-shadow');
+                        me._setPosition('hide');
                     }) : me.show(function () {
-                        me._$boxWrap.css('-webkit-transform', 'translateX(-' + me._$toolBox.width() + 'px)');
+                        me._$toolBox.addClass('mui-toolbar-anim');
+                        me._setPosition('show');
+                        me.root().addClass('mui-toolbar-shadow');
                     })
                     break;
             }
         },
+        _setPosition: function (type) {
+            this._$toolBox.css('-webkit-transform', 'translateX(' + (type == 'show' ? '0' : this._$toolBox.width()) + 'px)');
+        },
         _isInstance: function (instance) {
-            return instance instanceof ui.Button || instance instanceof ui.Group || instance instanceof ui.ScrollBox;
+            return instance instanceof ui.button || instance instanceof ui.group || instance instanceof ui.scrollbox;
         },
         _setVisible: function (fn, isShow) {
-            $.isFunction(fn) ? fn.call(this) : this.root()[isShow ? 'show' : 'hide']();
-            if ($.isFunction(fn)) {
-                fn.call(this);
-            } else {
-                this._$mask[isShow ? 'hide' : 'show']();
-                this._$toolBox[isShow ? 'hide' : 'show']();
-            }
+            $.isFunction(fn) ? fn.call(this) : this._$toolBox[isShow ? 'show' : 'hide']();
             return this;
         },
         show: function (fn) {
@@ -186,6 +172,20 @@
         addItem: function (item) {
             this._isInstance(item) && item.render(this._$toolBox);
             return this;
+        },
+        render: function (container) {
+            var me = this,
+                opts = me._options;
+
+            me.$super('render', container);
+            $.each(opts.items, function (key, item) {       //渲染子元素，可能有些子元素需要取高度等属性
+                me.addItem(item);
+            });
+            if (opts.mode == 'swipe' && !me._initDone) {
+                me._setPosition('hide');
+                me._initDone = true;
+            }
+            return me;
         }
     });
-})(Zepto, baidu.meditor.ui);
+})(Zepto, ME.ui);

@@ -48,4 +48,4 @@
             return !el.hasClass('mui-state-highlight');
         }
     });
-})(Zepto, baidu.meditor.ui);
+})(Zepto, ME.ui);
