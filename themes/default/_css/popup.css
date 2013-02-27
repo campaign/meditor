@@ -1,5 +1,6 @@
 .meditor-ui-popup {
     display: none;
+    position: absolute;
 }
 
 
@@ -11,7 +12,7 @@
 
 .meditor-ui-popup-arrow {
     position: absolute;
-    right: 0;
+    right: -10px;
     top:0;
     width:10px;
     height: 25px;
