@@ -516,15 +516,12 @@ Zepto.fn.iscroll = function(opt) {
     var that = this,
         me = this.attr('_iscroll-initialized',true).css({'overflow': 'hidden','-webkit-user-select': 'none'})[0],
         scroller = me.children[0],
-        M = Math, scrolling = false, top = 0, containerH, scrollerH, bottom, touch, stamp, startX, startY, isVertical, isTested, movedY, baseY, nowY, stopY, TID;
+        M = Math, scrolling = false, top = 0, containerH, scrollerH, bottom, touch, stamp, startX, startY, isVertical, isTested, movedY, baseY, nowY, TID;
     me.addEventListener('touchstart', function(e) {
         if(scrolling) {
             e.preventDefault();
-            stopY = parseInt(getComputedStyle(scroller, null)['-webkit-transform'].substr(22));
-            if(stopY > bottom && stopY < 0) {
+            if(top > bottom && top < 0) {
                 clearTimeout(TID);
-                scroller.style.webkitTransform = 'translate(0,' + stopY + 'px) translateZ(0px)';
-                top = stopY;
                 scrolling = false;
             }
         }
@@ -575,12 +572,11 @@ Zepto.fn.iscroll = function(opt) {
     }
     function roll(time, to) {
         if (scrolling) return;
-        if (to == nowY) time = 0;
-        top = to;
+        if (to === top) time = 0;
         scrolling = true;
         var startTime = Date.now(),
             animate = function () {
-                var now = Date.now(), newY;
+                var now = Date.now();
                 if (now >= startTime + time) {
                     scroller.style.webkitTransform = 'translate(0,' + to + 'px) translateZ(0px)';
                     scrolling = false;
@@ -589,8 +585,8 @@ Zepto.fn.iscroll = function(opt) {
                     return;
                 }
                 now = (now - startTime) / time - 1;
-                newY = (to - nowY) * M.sqrt(1 - now * now) + nowY;
-                scroller.style.webkitTransform = 'translate(0,' + newY + 'px) translateZ(0px)';
+                top = (to - nowY) * M.sqrt(1 - now * now) + nowY;
+                scroller.style.webkitTransform = 'translate(0,' + top + 'px) translateZ(0px)';
                 if (scrolling) TID = setTimeout(animate, 1);
             };
         animate();
