@@ -20,7 +20,7 @@
     background-color: white;
     -webkit-transform: translateZ(0);
     min-width: 400px;
-    min-height: 200px;
+    min-height: 180px;
     background-image: -webkit-gradient(linear,0% 0%, 0% 100%, from(#E2E5EA), to(#D3D5DB));
     -webkit-box-shadow:0 0 5px rgba(0, 0, 0, 0.5);
     border-radius: 3px;

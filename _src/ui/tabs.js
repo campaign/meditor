@@ -84,7 +84,7 @@
                 }
                 index++;
             });
-            $.isArray(opt.items) && el.addClass('mmui-tabs-notitle');
+            $.isArray(opt.items) && el.addClass('mui-tabs-notitle');
             this._titles = this._nav.children();
             this._panels = this._content.children();
         },
