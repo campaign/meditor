@@ -84,6 +84,10 @@
             return this.trigger('close');
         },
 
+        toggle: function(){
+            return this[this._opened?'close':'open'].call(this);
+        },
+
         refresh: function(){
             var body, round, $win, size, el;
             if(this._opened){
