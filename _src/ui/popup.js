@@ -16,7 +16,7 @@
         _create: function () {
             var me = this,
                 opt = me._options;
-            me._el = $('<div class="meditor-ui-popup"></div>').append($('<div class="meditor-ui-popup-content"></div>').html(opt.content).append('<div class="meditor-ui-popup-arrow"></div>')).appendTo('body');
+            me._el = $('<div class="mui-popup"></div>').append($('<div class="mui-popup-content"></div>').html(opt.content).append('<div class="mui-popup-arrow"></div>')).appendTo('body');
         },
 
         _init: function () {
@@ -32,7 +32,8 @@
                 width:      opt.width
             })
             //点击隐藏
-            $(document).on('tap', function () {
+            $(document).on('tap', function (e) {
+                if ($.contains(root[0], e.target)) return;
                 me.hide();
             });
         },
@@ -61,7 +62,7 @@
                 opt = me._options,
                 now = Date.now(),
                 stamp = opt._stamp;
-            if(now - stamp < 30) return me;
+            if(now - stamp < 50) return me;
             opt._stamp = now;
             me._fitSize(node).root().show();
             opt._isShow = true;
@@ -77,7 +78,7 @@
                 opt = me._options,
                 now = Date.now(),
                 stamp = opt._stamp;
-            if(now - stamp < 30) return me;
+            if(now - stamp < 50) return me;
             opt._stamp = now;
             me.root().hide();
             opt._isShow = false;
