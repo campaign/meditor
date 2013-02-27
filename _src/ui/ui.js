@@ -6,7 +6,7 @@
  * @import core/zepto.js, core/zepto.extend.js
  */
 (function($, ns, undefined) {
-    var id = 1;
+    var id = 1, _blankFn = function(){};
 
     function _guid() {
         return id++;
@@ -46,6 +46,10 @@
                 obj._createWidget.call(obj, options);
                 return obj;
             }, data);
+        },
+
+        isWidget: function(obj, name){
+            return obj instanceof (name===undefined ? _widget: ns.ui[name] || _blankFn);
         }
     };
 
