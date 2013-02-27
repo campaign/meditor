@@ -11,7 +11,7 @@
         }
         body {
             height: 500px;
-            width:500px;
+            width:700px;
         }
         #btn {
             position: absolute;
@@ -36,7 +36,8 @@
         combox1 = baidu.meditor.ui.combox({
                         itemClick: function (e, index, value, node) {
                             this.select(value);
-                            combox2.show(node);
+                            index == 1 && combox2.toggle(node);
+                            index == 2 && combox3.toggle(node);
                         },
                         renderFn: function (index) {
                             if(index < 10) {
@@ -44,14 +45,14 @@
                             }
                         }
                     });
-        $('#btn').click(function() {
-            combox1.show($('#btn'));
+        $('#btn').tap(function() {
+            combox1.toggle($('#btn'));
         });
         combox2 =
                 baidu.meditor.ui.combox({
                     itemClick: function (e, index, value, node) {
                         this.select(value);
-                        combox3.show(node);
+                        combox4.toggle(node);
                     },
                     renderFn: function (index) {
                         if(index < 10) {
@@ -60,6 +61,18 @@
                     }
                 });
         var combox3 =
+                baidu.meditor.ui.combox({
+                    itemClick: function (e, index, value, node) {
+                        this.select(value);
+                        combox4.toggle(node);
+                    },
+                    renderFn: function (index) {
+                        if(index < 10) {
+                            return '<span value="a' + index + '">第 ' + index + ' 行</span>';
+                        }
+                    }
+                });
+        var combox4 =
                 baidu.meditor.ui.combox({
                     itemClick: function (e, index, value, node) {
                         this.select(value);

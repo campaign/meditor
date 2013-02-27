@@ -11,17 +11,19 @@
         }
         body {
             height: 500px;
-            width:500px;
+            width:700px;
         }
         #btn {
             position: absolute;
             top:20px;
             right: 20px;
-            height: 30px;
-            width:30px;
+            padding: 3px 10px;
             background: #eee;
         }
-
+        .test {
+            height: 100%;
+            background: #efefef;
+        }
     </style>
     <script type="text/javascript" src="../../_src/zepto.js"></script>
     <script type="text/javascript" src="../../_src/zepto.extend.js"></script>
@@ -30,12 +32,12 @@
     <link rel="stylesheet" href="../../themes/default/_css/popup.css" />
 </head>
 <body>
-<div id="btn">btn</div>
+<button id="btn">btn</button>
 
 <script type="text/javascript">
     $(function(){
         var popup = baidu.meditor.ui.popup({
-                content:'<p>some content</p>'
+                content:'<p class="test">some content</p>'
             });
         $('#btn').tap(function() {
             popup.toggle($('#btn'));

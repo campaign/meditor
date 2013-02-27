@@ -1,17 +1,17 @@
-.meditor-ui-popup {
+.mui-popup {
     display: none;
     position: absolute;
 }
 
 
-.meditor-ui-popup-content {
+.mui-popup-content {
     border: 1px solid #ccc;
     background: #fff;
     border-radius: 4px;
     box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
 }
 
-.meditor-ui-popup-arrow {
+.mui-popup-arrow {
     position: absolute;
     right: -10px;
     top:0;
