@@ -5,7 +5,7 @@
  * @import editor.js,core/utils.js,core/EventBase.js,core/browser.js,core/dom/dtd.js,core/dom/domUtils.js,core/dom/Range.js,core/dom/Selection.js,plugins/serialize.js
  * @desc 编辑器主类，包含编辑器提供的大部分公用接口
  */
-(function () {
+(function ($) {
     var uid = 0, _selectionChangeTimer;
 
 
@@ -57,7 +57,6 @@
     var Editor = ME.Editor = function (options) {
         var me = this;
         me.uid = uid++;
-        EventBase.call(me);
         me.commands = {};
         me.options = utils.extend(utils.clone(options || {}), UEDITOR_CONFIG, true);
         me.shortcutkeys = {};
@@ -98,7 +97,7 @@
         }
         me.langIsReady = true;
 
-        me.fireEvent("langReady");
+        me.trigger("langReady");
         ME.instants['ueditorInstant' + me.uid] = me;
     };
     Editor.prototype = {
@@ -117,7 +116,7 @@
         ready:function (fn) {
             var me = this;
             if (fn) {
-                me.isReady ? fn.apply(me) : me.addListener('ready', fn);
+                me.isReady ? fn.apply(me) : me.on('ready', fn);
             }
         },
         /**
@@ -142,7 +141,7 @@
         destroy:function () {
 
             var me = this;
-            me.fireEvent('destroy');
+            me.trigger('destroy');
             var container = me.container.parentNode;
             var textarea = me.textarea;
             if (!textarea) {
@@ -244,7 +243,7 @@
                 if (options.autoClearinitialContent) {
                     var oldExecCommand = me.execCommand;
                     me.execCommand = function () {
-                        me.fireEvent('firstBeforeExecCommand');
+                        me.trigger('firstBeforeExecCommand');
                         return oldExecCommand.apply(me, arguments);
                     };
                     this._setDefaultContent(options.initialContent);
@@ -276,7 +275,7 @@
                 me.container = this.iframe.parentNode;
             }
             me.isReady = 1;
-            me.fireEvent('ready');
+            me.trigger('ready');
             options.onready && options.onready.call(me);
             domUtils.on(me.window, ['blur', 'focus'], function (e) {
                 //chrome下会出现alt+tab切换时，导致选区位置不对
@@ -354,10 +353,10 @@
             var range = me.selection.getRange(),
                 address = range.createAddress();
 //
-//            me.fireEvent( 'beforegetcontent');
+//            me.trigger( 'beforegetcontent');
 //            var root = UE.htmlparser(me.body.innerHTML);
 //            me.filterOutputRule(root);
-//            me.fireEvent( 'aftergetcontent', cmd );
+//            me.trigger( 'aftergetcontent', cmd );
 
             try{
                 range.moveToAddress(address).select(true);
@@ -374,7 +373,7 @@
             var me = this,
                 headHtml = [],
                 html = '';
-            me.fireEvent('getAllHtml', headHtml);
+            me.trigger('getAllHtml', headHtml);
 
             return '<html><head>' + (me.options.charset ? '<meta http-equiv="Content-Type" content="text/html; charset=' + me.options.charset + '"/>' : '')
                 + (headHtmlForIE9 || me.document.getElementsByTagName('head')[0].innerHTML) + headHtml.join('\n') + '</head>'
@@ -423,7 +422,7 @@
         setContent:function (html, isAppendTo, notFireSelectionchange) {
 //            var me = this;
 //
-//            me.fireEvent( 'beforesetcontent',html);
+//            me.trigger( 'beforesetcontent',html);
 //            var root = UE.htmlparser(html);
 //            me.filterInputRule(root);
 //            html = root.toHtml();
@@ -463,8 +462,8 @@
                     }
                 }
             }
-            me.fireEvent( 'aftersetcontent' );
-            me.fireEvent('contentchange');
+            me.trigger( 'aftersetcontent' );
+            me.trigger('contentchange');
 
             !notFireSelectionchange && me._selectionChange();
             //清除保存的选区
@@ -519,7 +518,7 @@
          * @ignore
          */
         _proxyDomEvent:function (evt) {
-            return this.fireEvent(evt.type.replace(/^on/, ''), evt);
+            return this.trigger(evt.type.replace(/^on/, ''), evt);
         },
         /**
          * 变化选区
@@ -538,10 +537,10 @@
                 me.selection.cache();
 
                 if (me.selection._cachedRange && me.selection._cachedStartElement) {
-                    me.fireEvent('beforeselectionchange');
+                    me.trigger('beforeselectionchange');
                     // 第二个参数causeByUi为true代表由用户交互造成的selectionchange.
-                    me.fireEvent('selectionchange', !!evt);
-                    me.fireEvent('afterselectionchange');
+                    me.trigger('selectionchange', !!evt);
+                    me.trigger('afterselectionchange');
                     me.selection.clear();
                 }
             }, delay || 50);
@@ -575,15 +574,15 @@
             if (!cmd.notNeedUndo && !me.__hasEnterExecCommand) {
                 me.__hasEnterExecCommand = true;
                 if (me.queryCommandState(cmdName) != -1) {
-                    me.fireEvent('beforeexeccommand', cmdName);
+                    me.trigger('beforeexeccommand', cmdName);
                     result = this._callCmdFn('execCommand', arguments);
-                    !me._ignoreContentChange && me.fireEvent('contentchange');
-                    me.fireEvent('afterexeccommand', cmdName);
+                    !me._ignoreContentChange && me.trigger('contentchange');
+                    me.trigger('afterexeccommand', cmdName);
                 }
                 me.__hasEnterExecCommand = false;
             } else {
                 result = this._callCmdFn('execCommand', arguments);
-                !me._ignoreContentChange && me.fireEvent('contentchange')
+                !me._ignoreContentChange && me.trigger('contentchange')
             }
             !me._ignoreContentChange && me._selectionChange();
             return result;
@@ -652,7 +651,7 @@
          * @grammar editor.reset()
          */
         reset:function () {
-            this.fireEvent('reset');
+            this.trigger('reset');
         },
         setEnabled:function () {
             var me = this, range;
@@ -671,7 +670,7 @@
                     me.queryCommandState = me.bkqueryCommandState;
                     delete me.bkqueryCommandState;
                 }
-                me.fireEvent('selectionchange');
+                me.trigger('selectionchange');
             }
         },
         /**
@@ -697,7 +696,7 @@
                     }
                     return -1;
                 };
-                me.fireEvent('selectionchange');
+                me.trigger('selectionchange');
             }
         },
         /** 设置当前编辑区域不可编辑,except中的命令除外
@@ -722,7 +721,7 @@
                 var me = this;
                 if (me.document.getElementById('initContent')) {
                     me.body.innerHTML = '<p><br/></p>';
-                    me.removeListener('firstBeforeExecCommand focus', clear);
+                    me.off('firstBeforeExecCommand focus', clear);
                     setTimeout(function () {
                         me.focus();
                         me._selectionChange();
@@ -734,7 +733,7 @@
                 var me = this;
                 me.body.innerHTML = '<p id="initContent">' + cont + '</p>';
 
-                me.addListener('firstBeforeExecCommand focus', clear);
+                me.on('firstBeforeExecCommand focus', clear);
             }
         }(),
         /**
@@ -822,6 +821,57 @@
             for (var i = 0, ci; ci = this.outputRules[i++];) {
                 ci.call(this, root)
             }
+        },
+        on:function (types, listener) {
+            types = $.trim(types).split(' ');
+            for (var i = 0, ti; ti = types[i++];) {
+                getListener(this, ti, true).push(listener);
+            }
+        },
+        /**
+         * 移除事件监听器
+         * @name off
+         * @grammar editor.off(types,fn)  //types为事件名称，多个可用空格分隔
+         * @example
+         * //changeCallback为方法体
+         * editor.off("selectionchange",changeCallback);
+         */
+        off:function (types, listener) {
+            types = $.trim(types).split(' ');
+            for (var i = 0, ti; ti = types[i++];) {
+                utils.removeItem(getListener(this, ti) || [], listener);
+            }
+        },
+        /**
+         * 触发事件
+         * @name trigger
+         * @grammar editor.trigger(types)  //types为事件名称，多个可用空格分隔
+         * @example
+         * editor.trigger("selectionchange");
+         */
+        trigger:function (types) {
+            types = $.trim(types).split(' ');
+            for (var i = 0, ti; ti = types[i++];) {
+                var listeners = getListener(this, ti),
+                    r, t, k;
+                if (listeners) {
+                    k = listeners.length;
+                    while (k--) {
+                        if(!listeners[k])continue;
+                        t = listeners[k].apply(this, arguments);
+                        if(t === true){
+                            return t;
+                        }
+                        if (t !== undefined) {
+                            r = t;
+                        }
+                    }
+                }
+                if (t = this['on' + ti.toLowerCase()]) {
+                    r = t.apply(this, arguments);
+                }
+            }
+            return r;
         }
         /**
          * 得到dialog实例对象
@@ -832,7 +882,13 @@
          * dialog.open();   //打开dialog
          * dialog.close();  //关闭dialog
          */
-    };
-    utils.inherits(Editor, EventBase);
-})();
+
+    }
+    function getListener(obj, type, force) {
+        var allListeners;
+        type = type.toLowerCase();
+        return ( ( allListeners = ( obj.__allListeners || force && ( obj.__allListeners = {} ) ) )
+            && ( allListeners[type] || force && ( allListeners[type] = [] ) ) );
+    }
+})(Zepto);
 
