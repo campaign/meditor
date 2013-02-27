@@ -33,7 +33,7 @@
 
 <script type="text/javascript">
     $(function(){
-        combox1 = baidu.meditor.ui.combox({
+        combox1 = ME.ui.combox({
                         itemClick: function (e, index, value, node) {
                             this.select(value);
                             index == 1 && combox2.toggle(node);
@@ -49,7 +49,7 @@
             combox1.toggle($('#btn'));
         });
         combox2 =
-                baidu.meditor.ui.combox({
+                ME.ui.combox({
                     itemClick: function (e, index, value, node) {
                         this.select(value);
                         combox4.toggle(node);
@@ -61,7 +61,7 @@
                     }
                 });
         var combox3 =
-                baidu.meditor.ui.combox({
+                ME.ui.combox({
                     itemClick: function (e, index, value, node) {
                         this.select(value);
                         combox4.toggle(node);
@@ -73,7 +73,7 @@
                     }
                 });
         var combox4 =
-                baidu.meditor.ui.combox({
+                ME.ui.combox({
                     itemClick: function (e, index, value, node) {
                         this.select(value);
                     },
