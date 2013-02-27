@@ -37,7 +37,14 @@
     var dialog = ui.dialog({
         title: '弹出框中使用tabs'
     }).content(ui.tabs({
-        items:['内容1', '内容2', '内容3']
+        items: {
+            tabs1: ui.tabs({
+                items: ['内容1', '内容2', '内容3']
+            }).root(),
+            tabs2: ui.tabs({
+                items: ['内容1', '内容2', '内容3']
+            }).root()
+        }
     }).root()).open();
 
 

@@ -77,12 +77,11 @@
                 actClass = index==active?' mui-state-active':'';
                 nav.append('<li class="'+actClass+'"><a href="javascript:void(0);">'+key+'</a></li>');
                 content.append($('<div id="'+id+'" class="mui-panel mui-tabs-panel slide'+actClass+'"></div>').append(val));
-                items[index] = {
+                items[index++] = {
                     id: id,
                     title: key,
                     content: val
                 }
-                index++;
             });
             $.isArray(opt.items) && el.addClass('mui-tabs-notitle');
             this._titles = this._nav.children();
@@ -96,11 +95,12 @@
             $(window).on('ortchange', eventHandler);
             tabs.push(this._content.get(0));
             eventBinded =  eventBinded || (tabsSwipeEvents(), true);
-            this._el.on('tabsSwipeLeft tabsSwipeRight', eventHandler);
+            this._el.on('tabsSwipeLeft tabsSwipeRight', eventHandler)
+                .one('DOMNodeInserted', eventHandler);
         },
 
         _eventHandler: function(e){
-            var match, items, active = this._options.active, index;
+            var match, items, active = this._options.active, index, me = this;
             switch(e.type) {
                 case 'tabsSwipeLeft':
                 case 'tabsSwipeRight':
@@ -114,6 +114,8 @@
                     break;
                 case 'ortchange':
                     return this.refresh();
+                case 'DOMNodeInserted':
+                    return $.later(function(){me.refresh();});
                 default:
                     if((match = $(e.target).closest('li', this._nav.get(0))) && match.length) {
                         e.preventDefault();
