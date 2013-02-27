@@ -41,7 +41,7 @@
 
 
 (function ($, ui) {
-    ui.define('ScrollBox', {
+    ui.define('scrollbox', {
         _options: {
             showCount: 4,
             items: []
@@ -96,8 +96,9 @@
         }
     });
 
-    ui.define('Group', {
+    ui.define('group', {
         _options: {
+            name: '',
             items: []
         },
         _init: function () {
@@ -127,9 +128,9 @@
             this._isInstance(item) && item.render(this._$subBarWrap);
             return this;
         }
-    }, ui.Button);
+    }, ui.button);
 
-    ui.define('Toolbar', {
+    ui.define('toolbar', {
         _options: {
             mode: 'swipe',    //'swipe' || 'static',
             items: [],
@@ -147,22 +148,19 @@
         },
         _init: function () {
             var me = this;
-            me._options.mode == 'swipe' ? me.root().on('swipeLeft swipeRight', $.proxy(me._eventHandler, me)) : me.show();
+            me._options.mode == 'swipe' ? me.root().on('swipe', $.proxy(me._eventHandler, me)) : me.show();
             return this;
         },
         _eventHandler: function (e) {
             var me = this;
-            alert(e.type);
             switch (e.type) {
-                case 'swipeRight':
-                    me.hide(function () {
+                case 'swipe':
+                    console.log(e);
+                    e.direction == 'right' ? me.hide(function () {
                         me._$boxWrap.css('-webkit-transform', 'translateX(0px)');
-                    });
-                    break;
-                case 'swipeLeft':
-                    me.show(function () {
+                    }) : me.show(function () {
                         me._$boxWrap.css('-webkit-transform', 'translateX(-' + me._$toolBox.width() + 'px)');
-                    });
+                    })
                     break;
             }
         },

@@ -1,5 +1,5 @@
 (function($, ui){
-    ui.define('Button', {
+    ui.define('button', {
         _options: {
             name: '',
             title: '按钮',
