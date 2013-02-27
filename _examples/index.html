@@ -7,6 +7,7 @@
     <script src="../_src/zepto.js"></script>
     <script src="../_src/hammer.js"></script>
     <script src="../_src/zepto.hammer.js"></script>
+    <script src="../_src/zepto.extend.js"></script>
     <script type="text/javascript" charset="utf-8" src="../editor_config.js"></script>
     <script type="text/javascript" charset="utf-8" src="editor_api.js">
     </script>
@@ -23,21 +24,13 @@
     <button id="right">》</button>
 </div>
 <script>
-    var me = new ME.Editor({
-        height:300
-    });
-    me.render('editor');
-    $('#bold').click(function(){
-        me.execCommand('bold')
+    ME.getEditor('#editor',{
+        toolbars:[
+            'bold',
+            {name:'justify',type:'group',items:['justifyleft']},
+            {type:'scrollbox',items:['bold','underline']}
+        ]
     })
-    $('#left').click(function(){
-        me.execCommand('moverange','left')
-    })
-    $('#right').click(function(){
-        me.execCommand('moverange','right')
-    })
-    document.body.addEventListener('touchstart',function(){},false)
-    me.body.addEventListener('touchend',function(e){me.selection.getRange().select()},false)
 </script>
 </body>
 </html>

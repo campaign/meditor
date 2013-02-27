@@ -420,7 +420,7 @@
          * })
          */
         setContent:function (html, isAppendTo, notFireSelectionchange) {
-//            var me = this;
+            var me = this;
 //
 //            me.trigger( 'beforesetcontent',html);
 //            var root = UE.htmlparser(html);
