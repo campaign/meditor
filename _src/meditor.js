@@ -5,7 +5,6 @@ window.ME = window.ME || {
     'plugins' : {},
     'commands' :{},
     'version' : '1.0.0.0',
-    'dom' : {},
     instants : {}
 };
 
