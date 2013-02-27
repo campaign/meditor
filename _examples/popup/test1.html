@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+            font-size: 14px;
+        }
+        body {
+            height: 500px;
+            width:500px;
+        }
+        #btn {
+            position: absolute;
+            top:20px;
+            right: 20px;
+            height: 30px;
+            width:30px;
+            background: #eee;
+        }
+
+    </style>
+    <script type="text/javascript" src="../../_src/zepto.js"></script>
+    <script type="text/javascript" src="../../_src/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../_src/ui/ui.js"></script>
+    <script type="text/javascript" src="../../_src/ui/popup.js"></script>
+    <link rel="stylesheet" href="../../themes/default/_css/popup.css" />
+</head>
+<body>
+<div id="btn">btn</div>
+
+<script type="text/javascript">
+    $(function(){
+        var popup = baidu.meditor.ui.popup({
+                content:'<p>some content</p>'
+            });
+        $('#btn').tap(function() {
+            popup.toggle($('#btn'));
+        });
+    });
+</script>
+</body>
+</html>
