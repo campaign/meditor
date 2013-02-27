@@ -125,4 +125,4 @@
 
     var btnOk = ui.dialog.BUTTON_OK = 1,
         btnCancel = ui.dialog.BUTTON_CANCEL = 2;
-})(Zepto, baidu.meditor.ui);
+})(Zepto, ME.ui);
