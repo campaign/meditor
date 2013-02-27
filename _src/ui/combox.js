@@ -1,6 +1,6 @@
 
 (function ($) {
-    baidu.meditor.ui.define('combox', {
+    ME.ui.define('combox', {
 
         _options: {
             renderFn:       null,

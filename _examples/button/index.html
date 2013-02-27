@@ -11,6 +11,7 @@
             padding: 0.5em;
         }
     </style>
+    <script type="text/javascript" src="../../_src/meditor.js"></script>
     <script type="text/javascript" src="../../_src/zepto.js"></script>
     <script type="text/javascript" src="../../_src/zepto.extend.js"></script>
     <script type="text/javascript" src="../../_src/ui/ui.js"></script>
@@ -19,20 +20,20 @@
 <body>
     <div id="toolbar"></div>
 <script>
-    var ui = baidu.meditor.ui;
+    var ui = ME.ui;
 
-    ui.Button({name: 'bold'}).render('#toolbar');
-    ui.Button({name: 'italic', disabled: true}).render('#toolbar');
-    ui.Button({name: 'underline', highlight: true}).render('#toolbar');
-    ui.Button({name: 'strike'}).render('#toolbar');
-    ui.Button({name: 'font'}).render('#toolbar');
-    ui.Button({name: 'image'}).render('#toolbar');
-    ui.Button({name: 'bullet'}).render('#toolbar');
-    ui.Button({name: 'numbered'}).render('#toolbar');
-    ui.Button({name: 'alignleft'}).render('#toolbar');
-    ui.Button({name: 'aligncenter'}).render('#toolbar');
-    ui.Button({name: 'alignright'}).render('#toolbar');
-    ui.Button({name: 'alignjustify'}).render('#toolbar');
+    ui.button({name: 'bold'}).render('#toolbar');
+    ui.button({name: 'italic', disabled: true}).render('#toolbar');
+    ui.button({name: 'underline', highlight: true}).render('#toolbar');
+    ui.button({name: 'strike'}).render('#toolbar');
+    ui.button({name: 'font'}).render('#toolbar');
+    ui.button({name: 'image'}).render('#toolbar');
+    ui.button({name: 'bullet'}).render('#toolbar');
+    ui.button({name: 'numbered'}).render('#toolbar');
+    ui.button({name: 'alignleft'}).render('#toolbar');
+    ui.button({name: 'aligncenter'}).render('#toolbar');
+    ui.button({name: 'alignright'}).render('#toolbar');
+    ui.button({name: 'alignjustify'}).render('#toolbar');
 </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 
 
 (function ($) {
-    baidu.meditor.ui.define('popup', {
+    ME.ui.define('popup', {
 
         _options: {
             content:        null,
