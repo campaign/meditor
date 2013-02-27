@@ -6,23 +6,26 @@
             renderFn:       null,
             height:         150,
             width:          200,
-            _iscrollInited:  false
+            needIscroll:    true,
+            _isShow:        false,
+            _iscrollInited: false
         },
-        _allCombox:         [],
-        _inited:            false,
+        _allShowedCombox:   [],
+        _addEventInited:    false,
         _needCloseAll:      true,
+        _sibling:           null,
 
         _create: function () {
             var me = this,
                 opt = me._options,
-                root = me._el = $('<div class="meditor-ui-combox"></div>').appendTo('body'),
-                i = 0, j, html = '<div class="meditor-ui-combox-content"><ul>';
+                root = me._el = $('<div class="mui-combox"></div>').appendTo('body'),
+                i = 0, j, html = '<div class="mui-combox-content"><ul>';
             while(true) {
                 j = opt.renderFn(i++);
                 if(!j) break;
                 html += '<li>' + j + '</li>';
             }
-            root.html(html + '</ul></div><div class="meditor-ui-combox-arrow"></div>');
+            root.html(html + '</ul></div><div class="mui-combox-arrow"></div>');
         },
 
         _init: function () {
@@ -30,86 +33,91 @@
                 opt = me._options,
                 proto = me.__proto__,
                 root = me.root(),
-                highLightCls = 'meditor-ui-combox-highlight';
-
+                content = root.children().first(),
+                highLightCls = 'mui-combox-highlight';
+            //设置宽高
+            root.css({
+                height:     opt.height,
+                width:      opt.width
+            });
             //highlight
-            root.on('touchstart', function (e) {
+            content.on('touchstart', function (e) {
                 $(e.target).closest('li').addClass(highLightCls);
             }).on('touchend touchcancel', function(e) {
                 $(e.target).closest('li').removeClass(highLightCls);
             });
 
             //autohide
-            root.on('tap', function (e) {
+            content.on('tap', function (e) {
+                me.closeChildren();
                 proto._needCloseAll = false;
-                me._closeOthers();
                 var li = $(e.target).closest('li');
                 me.trigger('itemClick', [li.index(), li.children().attr('value'), li]);
-
             });
-            if(!proto._inited) {
+            if(!proto._addEventInited) {
                 $(document).on('tap', function () {
                     proto._needCloseAll && me.closeAll();
                     proto._needCloseAll = true;
                 });
-                proto._inited = true;
+                proto._addEventInited = true;
             }
+
             //缓存查询
             var items = root.find('li'),
                 children = items.children();
             me.option({
-                items: items,
-                children: children
+                items:      items,
+                children:   children
             });
         },
 
         _fitSize: function (node) {
             var me = this,
                 opt = me._options,
-                rect = (node.nodeType === 1 ? node : node[0]).getBoundingClientRect();
+                rect;
+            if(!node) {
+                rect = {left: opt.width + 20, top: 10, height: 30};  //如果不传入节点，可以传入一个这样的对象，用来定义组件位置，height控制箭头位置
+            } else if(node[0] || node.nodeType === 1) {
+                rect= (node[0] || node).getBoundingClientRect();
+            } else rect = node;
+
             me.root().css({
-                position:   'absolute',
-                top:        rect.top,
                 left:       rect.left - opt.width - 10,
-                height:     opt.height,
-                width:      opt.width + 10
-            }).children().first().css({
-                height:     opt.height,
-                width:      opt.width
-            }).siblings().last().css({
-                top:rect.height / 2 - 10
-            });
+                top:        rect.top
+            }).children().last().css({top: rect.height / 2 - 10});
             return me;
         },
 
-        _closeOthers: function () {
+        closeChildren: function () {
             var me = this,
-                allCombox = me._allCombox,
+                allCombox = me._allShowedCombox,
+                proto = me.__proto__,
                 item;
             while(item = allCombox[allCombox.length - 1]){
                  if(item._options.stamp > me._options.stamp) {
                      item.hide();
-                     allCombox.pop();
+                     proto._sibling = item;
                  } else break;
             }
+            return me;
         },
 
         closeAll: function() {
             var me = this,
                 proto = me.__proto__,
-                allCombox = proto._allCombox;
+                allCombox = proto._allShowedCombox;
             allCombox.forEach(function(item) {
                 item.hide();
             });
-            proto._allCombox = [];
+            proto._allShowedCombox = [];
             return me;
         },
 
-        select: function (index, _needed) {
+        select: function (index, _remove) {
             var me = this,
                 opt = me._options,
                 cls = 'selected',
-                action = _needed ? 'removeClass' : 'addClass';
+                action = _remove ? 'removeClass' : 'addClass';
             if(typeof index === 'number') {
                 opt.items.eq(index)[action](cls);
             } else {
@@ -123,39 +131,58 @@
         },
 
         unSelect: function (index) {
-            var me = this;
-            me.select(index, false);
-            return me;
+            return this.select(index, true);
         },
 
         label: function (index, label) {
-            return this._options.items.eq(index).html(label);
+            var _lable = this._options.children.eq(index).html(label);
+            return label === undefined ? _lable : this;
         },
 
         value: function (index, value) {
-            return this._options.children.eq(index).attr('value', value);
+            var _value = this._options.children.eq(index).attr('value', value);
+            return value === undefined ? _value : this;
         },
 
         show: function (node) {
             var me = this,
                 opt = me._options;
             me._fitSize(node).root().show();
-            if(!opt._iscrollInited) {
+            opt._isShow = true;
+            if(opt.needIscroll && !opt._iscrollInited) {
                 me.root().children().first().iscroll();
                 opt._iscrollInited  = true;
             }
             //公共索引
             me.option('stamp', Date.now());
-            me._allCombox.push(me);
+            me._allShowedCombox.push(me);
             return me;
         },
 
         hide: function () {
-            var me = this;
+            var me = this,
+                opt = me._options,
+                allCombox = me.__proto__._allShowedCombox;
+            me.closeChildren();
             me.root().hide();
+            if(me === allCombox[allCombox.length - 1]) {
+                allCombox.pop();
+            }
+            opt._isShow = false;
+            return me;
+        },
+
+        toggle: function (node) {
+            var me = this,
+                proto = me.__proto__;
+            if(me === proto._sibling) {
+                proto._sibling = null;
+                return me;
+            }
+            me._options._isShow ? me.hide() : me.show(node);
+            proto._needCloseAll = false;
             return me;
         }
-
     });
 
 })(Zepto);

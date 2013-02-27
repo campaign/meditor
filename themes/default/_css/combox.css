@@ -1,34 +1,38 @@
-.meditor-ui-combox {
+.mui-combox {
     display: none;
+    position: absolute;
 }
 
-.meditor-ui-combox ul li {
+.mui-combox ul li {
     list-style:none;
     height: 50px;
     line-height: 50px;
     border-bottom: 1px solid #ddd;
     text-indent: 2em;
 }
-.meditor-ui-combox li.selected {
-    background-image: url(aa.png);
+.mui-combox li.selected {
+    background-image: url(../images/scale.png);
     background-position: left center;
     background-repeat: no-repeat;
 }
 
-.meditor-ui-combox-content {
+.mui-combox-content {
+    height: 100%;
+    width: 100%;
     border: 1px solid #ccc;
     background: #fff;
+    border-radius: 4px;
     box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
 }
 
-.meditor-ui-combox-highlight {
+.mui-combox-highlight {
     background-color: #efefef;
 }
-.meditor-ui-combox-arrow {
+.mui-combox-arrow {
     position: absolute;
-    right: 0;
+    right: -10px;
     top:0;
     width:10px;
     height: 25px;
-    background: url(bb.png) center center no-repeat;
+    background: url(../images/cursor_v.png) center center no-repeat;
 }
