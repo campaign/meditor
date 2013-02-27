@@ -7,6 +7,7 @@
 .meditor-ui-popup-content {
     border: 1px solid #ccc;
     background: #fff;
+    border-radius: 4px;
     box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
 }
 
