@@ -495,20 +495,19 @@
          * @ignore
          */
         _initEvents:function () {
-//            var me = this,
-//                doc = me.document,
-//                win = me.window;
-//            me._proxyDomEvent = utils.bind(me._proxyDomEvent, me);
-//            domUtils.on(doc, ['click', 'mousedown', 'keydown', 'keyup', 'keypress', 'mouseup', 'mouseover', 'mouseout', 'selectstart'], me._proxyDomEvent);
-//            domUtils.on(win, ['focus', 'blur'], me._proxyDomEvent);
-//            domUtils.on(doc, ['mouseup', 'keydown'], function (evt) {
-//                //特殊键不触发selectionchange
-//                if (evt.type == 'keydown' && (evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)) {
-//                    return;
-//                }
-//                if (evt.button == 2)return;
-//                me._selectionChange(250, evt);
-//            });
+            var me = this,
+                doc = me.document,
+                win = me.window;
+            me._proxyDomEvent = utils.bind(me._proxyDomEvent, me);
+            domUtils.on(doc, ['click', 'keydown', 'keyup', 'keypress','touchstart','touchend','touchmove', 'selectstart'], me._proxyDomEvent);
+            domUtils.on(win, ['focus', 'blur'], me._proxyDomEvent);
+            domUtils.on(doc, ['touchend', 'keydown'], function (evt) {
+                //特殊键不触发selectionchange
+                if (evt.type == 'keydown' && (evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)) {
+                    return;
+                }
+                me._selectionChange(250, evt);
+            });
 
 
         },
