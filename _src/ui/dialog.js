@@ -3,7 +3,7 @@
         _options: {
             title: '',
             content: '',
-            mask: false,
+            mask: true,
             buttonType: 3// 第一位表示是否现实确认，第二位表示是否显示取消。
         },
 
