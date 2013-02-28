@@ -13,8 +13,8 @@
             'plugins/moverange.js',
             'plugins/basestyle.js',
             'ui/ui.js',
-            'ui/toolbar.js',
             'ui/button.js',
+            'ui/toolbar.js',
             'ui/popup.js',
             'adapter/adapter.js',
             'adapter/buttons.js'

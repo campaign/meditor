@@ -41,6 +41,7 @@
 .mui-button-redo span.icon:before { content: '\27f3'}/*redo*/
 .mui-button-table span.icon:before { content: '\f0ce'}/*表格*/
 .mui-button-delete span.icon:before { content: '\2716'}/*删除*/
+.mui-button-color span.icon:before { content: '\f020'}/*颜色*/
 
 
 .mui-button {
