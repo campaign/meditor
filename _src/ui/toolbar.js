@@ -54,16 +54,17 @@
         },
         _createPopup: function () {
             var me = this,
-                items = this._options.items,
+                opts = this._options,
                 $subBarWrap = $('<div class="mui-group-wrap"></div> ');
 
             me._$subBarWrap = $subBarWrap;
-            $.each(items, function (i, item) {
+            $.each(opts.items, function (i, item) {
                 me.addItem(item);
             });
             return me._subBar = ui.popup({
                 content: $subBarWrap,
-                width: 'auto'
+                width: 'auto',
+                prefix: opts.name || 'group'
             });
         },
         _isInstance: function (instance) {
@@ -98,7 +99,7 @@
 
             $.each(opts.items.slice(0, Math.min(opts.showCount, opts.items.length)), function (i, item) {
                 var $item = item.root();
-                height += $item.height() + parseInt($item.css('margin-top')) + parseInt($item.css('margin-bottom'));
+                height += ($item.height() + parseInt($item.css('margin-top')) + parseInt($item.css('margin-bottom')))/(i == opts.showCount - 1 ? 2 : 1);
             });
             return height;
         },
@@ -126,43 +127,74 @@
             items: [],
             useFix: false
         },
+        _isShow: false,
+        _initDone: false,
+        _isAnim: false,
+        _win: window,
+        _body: document.body,
+
         _create: function () {
             var me = this,
                 opts = me._options, $el;
 
             me.root($el = $('<div class="mui-toolbar"></div>').append(me._$toolBox = $('<div class="mui-toolbar-toolBox"></div>')));
-            opts.mode == 'swipe' && $el.prepend(me._$arrow = $('<span class="mui-toolbar-showArrow"></span>').appendTo('<div class="mui-toolbar-arrowWrap"></div>'));
+            opts.mode == 'swipe' && $el.prepend(me._$arrow = $('<span class="mui-toolbar-showArrow"></span>'));
         },
         _init: function () {
             var me = this;
-            me._options.mode == 'swipe' ? me.root().hammer().on('swipe', $.proxy(me._eventHandler, me)) : me.show();
+            me._options.mode == 'swipe' ? me.root().hammer('swipe', $.proxy(me._eventHandler, me)) : me.show();
+            $(document).on('scrollStop touchmove', $.proxy(me._eventHandler, me));
             return this;
         },
-        _initRender: function () {
+        _initRender: function (container) {
             var me = this,
-                opts = me._options;
+                opts = me._options,
+                $el = me.root()
+
             $.each(opts.items, function (key, item) {       //渲染子元素，可能有些子元素需要取高度等属性
                 me.addItem(item);
             });
             if (opts.mode == 'swipe' && !me._initDone) {
                 me._setPosition('hide');
                 me._initDone = true;
-                me._$arrow && me._$arrow.css('top', (me.root().height() - me._$arrow.height()) / 2);
+                me._$arrow && me._$arrow.css('top', ($el.height() - me._$arrow.height()) / 2);
             }
+            $el.css('top', ($(container).height() - $el.height()) / 2);
             return me;
         },
         _eventHandler: function (e) {
-            var me = this;
-            switch (e.type) {
-                case 'swipe':
-                    e.direction == 'right' ? me.hide(function () {
+            var me = this,
+                target = e.originalEvent ? e.originalEvent.target: e.target,
+                el = me.root().get(0),
+                isRoot = $.contains(el, target) || el == target,
+                type = e.type == 'swipe' ? e.direction : e.type;
+
+            switch (type) {
+                case 'right':
+                    isRoot && me.hide(function () {
                         me.root().removeClass('mui-toolbar-shadow');
                         me._setPosition('hide');
-                    }) : me.show(function () {
-                        me._$toolBox.addClass('mui-toolbar-anim');
+                    });
+                    break;
+                case 'left':
+                    isRoot && me.show(function () {
+                        if (!me._isAnim) {
+                            me._animFn = function () {
+                                me.root()[me._isShow ? 'addClass': 'removeClass']('mui-toolbar-shadow');   //添加外层阴影边框
+                            };
+                            me._$toolBox.on('webkitTransitionEnd', me._animFn).addClass('mui-toolbar-anim');
+                            me._isAnim = true;
+                        }
                         me._setPosition('show');
-                        me.root().addClass('mui-toolbar-shadow');
                     })
+                    break;
+                case 'touchmove':
+                    //!isRoot && me.hide();
+                    break;
+                case 'scrollStop':
+                    !isRoot && me.show().setFix();
+                    break;
+                case 'default':
                     break;
             }
         },
@@ -174,6 +206,7 @@
         },
         _setVisible: function (fn, isShow) {
             $.isFunction(fn) ? fn.call(this) : this._$toolBox[isShow ? 'show' : 'hide']();
+            this._isShow = isShow;
             return this;
         },
         show: function (fn) {
@@ -187,11 +220,25 @@
             return this;
         },
         render: function (container) {
-            this.$super('render', container);
-            return this._initRender();
+            this.$super('render', this.container = container || this._body);
+            this._cOffset = $(this.container).offset();
+            return this._initRender(container);
         },
         zIndex: function (zindex) {
             return $.isUndefined(zindex) ? this.root().css('z-index') : (this.root().css('z-index', zindex), this);
+        },
+        setFix: function (pos, offset) {
+            var me = this,
+                $el = me.root(), parentTop;
+
+            if (pos) {
+                $el.css('top', pos.y );
+            } else {
+                pos = offset || {x:10,y:10};
+                parentTop = ($el.offsetParent().get(0) == $(me.container).get(0) ? me._cOffset.top : 0);
+                $el.css('top', Math.max($(me._win).scrollTop() - parentTop, 0) + pos.y);
+            }
+            return me;
         }
     });
 })(Zepto, ME.ui);

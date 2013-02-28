@@ -1,18 +1,18 @@
 
-(function ($) {
+(function ($, undefined) {
     ME.ui.define('combox', {
 
         _options: {
             renderFn:       null,
-            prefix:           '',
+            prefix:         '',
             needIscroll:    true,
             _isShow:        false,
-            _iscrollInited: false
+            _iscrollInited: false,
+            _lastClicked:     null
         },
         _allShowedCombox:   [],
         _addEventInited:    false,
         _needCloseAll:      true,
-        _sibling:           null,
 
         _create: function () {
             var me = this,
@@ -45,9 +45,9 @@
 
             //autohide
             content.on('tap', function (e) {
-                me.closeChildren();
+                var li = opt._lastClick =  $(e.target).closest('li');
+                me.closeChildren(li);
                 proto._needCloseAll = false;
-                var li = $(e.target).closest('li');
                 me.trigger('itemClick', [li.index(), li.children().attr('value'), li]);
             });
             if(!proto._addEventInited) {
@@ -69,14 +69,9 @@
 
         _fitSize: function (node) {
             var me = this,
-                opt = me._options,
                 width = parseInt(me.root().css('width')),
-                rect;
-            if(!node) {
-                rect = {left: width + 15, top: 10, height: 30};  //如果不传入节点，可以传入一个这样的对象，用来定义组件位置，height控制箭头位置
-            } else if(node[0] || node.nodeType === 1) {
-                rect= (node[0] || node).getBoundingClientRect();
-            } else rect = node;
+                node = me._options._lastClicked = node[0] || node,
+                rect= node.getBoundingClientRect();
 
             me.root().css({
                 left:       rect.left - width - 15,
@@ -85,15 +80,14 @@
             return me;
         },
 
-        closeChildren: function () {
+        closeChildren: function (li) {
             var me = this,
                 allCombox = me._allShowedCombox,
-                proto = me.__proto__,
                 item;
             while(item = allCombox[allCombox.length - 1]){
                  if(item._options.stamp > me._options.stamp) {
+                     if(li && item._options._lastClicked === li[0]) break;
                      item.hide();
-                     proto._sibling = item;
                  } else break;
             }
             return me;
@@ -141,6 +135,11 @@
             return value === undefined ? _value : this;
         },
 
+        zIndex: function (index) {
+            var _index = this.root().css('z-index', index);
+            return index === undefined ? _index : this;
+        },
+
         show: function (node) {
             var me = this,
                 opt = me._options;
@@ -172,10 +171,6 @@
         toggle: function (node) {
             var me = this,
                 proto = me.__proto__;
-            if(me === proto._sibling) {
-                proto._sibling = null;
-                return me;
-            }
             me._options._isShow ? me.hide() : me.show(node);
             proto._needCloseAll = false;
             return me;
