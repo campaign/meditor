@@ -90,7 +90,7 @@
 
         _init: function(){
             var eventHandler = $.proxy(this._eventHandler, this);
-            this._nav.on('tap', eventHandler);
+            this._nav.on('click', eventHandler);
             this._titles.highlight('mui-state-hover');
             $(window).on('ortchange', eventHandler);
             tabs.push(this._content.get(0));
