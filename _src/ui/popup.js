@@ -16,7 +16,7 @@
         _create: function () {
             var me = this,
                 opt = me._options;
-            me._el = $('<div class="mui-popup"></div>').append($('<div class="mui-popup-content"></div>').html(opt.content).append('<div class="mui-popup-arrow"></div>')).appendTo('body');
+            me._el = $('<div class="mui-popup"></div>').append($('<div class="mui-popup-content"></div>').html(opt.content).append('<div class="mui-popup-arrow"><b></b></div>')).appendTo('body');
         },
 
         _init: function () {
