@@ -1,9 +1,9 @@
 ;(function($,ui){
     var _registerUIs = {};
-    $.extend(ME,{
-        registerUI : function(cmdName,fn){
-            $.each(cmdName.split(/\s+/),function(i,c){
-                _registerUIs[c.toLowerCase()] = fn;
+                $.extend(ME,{
+                    registerUI : function(cmdName,fn){
+                        $.each(cmdName.split(/\s+/),function(i,c){
+                            _registerUIs[c.toLowerCase()] = fn;
             });
         },
         getUI : function(editor,cmdName){
