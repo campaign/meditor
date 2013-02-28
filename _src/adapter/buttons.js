@@ -11,7 +11,7 @@
 
             editor.on('selectionchange',function(){
                 var state = editor.queryCommandState(cmdName);
-                btn.highlight(state == 1).enable(state == -1);
+                btn.highlight(state == 1).enable(state != -1);
             });
             return btn;
         }
