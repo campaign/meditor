@@ -37,6 +37,11 @@
 .mui-button-alignright span.icon:before { content: '\e780'}/*右对齐*/
 .mui-button-alignjustify span.icon:before { content: '\e781'}/*两端对齐*/
 
+.mui-button-undo span.icon:before { content: '\27f2'}/*undo*/
+.mui-button-redo span.icon:before { content: '\27f3'}/*redo*/
+.mui-button-table span.icon:before { content: '\f0ce'}/*表格*/
+.mui-button-delete span.icon:before { content: '\2716'}/*删除*/
+
 
 .mui-button {
     display: inline-block;
