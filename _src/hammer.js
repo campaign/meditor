@@ -609,6 +609,7 @@ function Hammer(element, options, undefined)
         {
             case 'mousedown':
             case 'touchstart':
+
                 count = countFingers(event);
                 _can_tap = count === 1;
 
@@ -668,6 +669,7 @@ function Hammer(element, options, undefined)
             case 'mouseout':
             case 'touchcancel':
             case 'touchend':
+
                 var callReset = true;
 
                 _mousedown = false;
