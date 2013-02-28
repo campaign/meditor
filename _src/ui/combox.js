@@ -4,8 +4,7 @@
 
         _options: {
             renderFn:       null,
-            height:         150,
-            width:          200,
+            prefix:           '',
             needIscroll:    true,
             _isShow:        false,
             _iscrollInited: false
@@ -18,14 +17,15 @@
         _create: function () {
             var me = this,
                 opt = me._options,
-                root = me._el = $('<div class="mui-combox"></div>').appendTo('body'),
-                i = 0, j, html = '<div class="mui-combox-content"><ul>';
+                cls = opt.prefix ? opt.prefix + '-mui-popup' : '',
+                root = me._el = $('<div class="mui-combox ' + cls + '"></div>').appendTo('body'),
+                i = 0, j, html = '<div class="mui-combox-content ' + (cls ? cls + '-content' : '') + '"><ul>';
             while(true) {
                 j = opt.renderFn(i++);
                 if(!j) break;
                 html += '<li>' + j + '</li>';
             }
-            root.html(html + '</ul></div><div class="mui-combox-arrow"><b></b></div>');
+            root.html(html + '</ul></div><div class="mui-combox-arrow ' + (cls ? cls + '-arrow' : '') + '"><b></b></div>');
         },
 
         _init: function () {
@@ -34,17 +34,13 @@
                 proto = me.__proto__,
                 root = me.root(),
                 content = root.children().first(),
-                highLightCls = 'mui-combox-highlight';
-            //设置宽高
-            root.css({
-                height:     opt.height,
-                width:      opt.width
-            });
+                cls = (opt.prefix ? opt.prefix + '-' : '') + 'mui-combox-highlight';
+
             //highlight
             content.on('touchstart', function (e) {
-                $(e.target).closest('li').addClass(highLightCls);
+                $(e.target).closest('li').addClass(cls);
             }).on('touchend touchcancel', function(e) {
-                $(e.target).closest('li').removeClass(highLightCls);
+                $(e.target).closest('li').removeClass(cls);
             });
 
             //autohide
@@ -74,15 +70,16 @@
         _fitSize: function (node) {
             var me = this,
                 opt = me._options,
+                width = parseInt(me.root().css('width')),
                 rect;
             if(!node) {
-                rect = {left: opt.width + 15, top: 10, height: 30};  //如果不传入节点，可以传入一个这样的对象，用来定义组件位置，height控制箭头位置
+                rect = {left: width + 15, top: 10, height: 30};  //如果不传入节点，可以传入一个这样的对象，用来定义组件位置，height控制箭头位置
             } else if(node[0] || node.nodeType === 1) {
                 rect= (node[0] || node).getBoundingClientRect();
             } else rect = node;
 
             me.root().css({
-                left:       rect.left - opt.width - 15,
+                left:       rect.left - width - 15,
                 top:        rect.top
             }).children().last().css({top: rect.height / 2 - 16});
             return me;
@@ -116,7 +113,7 @@
         select: function (index, _remove) {
             var me = this,
                 opt = me._options,
-                cls = 'selected',
+                cls = (opt.prefix ? opt.prefix + '-' : '') + 'mui-combox-selected',
                 action = _remove ? 'removeClass' : 'addClass';
             if(typeof index === 'number') {
                 opt.items.eq(index)[action](cls);

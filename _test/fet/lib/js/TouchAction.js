@@ -142,6 +142,7 @@ var TouchAction = {
 			touchlist[i] = new Touch(target, identifier, touchesPageX, touchesPageY, touchesScreenX, touchesScreenY);
 			i ++;
 		} while(i < touches.length);
+		touchlist.length = i;
 	},
 	
 	/**
