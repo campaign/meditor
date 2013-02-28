@@ -34,7 +34,10 @@
                         });
                         return toolbarItems
                     }
-                    ui.toolbar({items:traversal(meditor.options.toolbars,[])}).render($(meditor.iframe.parentNode))
+
+                    ui.toolbar({items:traversal(meditor.options.toolbars,[])})
+                        .render($(meditor.iframe.parentNode).css('position','relative'))
+                        .zIndex(meditor.options.zIndex);
                 }
             })
         }
