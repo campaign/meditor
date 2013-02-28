@@ -89,6 +89,7 @@
                     }));
                 } else if (typeof v == 'object') {
                     ret.push(ui[v.type]({
+                        name:v.name,
                         items: parseItems(v.items),
                         showCount: v.showCount
                     }));
