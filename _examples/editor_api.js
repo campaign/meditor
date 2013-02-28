@@ -5,14 +5,19 @@
     var paths  = [
             'meditor.js',
             'core/utils.js',
-            'core/EventBase.js',
             'core/dtd.js',
             'core/domUtils.js',
             'core/Range.js',
             'core/Selection.js',
             'core/Editor.js',
             'plugins/moverange.js',
-            'plugins/basestyle.js'
+            'plugins/basestyle.js',
+            'ui/ui.js',
+            'ui/toolbar.js',
+            'ui/button.js',
+            'ui/popup.js',
+            'adapter/adapter.js',
+            'adapter/buttons.js'
 
         ],
         baseURL = '../_src/';
