@@ -30,9 +30,21 @@
 }
 .mui-combox-arrow {
     position: absolute;
-    right: -10px;
+    overflow: hidden;
+    right: -16px;
     top:0;
-    width:10px;
-    height: 25px;
-    background: url(../images/cursor_v.png) center center no-repeat;
+    width:15px;
+    height: 32px;
+}
+
+.mui-combox-arrow b {
+    position: absolute;
+    left:-8px;
+    top:8px;
+    height: 16px;
+    width:16px;
+    display: inline-block;
+    background: #fff;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
+    -webkit-transform: rotate(45deg);
 }
