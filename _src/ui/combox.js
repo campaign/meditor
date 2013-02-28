@@ -159,7 +159,6 @@
             var me = this,
                 opt = me._options,
                 allCombox = me.__proto__._allShowedCombox;
-            me.closeChildren();
             me.root().hide();
             if(me === allCombox[allCombox.length - 1]) {
                 allCombox.pop();
