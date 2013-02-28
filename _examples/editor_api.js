@@ -15,9 +15,11 @@
             'ui/ui.js',
             'ui/button.js',
             'ui/toolbar.js',
+            'ui/tabs.js',
             'ui/popup.js',
             'adapter/adapter.js',
-            'adapter/buttons.js'
+            'adapter/buttons.js',
+            'adapter/smiley.js'
 
         ],
         baseURL = '../_src/';

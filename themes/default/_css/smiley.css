@@ -1,0 +1,41 @@
+.smiley-tabs table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.smiley-tabs .mui-tabs-content .mui-tabs-panel {
+    padding: 5px;
+}
+
+.smiley-tabs table td {
+    border: 1px solid #c9c9c9;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.smiley-tabs table td span {
+    display: block;
+    width: 35px;
+    height: 35px;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    margin: auto;
+}
+
+.smiley-tabs .smiley-bubble td span {
+    width: 26px;
+    height: 26px;
+    background-image: url(../images/smiley/fface.gif);
+}
+
+.smiley-tabs .smiley-lvdouwa td span {
+    background-image: url(../images/smiley/bface.gif);
+}
+
+.smiley-tabs .smiley-bobo td span {
+    background-image: url(../images/smiley/wface.gif);
+}
+
+.smiley-mui-popup {
+    width: 500px;
+}
