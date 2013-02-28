@@ -76,15 +76,15 @@
                 opt = me._options,
                 rect;
             if(!node) {
-                rect = {left: opt.width + 20, top: 10, height: 30};  //如果不传入节点，可以传入一个这样的对象，用来定义组件位置，height控制箭头位置
+                rect = {left: opt.width + 15, top: 10, height: 30};  //如果不传入节点，可以传入一个这样的对象，用来定义组件位置，height控制箭头位置
             } else if(node[0] || node.nodeType === 1) {
                 rect= (node[0] || node).getBoundingClientRect();
             } else rect = node;
 
             me.root().css({
-                left:       rect.left - opt.width - 20,
+                left:       rect.left - opt.width - 15,
                 top:        rect.top
-            }).children().last().css({top: rect.height / 2 - 10});
+            }).children().last().css({top: rect.height / 2 - 16});
             return me;
         },
 

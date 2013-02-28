@@ -193,7 +193,7 @@
     var startEvent = $.fx.animationEnd.replace(/AnimationEnd$/, 'AnimationStart');
     $(document).on(startEvent, function(e){
         if (e.animationName == 'nodeInserted'){
-            $(e.target).trigger('render');
+            $(e.target).triggerHandler('render');
         }
     });
 })(Zepto, ME);

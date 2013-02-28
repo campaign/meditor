@@ -100,7 +100,7 @@
         },
 
         _eventHandler: function(e){
-            var match, items, active = this._options.active, index, me = this;
+            var match, items, active = this._options.active, index;
             switch(e.type) {
                 case 'tabsSwipeLeft':
                 case 'tabsSwipeRight':

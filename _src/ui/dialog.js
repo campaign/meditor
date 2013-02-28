@@ -28,7 +28,7 @@
                 .content(opt.content)
                 .root()
                 .on('click', eventHandler)
-                .on('render', $.debounce(100, eventHandler, false))
+                .on('render', eventHandler)
                 .find('.mui-dialog-btnOk, .mui-dialog-btnCancel')
                 .highlight('mui-state-hover');
             $(window).on('ortchange', eventHandler);
@@ -72,7 +72,6 @@
             this._opened = true;
             this.root().show();
             this._mask && this._mask.show();
-            this.refresh();
             return this.trigger('open');
         },
 
