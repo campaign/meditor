@@ -1,5 +1,5 @@
 
-(function ($) {
+(function ($, undefined) {
     ME.ui.define('combox', {
 
         _options: {
@@ -133,6 +133,11 @@
         value: function (index, value) {
             var _value = this._options.children.eq(index).attr('value', value);
             return value === undefined ? _value : this;
+        },
+
+        zIndex: function (index) {
+            var _index = this.root().css('z-index', index);
+            return index === undefined ? _index : this;
         },
 
         show: function (node) {
