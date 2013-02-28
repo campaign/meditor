@@ -7,7 +7,7 @@
             content:        null,
             prefix:         '',
             needIscroll:    false,
-            _stamp:         0,
+            _btn:           null,
             _isShow:        false,
             _iscrollInited: false
         },
@@ -25,22 +25,19 @@
                 root = me.root();
             //点击隐藏
             $(document).on('tap', function (e) {
-                if ($.contains(root[0], e.target)) return;
+                if ($.contains(root[0], e.target) || e.target === me._options._btn) return;
                 me.hide();
             });
         },
 
         _fitSize: function (node) {
             var me = this,
-                width = parseInt(me.root().css('width')),
-                rect;
-            if(!node) {
-                rect = {left: width + 15, top: 10, height: 30};  //如果不传入节点，可以传入一个这样的对象，用来定义组件位置，height控制箭头位置
-            } else if(node[0] || node.nodeType === 1) {
-                rect= (node[0] || node).getBoundingClientRect();
-            } else rect = node;
+                root = me.root(),
+                width = parseInt(root.css('width')),
+                node = me._options._btn = node[0] || node,
+                rect = node.getBoundingClientRect();
 
-            me.root().css({
+            root.css({
                 top:        rect.top,
                 left:       rect.left - width - 15
             }).children().last().css({
@@ -51,11 +48,7 @@
 
         show: function (node) {
             var me = this,
-                opt = me._options,
-                now = Date.now(),
-                stamp = opt._stamp;
-            if(now - stamp < 50) return me;
-            opt._stamp = now;
+                opt = me._options;
             me._fitSize(node).root().show();
             opt._isShow = true;
             if(opt.needIscroll && !opt._iscrollInited) {
@@ -67,11 +60,7 @@
 
         hide: function () {
             var me = this,
-                opt = me._options,
-                now = Date.now(),
-                stamp = opt._stamp;
-            if(now - stamp < 50) return me;
-            opt._stamp = now;
+                opt = me._options;
             me.root().hide();
             opt._isShow = false;
             return me;
