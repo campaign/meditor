@@ -4,7 +4,7 @@
 
         _options: {
             renderFn:       null,
-            prefix:           '',
+            prefix:         '',
             needIscroll:    true,
             _isShow:        false,
             _iscrollInited: false,
@@ -86,7 +86,7 @@
                 item;
             while(item = allCombox[allCombox.length - 1]){
                  if(item._options.stamp > me._options.stamp) {
-                     if(item._options._lastClicked === li[0]) break;
+                     if(li && item._options._lastClicked === li[0]) break;
                      item.hide();
                  } else break;
             }
@@ -159,6 +159,7 @@
             var me = this,
                 opt = me._options,
                 allCombox = me.__proto__._allShowedCombox;
+            me.closeChildren();
             me.root().hide();
             if(me === allCombox[allCombox.length - 1]) {
                 allCombox.pop();
