@@ -234,6 +234,7 @@
             me.window = doc.defaultView || doc.parentWindow;
             me.iframe = me.window.frameElement;
             me.body = doc.body;
+            domUtils.on(me.body,'touchend',function(){me.selection.getRange().select()});
             //设置编辑器最小高度
             me.setHeight(options.height);
             me.selection = new ME.Selection(doc);
@@ -293,8 +294,7 @@
                     }
                 }
             });
-            !options.isShow && me.setHide();
-            options.readonly && me.setDisabled();
+
         },
         /**
          * 同步编辑器的数据，为提交数据做准备，主要用于你是手动提交的情况
@@ -653,63 +653,7 @@
         reset:function () {
             this.trigger('reset');
         },
-        setEnabled:function () {
-            var me = this, range;
-            if (me.body.contentEditable == 'false') {
-                me.body.contentEditable = true;
-                range = me.selection.getRange();
-                //有可能内容丢失了
-                try {
-                    range.moveToBookmark(me.lastBk);
-                    delete me.lastBk
-                } catch (e) {
-                    range.setStartAtFirst(me.body).collapse(true)
-                }
-                range.select(true);
-                if (me.bkqueryCommandState) {
-                    me.queryCommandState = me.bkqueryCommandState;
-                    delete me.bkqueryCommandState;
-                }
-                me.trigger('selectionchange');
-            }
-        },
-        /**
-         * 设置当前编辑区域可以编辑
-         * @name enable
-         * @grammar editor.enable()
-         */
-        enable:function () {
-            return this.setEnabled();
-        },
-        setDisabled:function (except) {
-            var me = this;
-            except = except ? utils.isArray(except) ? except : [except] : [];
-            if (me.body.contentEditable == 'true') {
-                if (!me.lastBk) {
-                    me.lastBk = me.selection.getRange().createBookmark(true);
-                }
-                me.body.contentEditable = false;
-                me.bkqueryCommandState = me.queryCommandState;
-                me.queryCommandState = function (type) {
-                    if (utils.indexOf(except, type) != -1) {
-                        return me.bkqueryCommandState.apply(me, arguments);
-                    }
-                    return -1;
-                };
-                me.trigger('selectionchange');
-            }
-        },
-        /** 设置当前编辑区域不可编辑,except中的命令除外
-         * @name disable
-         * @grammar editor.disable()
-         * @grammar editor.disable(except)  //例外的命令，也即即使设置了disable，此处配置的命令仍然可以执行
-         * @example
-         * //禁用工具栏中除加粗和插入图片之外的所有功能
-         * editor.disable(['bold','insertimage']);//可以是单一的String,也可以是Array
-         */
-        disable:function (except) {
-            return this.setDisabled(except);
-        },
+
         /**
          * 设置默认内容
          * @ignore
@@ -736,57 +680,6 @@
                 me.on('firstBeforeExecCommand focus', clear);
             }
         }(),
-        /**
-         * show方法的兼容版本
-         * @private
-         * @ignore
-         */
-        setShow:function () {
-            var me = this, range = me.selection.getRange();
-            if (me.container.style.display == 'none') {
-                //有可能内容丢失了
-                try {
-                    range.moveToBookmark(me.lastBk);
-                    delete me.lastBk
-                } catch (e) {
-                    range.setStartAtFirst(me.body).collapse(true)
-                }
-                //ie下focus实效，所以做了个延迟
-                setTimeout(function () {
-                    range.select(true);
-                }, 100);
-                me.container.style.display = '';
-            }
-
-        },
-        /**
-         * 显示编辑器
-         * @name show
-         * @grammar editor.show()
-         */
-        show:function () {
-            return this.setShow();
-        },
-        /**
-         * hide方法的兼容版本
-         * @private
-         * @ignore
-         */
-        setHide:function () {
-            var me = this;
-            if (!me.lastBk) {
-                me.lastBk = me.selection.getRange().createBookmark(true);
-            }
-            me.container.style.display = 'none'
-        },
-        /**
-         * 隐藏编辑器
-         * @name hide
-         * @grammar editor.hide()
-         */
-        hide:function () {
-            return this.setHide();
-        },
 
         /**
          * 计算编辑器当前内容的长度

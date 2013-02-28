@@ -4,11 +4,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta charset="utf-8">
     <title>按钮Test</title>
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/core.css" />
     <link rel="stylesheet" type="text/css" href="../../themes/default/_css/button.css" />
     <style>
         #toolbar {
             display: inline-block;
             padding: 0.5em;
+        }
+
+            /*自定义按钮样式*/
+        .mui-button-custom span.icon {
+            background: url(../../themes/default/images/icons.gif) -361px -42px no-repeat;
         }
     </style>
     <script type="text/javascript" src="../../_src/meditor.js"></script>
@@ -19,6 +25,9 @@
 </head>
 <body>
     <div id="toolbar"></div>
+
+    <h2>自定应按钮</h2>
+    <div id="tl2"></div>
 <script>
     var ui = ME.ui;
 
@@ -34,6 +43,15 @@
     ui.button({name: 'aligncenter'}).render('#toolbar');
     ui.button({name: 'alignright'}).render('#toolbar');
     ui.button({name: 'alignjustify'}).render('#toolbar');
+    ui.button({name: 'undo'}).render('#toolbar');
+    ui.button({name: 'redo'}).render('#toolbar');
+    ui.button({name: 'table'}).render('#toolbar');
+    ui.button({name: 'delete'}).render('#toolbar');
+    ui.button({name: 'color'}).render('#toolbar');
+    ui.button({name: 'smiley'}).render('#toolbar');
+
+
+    ui.button({name: 'custom'}).render('#tl2');
 </script>
 </body>
 </html>

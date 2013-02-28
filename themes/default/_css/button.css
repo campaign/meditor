@@ -12,13 +12,14 @@
     font-family: 'fontello';
     font-style: normal;
     font-weight: normal;
-    font-size: 1em;
     speak: none;
     display: inline-block;
     text-decoration: inherit;
     text-align: center;
     line-height: 1.0;
     width: 17px;
+    height: 17px;
+    overflow: hidden;
 }
 
 .mui-button-bold span.icon:before { content: '\e77a'} /*粗体*/
@@ -36,15 +37,26 @@
 .mui-button-alignright span.icon:before { content: '\e780'}/*右对齐*/
 .mui-button-alignjustify span.icon:before { content: '\e781'}/*两端对齐*/
 
+.mui-button-undo span.icon:before { content: '\27f2'}/*undo*/
+.mui-button-redo span.icon:before { content: '\27f3'}/*redo*/
+.mui-button-table span.icon:before { content: '\f0ce'}/*表格*/
+.mui-button-delete span.icon:before { content: '\2716'}/*删除*/
+.mui-button-color span.icon:before { content: '\f020'}/*颜色*/
+.mui-button-smiley span.icon:before { content: '\e800'}/*表情*/
+
 
 .mui-button {
     display: inline-block;
     background: rgba(238, 238, 238, 1);
     border-radius: 2px;
-    padding: 0.3em 0.3em 0.2em;
     margin: 0.2em 0.2em 0 0;
     cursor: pointer;
     -webkit-user-select: none;
+    vertical-align: bottom;
+    width:18px;
+    height: 18px;
+    overflow: hidden;
+    padding: 5px 4px 3px;
 }
 
 .mui-button.mui-state-disable {

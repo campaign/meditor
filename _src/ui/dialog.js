@@ -28,7 +28,7 @@
                 .content(opt.content)
                 .root()
                 .on('click', eventHandler)
-                .on('render', eventHandler)
+                .on('widgetrender', $.debounce(20, eventHandler, false))
                 .find('.mui-dialog-btnOk, .mui-dialog-btnCancel')
                 .highlight('mui-state-hover');
             $(window).on('ortchange', eventHandler);
@@ -55,7 +55,7 @@
             var match, evt;
             switch(e.type){
                 case 'ortchange':
-                case 'render':
+                case 'widgetrender':
                     return this.refresh();
                 default:
                     if((match = $(e.target).closest('.mui-dialog-btnOk, .mui-dialog-btnCancel')) && match.length){
@@ -68,8 +68,8 @@
         },
 
         open: function(){
-            this._rendered || this.render();
             this._opened = true;
+            this._rendered || this.render();
             this.root().show();
             this._mask && this._mask.show();
             return this.trigger('open');

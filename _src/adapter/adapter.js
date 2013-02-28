@@ -1,9 +1,9 @@
 ;(function($,ui){
     var _registerUIs = {};
-    $.extend(ME,{
-        registerUI : function(cmdName,fn){
-            $.each(cmdName.split(/\s+/),function(i,c){
-                _registerUIs[c.toLowerCase()] = fn;
+                $.extend(ME,{
+                    registerUI : function(cmdName,fn){
+                        $.each(cmdName.split(/\s+/),function(i,c){
+                            _registerUIs[c.toLowerCase()] = fn;
             });
         },
         getUI : function(editor,cmdName){
@@ -34,7 +34,10 @@
                         });
                         return toolbarItems
                     }
-                    ui.toolbar({items:traversal(meditor.options.toolbars,[])}).render($(meditor.iframe.parentNode))
+
+                    ui.toolbar({items:traversal(meditor.options.toolbars,[])})
+                        .render($(meditor.iframe.parentNode).css('position','relative'))
+                        .zIndex(meditor.options.zIndex);
                 }
             })
         }

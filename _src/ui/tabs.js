@@ -90,13 +90,13 @@
 
         _init: function(){
             var eventHandler = $.proxy(this._eventHandler, this);
-            this._nav.on('tap', eventHandler);
+            this._nav.on('click', eventHandler);
             this._titles.highlight('mui-state-hover');
             $(window).on('ortchange', eventHandler);
             tabs.push(this._content.get(0));
             eventBinded =  eventBinded || (tabsSwipeEvents(), true);
             this._el.on('tabsSwipeLeft tabsSwipeRight', eventHandler)
-                .one('render', eventHandler);
+                .on('widgetrender', $.debounce(15, eventHandler, false));
         },
 
         _eventHandler: function(e){
@@ -113,7 +113,7 @@
                     index !== undefined && (e.stopPropagation(), this.switchTo(index));
                     break;
                 case 'ortchange':
-                case 'render':
+                case 'widgetrender':
                     return this.refresh();
                 default:
                     if((match = $(e.target).closest('li', this._nav.get(0))) && match.length) {

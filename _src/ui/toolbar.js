@@ -131,12 +131,25 @@
                 opts = me._options, $el;
 
             me.root($el = $('<div class="mui-toolbar"></div>').append(me._$toolBox = $('<div class="mui-toolbar-toolBox"></div>')));
-            opts.mode == 'swipe' && $el.prepend('<span class="mui-toolbar-showArrow"></span>');
+            opts.mode == 'swipe' && $el.prepend(me._$arrow = $('<span class="mui-toolbar-showArrow"></span>').appendTo('<div class="mui-toolbar-arrowWrap"></div>'));
         },
         _init: function () {
             var me = this;
             me._options.mode == 'swipe' ? me.root().hammer().on('swipe', $.proxy(me._eventHandler, me)) : me.show();
             return this;
+        },
+        _initRender: function () {
+            var me = this,
+                opts = me._options;
+            $.each(opts.items, function (key, item) {       //渲染子元素，可能有些子元素需要取高度等属性
+                me.addItem(item);
+            });
+            if (opts.mode == 'swipe' && !me._initDone) {
+                me._setPosition('hide');
+                me._initDone = true;
+                me._$arrow && me._$arrow.css('top', (me.root().height() - me._$arrow.height()) / 2);
+            }
+            return me;
         },
         _eventHandler: function (e) {
             var me = this;
@@ -174,18 +187,11 @@
             return this;
         },
         render: function (container) {
-            var me = this,
-                opts = me._options;
-
-            me.$super('render', container);
-            $.each(opts.items, function (key, item) {       //渲染子元素，可能有些子元素需要取高度等属性
-                me.addItem(item);
-            });
-            if (opts.mode == 'swipe' && !me._initDone) {
-                me._setPosition('hide');
-                me._initDone = true;
-            }
-            return me;
+            this.$super('render', container);
+            return this._initRender();
+        },
+        zIndex: function (zindex) {
+            return $.isUndefined(zindex) ? this.root().css('z-index') : (this.root().css('z-index', zindex), this);
         }
     });
 })(Zepto, ME.ui);
