@@ -12,6 +12,8 @@
             'core/Editor.js',
             'plugins/moverange.js',
             'plugins/basestyle.js',
+            'plugins/autolink.js',
+            'plugins/paste.js',
             'ui/ui.js',
             'ui/button.js',
             'ui/toolbar.js',
