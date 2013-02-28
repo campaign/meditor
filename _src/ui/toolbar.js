@@ -129,10 +129,6 @@
         _isShow: false,
         _initDone: false,
         _isAnim: false,
-        _kh: {
-            portrait: 264,
-            landscape: 352
-        },
         _win: window,
         _body: document.body,
 
@@ -237,8 +233,9 @@
             if (pos) {
                 $el.css('top', pos.y );
             } else {
+                pos = offset || {x:10,y:10};
                 parentTop = ($el.offsetParent().get(0) == $(me.container).get(0) ? me._cOffset.top : 0);
-                $el.css('top', Math.max($(me._win).scrollTop() - parentTop, 0) + 10 );
+                $el.css('top', Math.max($(me._win).scrollTop() - parentTop, 0) + pos.y);
             }
             return me;
         }
