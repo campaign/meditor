@@ -25,7 +25,7 @@
                 if(!j) break;
                 html += '<li>' + j + '</li>';
             }
-            root.html(html + '</ul></div><div class="mui-combox-arrow"></div>');
+            root.html(html + '</ul></div><div class="mui-combox-arrow"><b></b></div>');
         },
 
         _init: function () {
@@ -82,7 +82,7 @@
             } else rect = node;
 
             me.root().css({
-                left:       rect.left - opt.width - 10,
+                left:       rect.left - opt.width - 20,
                 top:        rect.top
             }).children().last().css({top: rect.height / 2 - 10});
             return me;

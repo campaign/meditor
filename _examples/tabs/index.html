@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta charset="utf-8">
+    <title>弹出框Test</title>
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/core.css" />
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/dialog.css" />
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/tabs.css" />
+    <style>
+        body>.mui-tabs {
+            margin: 0 0 1em 0;
+        }
+    </style>
+    <script type="text/javascript" src="../../_src/meditor.js"></script>
+    <script type="text/javascript" src="../../_src/zepto.js"></script>
+    <script type="text/javascript" src="../../_src/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../_src/ui/ui.js"></script>
+    <script type="text/javascript" src="../../_src/ui/dialog.js"></script>
+    <script type="text/javascript" src="../../_src/ui/tabs.js"></script>
+</head>
+<body>
+<script>
+    var ui = ME.ui;
+
+    ui.tabs({
+        items: ['内容1', '内容2', '内容3']
+    }).render('body');
+
+    ui.tabs({
+        items:{
+            '选项卡1':'内容1',
+            '选项卡2':'内容2',
+            '选项卡3':'内容3'
+        }
+    }).render('body');
+
+    var dialog = ui.dialog({
+        title: '弹出框中使用tabs'
+    }).content(ui.tabs({
+        items: {
+            tabs1: ui.tabs({
+                items: ['内容1', '内容2', '内容3']
+            }).root(),
+            tabs2: ui.tabs({
+                items: ['内容1', '内容2', '内容3']
+            }).root()
+        }
+    }).root()).open();
+
+
+</script>
+</body>
+</html>
