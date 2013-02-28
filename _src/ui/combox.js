@@ -1,10 +1,10 @@
 
-(function ($) {
+(function ($, undefined) {
     ME.ui.define('combox', {
 
         _options: {
             renderFn:       null,
-            prefix:           '',
+            prefix:         '',
             needIscroll:    true,
             _isShow:        false,
             _iscrollInited: false,
@@ -86,7 +86,7 @@
                 item;
             while(item = allCombox[allCombox.length - 1]){
                  if(item._options.stamp > me._options.stamp) {
-                     if(item._options._lastClicked === li[0]) break;
+                     if(li && item._options._lastClicked === li[0]) break;
                      item.hide();
                  } else break;
             }
@@ -133,6 +133,11 @@
         value: function (index, value) {
             var _value = this._options.children.eq(index).attr('value', value);
             return value === undefined ? _value : this;
+        },
+
+        zIndex: function (index) {
+            var _index = this.root().css('z-index', index);
+            return index === undefined ? _index : this;
         },
 
         show: function (node) {

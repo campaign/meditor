@@ -1,6 +1,6 @@
 
 
-(function ($) {
+(function ($, undefined) {
     ME.ui.define('popup', {
 
         _options: {
@@ -44,6 +44,11 @@
                 top:        rect.height / 2 - 16
             });
             return me;
+        },
+
+        zIndex: function (index) {
+            var _index = this.root().css('z-index', index);
+            return index === undefined ? _index : this;
         },
 
         show: function (node) {
