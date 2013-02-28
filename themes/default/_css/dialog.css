@@ -33,7 +33,6 @@
     overflow: hidden;
     background-image: -webkit-gradient(linear,0% 0%, 0% 100%, from(#ffffff), to(#a5a9b6), color-stop(0.5,#dfe1e6));
     border-bottom: 1px solid #80868f;
-    border-radius: 3px 3px 0 0;
     text-align: center;
     overflow: hidden;
 }

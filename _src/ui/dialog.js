@@ -28,6 +28,7 @@
                 .content(opt.content)
                 .root()
                 .on('click', eventHandler)
+                .on('render', $.debounce(100, eventHandler, false))
                 .find('.mui-dialog-btnOk, .mui-dialog-btnCancel')
                 .highlight('mui-state-hover');
             $(window).on('ortchange', eventHandler);
@@ -54,6 +55,7 @@
             var match, evt;
             switch(e.type){
                 case 'ortchange':
+                case 'render':
                     return this.refresh();
                 default:
                     if((match = $(e.target).closest('.mui-dialog-btnOk, .mui-dialog-btnCancel')) && match.length){
@@ -118,7 +120,9 @@
         },
 
         destroy: function(){
+            var eventHandler = this._eventHandler;
             this._mask.remove();
+            $(window).off('ortchange', eventHandler);
             return this.$super('destroy');
         }
     });

@@ -96,7 +96,7 @@
             tabs.push(this._content.get(0));
             eventBinded =  eventBinded || (tabsSwipeEvents(), true);
             this._el.on('tabsSwipeLeft tabsSwipeRight', eventHandler)
-                .one('DOMNodeInserted', eventHandler);
+                .one('render', eventHandler);
         },
 
         _eventHandler: function(e){
@@ -113,9 +113,8 @@
                     index !== undefined && (e.stopPropagation(), this.switchTo(index));
                     break;
                 case 'ortchange':
+                case 'render':
                     return this.refresh();
-                case 'DOMNodeInserted':
-                    return $.later(function(){me.refresh();});
                 default:
                     if((match = $(e.target).closest('li', this._nav.get(0))) && match.length) {
                         e.preventDefault();

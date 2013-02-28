@@ -17,7 +17,7 @@
     width: 100%;
     -webkit-box-sizing: border-box;
     overflow: hidden;
-    -webkit-transition: height 200ms ease-in-out;
+    /*-webkit-transition: height 200ms ease-in-out;*/
 }
 .mui-tabs-content .mui-tabs-panel {
     display: none;

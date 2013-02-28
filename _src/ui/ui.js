@@ -63,11 +63,15 @@
          * common constructor
          */
         _createWidget: function(opts) {
-            var me = this;
+            var me = this, el;
             me._options = $.extend({
                 theme: 'default'
             }, me._options, opts);
             me._create();
+            if(!(el = me.root())){
+                throw new Error('组件的_create方法里面必须创建并保存根元素');
+            }
+            el.addClass('mui-widget');
             me.trigger('create');
             me._init();
             me.trigger('init');
@@ -182,6 +186,14 @@
             }
             this.root().trigger(event, data);
             return this;
+        }
+    });
+
+    //添加render事件
+    var startEvent = $.fx.animationEnd.replace(/AnimationEnd$/, 'AnimationStart');
+    $(document).on(startEvent, function(e){
+        if (e.animationName == 'nodeInserted'){
+            $(e.target).trigger('render');
         }
     });
 })(Zepto, ME);
