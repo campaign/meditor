@@ -42,6 +42,7 @@
 .mui-button-table span.icon:before { content: '\f0ce'}/*表格*/
 .mui-button-delete span.icon:before { content: '\2716'}/*删除*/
 .mui-button-color span.icon:before { content: '\f020'}/*颜色*/
+.mui-button-smiley span.icon:before { content: '\e800'}/*表情*/
 
 
 .mui-button {
