@@ -8,7 +8,8 @@
                 },
                 title:cmdName
             });
-            editor.on('selectionchange',function(cmdName){
+
+            editor.on('selectionchange',function(){
                 var state = editor.queryCommandState(cmdName);
                 btn.highlight(state == 1).enable(state == -1);
             });
