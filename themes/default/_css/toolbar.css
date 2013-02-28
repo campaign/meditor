@@ -3,9 +3,10 @@
     width: 50px;
     height: auto;
     overflow: hidden;
-    position: relative;
-    float: right;
+    position: absolute;
     z-index: 1000;
+    right:0;
+    top: 100px;
 }
 .mui-default .mui-toolbar.mui-toolbar-shadow{
     -webkit-box-shadow: 3px 3px 3px #737373;
@@ -33,6 +34,9 @@
     -webkit-transition-duration: 200ms;
     -webkit-transition-timing-function:linear;
     -webkit-transform: translateX(0);
+}
+.mui-default .mui-toolbar .mui-toolbar-arrowWrap{
+    position: relative;
 }
 .mui-default .mui-toolbar .mui-toolbar-showArrow{
     position: absolute;
