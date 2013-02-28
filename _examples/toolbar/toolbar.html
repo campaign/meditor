@@ -10,6 +10,7 @@
     <!--<script type="text/javascript" charset="utf-8" src="editor_api.js"></script>-->
     <script type="text/javascript" charset="utf-8" src="../../_src/zepto.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../_src/zepto.extend.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../_src/meditor.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../_src/hammer.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../_src/zepto.hammer.js"></script>
     <script type="text/javascript" charset="utf-8" src="../../_src/ui/ui.js"></script>
@@ -21,74 +22,84 @@
     <link href="../../themes/default/_css/button.css" rel="stylesheet" />
     <link href="../../themes/default/_css/popup.css" rel="stylesheet" />
     <style>
-        .mui-group-wrap{
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
+        #meditor{
+            border: 1px solid #000;
+            width: 100%;
+            height: 400px;
         }
     </style>
 
 </head>
 <body class="mui-default">
 
-<div id="meditor" style="border:1px solid #000; width: 100%; height: 500px;"></div>
+<div id="meditor"></div>
 
 
 </body>
 <script type="text/javascript">
 
     (function ($, ui) {
-        var group = ui.group({
-            name: 'group',
-            items: [
-                ui.button({
-                    name: 'bold'
-                }),
-                ui.button({
-                    name: 'underline'
-                }),
-                ui.button({
-                    name: 'italic'
-                }),
-                ui.button({
-                    name: 'italic'
-                })]
-        });
+        var toolbarCfg = [
+            'undo',
+            'redo',
+            {
+                type: 'group',
+                name: 'font',
+                items: ['fontfamily', 'fontsize']
+            },
+            {
+                type: 'scrollbox',
+                viewCount: 4,
+                items: [
+                    'bold',
+                    'underline',
+                    {
+                        type: 'group',
+                        name: 'justify',
+                        items: ['justifyleft', 'justifyright', 'justifycenter']
+                    },
+                    {
+                        type: 'group',
+                        name: 'insert',
+                        items: [
+                            'image',
+                            'link',
+                            {
+                                type: 'group',
+                                name: 'image',
+                                items: ['image', 'image', 'bullet']
+                            },
+                            {
+                                type: 'scrollbox',
+                                viewCount: 3,
+                                items: ['bold', 'underline', 'underline', 'underline']
+                            }
+                        ]
+                    }
+                ]
+            },
+            'test'];
 
-        var scrollbox = ui.scrollbox({
-            items: [
-                ui.button({
-                    name: 'underline'
-                }),
-                ui.button({
-                    name: 'italic'
-                }),
-                group,
-                ui.button({
-                    name: 'italic'
-                }),
-                ui.button({
-                    name: 'italic'
-                })]
+        function parseItems(items){
+            var ret = [];
+            $.each(items, function(k, v){
+                if (typeof v == 'string') {
+                    ret.push(ui.button({
+                        name: v
+                    }));
+                } else if (typeof v == 'object') {
+                    ret.push(ui[v.type]({
+                        items: parseItems(v.items),
+                        showCount: v.showCount
+                    }));
+                }
             });
+            return ret;
+        }
 
-        var toolbar = ui.toolbar({
-            items: [
-                ui.button({
-                    name: 'bold'
-                }),
-                ui.button({
-                    name: 'underline'
-                }),
-                group,
-                scrollbox,
-                ui.button({
-                    name: 'italic'
-                }),
-                ui.button({
-                    name: 'italic'
-                })]
-        });
-        toolbar.render($('#meditor'));
+        ui.toolbar({
+            items: parseItems(toolbarCfg)
+        }).render('#meditor');
 
     })(Zepto, ME.ui);
 </script>
