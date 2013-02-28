@@ -25,7 +25,7 @@
                 root = me.root();
             //点击隐藏
             $(document).on('tap', function (e) {
-                if ($.contains(root[0], e.target) || e.target === me._options._btn) return;
+                if ($.contains(root[0], e.target) || me._options._btn === e.target || $.contains(me._options._btn, e.target)) return;
                 me.hide();
             });
         },
