@@ -27,15 +27,15 @@
 .mui-button-underline span.icon:before { content: '\f0cd'}/*下划线*/
 .mui-button-strike span.icon:before { content: '\f0cc'}/*删除线*/
 .mui-button-font span.icon:before { content: '\e779'}/*字体*/
-.mui-button-image span.icon:before { content: '🌄'}/*图片*/
+.mui-button-image span.icon:before { content:'🌄'}/*图片*/
 
 .mui-button-bullet span.icon:before { content: '\f0ca'}/*无须列表*/
 .mui-button-numbered span.icon:before { content: '\f0cb'}/*无须列表*/
 
-.mui-button-alignleft span.icon:before { content: '\e77e'}/*左对齐*/
-.mui-button-aligncenter span.icon:before { content: '\e77f'}/*居中*/
-.mui-button-alignright span.icon:before { content: '\e780'}/*右对齐*/
-.mui-button-alignjustify span.icon:before { content: '\e781'}/*两端对齐*/
+.mui-button-justifyleft span.icon:before { content: '\e77e'}/*左对齐*/
+.mui-button-justifycenter span.icon:before { content: '\e77f'}/*居中*/
+.mui-button-justifyright span.icon:before { content: '\e780'}/*右对齐*/
+.mui-button-justifyjustify span.icon:before { content: '\e781'}/*两端对齐*/
 
 .mui-button-undo span.icon:before { content: '\27f2'}/*undo*/
 .mui-button-redo span.icon:before { content: '\27f3'}/*redo*/
