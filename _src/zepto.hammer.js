@@ -1,17 +1,20 @@
 (function($){
-    $.fn.hammer = function(options){
+    $.fn.hammer = function(eventNames,fn){
 
         return this.each(function(){
 
-            var hammer = new Hammer(this, options);
+            var hammer = $(this).data('hammer');
+            if(!hammer){
+                hammer = new Hammer(this);
+                $(this).data('hammer',hammer)
+            }
 
-            var $el = $(this);
+            $.each(eventNames.split(/\s+/),function(i,eventName){
+                hammer['on'+eventName] = fn ? function(ev){
+                    fn.call(this,$.Event(eventName, ev))
+                } : null;
+            });
 
-            $.each(['hold','tap','doubletap','transformstart','transform','transformend','dragstart','drag','dragend','swipe','release'],function(i,eventName){
-                hammer['on'+ eventName] = function(ev) {
-                    $el.trigger($.Event(eventName, ev));
-                };
-            })
         });
     };
 })(Zepto);
