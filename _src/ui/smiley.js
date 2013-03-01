@@ -16,7 +16,10 @@
             content.append(ui.tabs({
                 items: panels
             }).root().addClass('smiley-tabs'));
-            content.append('<div class="smiley-btns"><div class="mui-btnOk">确认</div></div>');
+            content.append('<div class="smiley-btns">' +
+                '<div class="mui-btnCancel">重置</div>' +
+                '<div class="mui-btnOk">确认</div>' +
+                '</div>');
             return this.$super('_create');
         },
 
@@ -34,7 +37,7 @@
                 for(i=0; i<cells; i++){
                     item = row[i];
                     empty = typeof item !== 'string';
-                    html += '<td '+(empty?' class="empty"':'')+'data-url="'+this._formatUrl(url, index+1)+'" title="'+item+'"><div>';
+                    html += '<td '+(empty?' class="empty"':'')+'data-url="'+this._formatUrl(url, index+1)+'" title="'+(item||'')+'"><div>';
                     html += empty ? '&nbsp;' : '<span class="icon" style="background-position: 0 -'+index*size+'px"></span>';
                     html += '</div></td>';
                     index++;
@@ -61,14 +64,13 @@
             opt.content.on('click', 'td:not(.empty)', function(){
                 var td = $(this),
                     url = td.attr('data-url');
-
                 me.trigger('select', [url, td.hasClass('active')]);
                 td.toggleClass('active');
             }).highlight()
-                .find('.mui-btnOk')
+                .find('.mui-btnOk, .mui-btnCancel')
                 .highlight('mui-state-hover')
-                .on('click', function(e){
-                    me._commit();
+                .on('click', function(){
+                    me[$(this).is('.mui-btnOk')?'_commit':'_reset']();
                 });
         },
 
@@ -80,6 +82,13 @@
                 ret.push($(this).attr('data-url'));
             }).removeClass('active');
             this.trigger('confirm', [ret]);
+        },
+
+        _reset: function(){
+            var opt = this._options,
+                actives = $('td.active', opt.content);
+            actives.removeClass('active');
+            this.trigger('reset');
         }
     }, "popup");
 })(Zepto, ME.ui)
