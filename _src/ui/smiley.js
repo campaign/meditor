@@ -79,7 +79,7 @@
             actives.each(function(){
                 ret.push($(this).attr('data-url'));
             }).removeClass('active');
-            ret.length && this.trigger('confirm', [ret]);
+            this.trigger('confirm', [ret]);
         }
     }, "popup");
 })(Zepto, ME.ui)
