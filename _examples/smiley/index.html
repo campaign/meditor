@@ -57,7 +57,11 @@
                     ]
                 }
             ],
-            commit: function(e, url){
+            select: function(e, url, state){
+                console.log(url, state);
+            },
+            confirm: function(e, urls){
+                console.log(urls);
                 pop.hide();
             }
         });

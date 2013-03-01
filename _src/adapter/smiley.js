@@ -32,7 +32,7 @@
                                 ]
                             }
                         ],
-                        commit: function(e, urls){
+                        confirm: function(e, urls){
                             var html = '';
                             $.each(urls, function(){
                                 html += '<img src="'+this+'" />';
