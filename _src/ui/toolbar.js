@@ -54,16 +54,17 @@
         },
         _createPopup: function () {
             var me = this,
-                items = this._options.items,
+                opts = this._options,
                 $subBarWrap = $('<div class="mui-group-wrap"></div> ');
 
             me._$subBarWrap = $subBarWrap;
-            $.each(items, function (i, item) {
+            $.each(opts.items, function (i, item) {
                 me.addItem(item);
             });
             return me._subBar = ui.popup({
                 content: $subBarWrap,
-                width: 'auto'
+                width: 'auto',
+                prefix: opts.name || 'group'
             });
         },
         _isInstance: function (instance) {
@@ -98,7 +99,7 @@
 
             $.each(opts.items.slice(0, Math.min(opts.showCount, opts.items.length)), function (i, item) {
                 var $item = item.root();
-                height += $item.height() + parseInt($item.css('margin-top')) + parseInt($item.css('margin-bottom'));
+                height += ($item.height() + parseInt($item.css('margin-top')) + parseInt($item.css('margin-bottom')))/(i == opts.showCount - 1 ? 2 : 1);
             });
             return height;
         },

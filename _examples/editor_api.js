@@ -10,14 +10,22 @@
             'core/Range.js',
             'core/Selection.js',
             'core/Editor.js',
+            'core/htmlparser.js',
+            'core/node.js',
+            'core/filternode.js',
+            'plugins/inserthtml.js',
             'plugins/moverange.js',
             'plugins/basestyle.js',
+            'plugins/autolink.js',
+            'plugins/paste.js',
             'ui/ui.js',
             'ui/button.js',
             'ui/toolbar.js',
+            'ui/tabs.js',
             'ui/popup.js',
             'adapter/adapter.js',
-            'adapter/buttons.js'
+            'adapter/buttons.js',
+            'adapter/smiley.js'
 
         ],
         baseURL = '../_src/';
