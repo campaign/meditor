@@ -4,7 +4,7 @@
             var pop,
                 btn = ui.button({
                 name : cmdName,
-                buttonclick:function(){
+                click:function(){
                     pop = pop || ui.smiley({
                         items: [
                             {

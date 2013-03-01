@@ -3,7 +3,7 @@
         'bold italic underline', function(editor,cmdName){
             var btn = ui.button({
                 name : cmdName,
-                buttonclick:function(){
+                click:function(){
                     editor.execCommand(cmdName)
                 },
                 title:cmdName
