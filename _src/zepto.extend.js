@@ -134,6 +134,12 @@
             }
             args.forEach(function(arg){ extend(target, arg, deep,override)})
             return target
+        },
+        getOrientation: "matchMedia" in window ? function(){
+            return window.matchMedia("(orientation: portrait)").matches?'portrait':'landscape';
+        }:function(){
+            var elem = document.documentElement;
+            return elem.clientWidth / Math.max(elem.clientHeight, 320) < 1.1 ? "portrait" : "landscape";
         }
     });
 })(Zepto);
@@ -441,7 +447,6 @@
         touch: "ontouchend" in document,
         cssTransitions: "WebKitTransitionEvent" in window,
         has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
-
     });
 
 })(Zepto);
