@@ -1,11 +1,8 @@
 .mui-popup {
     display: none;
     position: absolute;
-    height: 150px;
-    width:200px;
     z-index: 9990;
 }
-
 
 .mui-popup-content {
     height: 100%;

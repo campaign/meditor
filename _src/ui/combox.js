@@ -17,7 +17,7 @@
         _create: function () {
             var me = this,
                 opt = me._options,
-                cls = opt.prefix ? opt.prefix + '-mui-popup' : '',
+                cls = opt.prefix ? 'mui-' + opt.prefix + '-popup' : '',
                 root = me._el = $('<div class="mui-combox ' + cls + '"></div>').appendTo('body'),
                 i = 0, j, html = '<div class="mui-combox-content ' + (cls ? cls + '-content' : '') + '"><ul>';
             while(true) {
@@ -34,7 +34,7 @@
                 proto = me.__proto__,
                 root = me.root(),
                 content = root.children().first(),
-                cls = (opt.prefix ? opt.prefix + '-' : '') + 'mui-combox-highlight';
+                cls = 'mui-' + (opt.prefix ? opt.prefix + '-' : '') + 'combox-highlight';
 
             //highlight
             content.on('touchstart', function (e) {
@@ -48,7 +48,7 @@
                 var li = opt._lastClick =  $(e.target).closest('li');
                 me.closeChildren(li);
                 proto._needCloseAll = false;
-                me.trigger('itemClick', [li.index(), li.children().attr('value'), li]);
+                me.trigger('click', [li.index(), li.children().attr('value'), li]);
             });
             if(!proto._addEventInited) {
                 $(document).on('tap', function () {
@@ -69,11 +69,12 @@
 
         _fitSize: function (node) {
             var me = this,
-                width = parseInt(me.root().css('width')),
+                root = me.root(),
+                width = parseInt(me.root().css('width')) || root[0].getBoundingClientRect().width,
                 node = me._options._lastClicked = node[0] || node,
                 rect= node.getBoundingClientRect();
 
-            me.root().css({
+            root.css({
                 left:       rect.left - width - 15,
                 top:        rect.top
             }).children().last().css({top: rect.height / 2 - 16});
@@ -107,7 +108,7 @@
         select: function (index, _remove) {
             var me = this,
                 opt = me._options,
-                cls = (opt.prefix ? opt.prefix + '-' : '') + 'mui-combox-selected',
+                cls = 'mui-' + (opt.prefix ? opt.prefix + '-' : '') + 'combox-selected',
                 action = _remove ? 'removeClass' : 'addClass';
             if(typeof index === 'number') {
                 opt.items.eq(index)[action](cls);
@@ -143,7 +144,8 @@
         show: function (node) {
             var me = this,
                 opt = me._options;
-            me._fitSize(node).root().show();
+            me.root().show();
+            me._fitSize(node);
             opt._isShow = true;
             if(opt.needIscroll && !opt._iscrollInited) {
                 me.root().children().first().iscroll();

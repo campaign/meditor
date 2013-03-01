@@ -35,7 +35,7 @@
 <script type="text/javascript">
     $(function(){
         combox1 = ME.ui.combox({
-                        itemClick: function (e, index, value, node) {
+                        click: function (e, index, value, node) {
                             this.select(value);
                             index == 1 && combox2.toggle(node);
                             index == 2 && combox3.toggle(node);
