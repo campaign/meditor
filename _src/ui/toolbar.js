@@ -47,7 +47,7 @@
         },
         _init: function () {
             this.$super('_init');
-            this.root().on('buttonclick', $.proxy(this._showPopup, this));
+            this.on('click', this._showPopup);
         },
         _showPopup: function () {
             (this._subBar || this._createPopup()).toggle(this.root());
