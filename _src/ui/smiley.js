@@ -4,7 +4,7 @@
             items: null,
             prefix: 'smiley'
         },
-        _create: function(){;
+        _create: function(){
             var me = this,
                 opt = me._options,
                 panels = [],
