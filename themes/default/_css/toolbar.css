@@ -86,6 +86,10 @@
     border-bottom: 1px solid #fff;
     border-top: 1px solid #bebebe;
 }
+
+.mui-scrollbox .mui-button.mui-state-highlight {
+    background: rgba(80, 132, 228, 1);
+}
 /*.mui-default .mui-scrollbox .mui-button:after{
     content: '\0020';
     height: 1px;

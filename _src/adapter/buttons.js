@@ -15,5 +15,5 @@
             });
             return btn;
         }
-    )
+    );
 })(Zepto,ME.ui)
