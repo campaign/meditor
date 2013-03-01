@@ -6,6 +6,14 @@
     z-index: 9990;
 }
 
+.mui-combox-content {
+    height: 100%;
+    width: 100%;
+    border: 5px solid #666;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+}
 .mui-combox ul li {
     list-style:none;
     height: 50px;
@@ -19,22 +27,13 @@
     background-repeat: no-repeat;
 }
 
-.mui-combox-content {
-    height: 100%;
-    width: 100%;
-    border: 1px solid #ccc;
-    background: #fff;
-    border-radius: 4px;
-    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
-}
-
 .mui-combox-highlight {
     background-color: #efefef;
 }
 .mui-combox-arrow {
     position: absolute;
     overflow: hidden;
-    right: -16px;
+    right: -23px;
     top:0;
     width:15px;
     height: 32px;
@@ -47,7 +46,7 @@
     height: 16px;
     width:16px;
     display: inline-block;
-    background: #fff;
-    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.4);
+    background: #666;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
     -webkit-transform: rotate(45deg);
 }

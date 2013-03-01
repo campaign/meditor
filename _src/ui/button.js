@@ -17,18 +17,21 @@
         _init: function(){
             var el = this.root(), opt = this._options, _eH = $.proxy(this._eventHandler, this);
             el.on('click', _eH);
+            opt.click && this.on('click', opt.click);
             this.enable(!opt.disabled).highlight(opt.highlight);
         },
 
         _eventHandler: function(e){
-            if(this.isEnable()){
-                this.trigger('buttonclick', $.extend({}, this.option()));
+            if(!this.isEnable()){
+                e.preventDefault();
+                e.stopImmediatePropagation();
             }
         },
 
         enable: function(flag){
             var el = this.root();
-            el[flag?'removeClass':'addClass']('mui-state-disable').highlight(flag?'mui-state-hover':null);
+            el[flag?'removeClass':'addClass']('mui-state-disable')
+                .highlight(flag?'mui-state-hover':null);
             return this;
         },
 

@@ -54,12 +54,12 @@
 /*group*/
 .justify-mui-popup{
     width: 50px;
-
 }
 .mui-popup .mui-group-wrap{
     display: -webkit-box;
     -webkit-box-orient: vertical;
     padding: 5px;
+    -webkit-box-align: center;
 }
 .mui-popup .mui-group-wrap .mui-button{
     display: block;

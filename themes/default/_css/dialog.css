@@ -38,30 +38,16 @@
     overflow: hidden;
 }
 
-.mui-dialog-header .mui-dialog-btnOk, .mui-dialog-header .mui-dialog-btnCancel {
+.mui-dialog-header .mui-btnOk, .mui-dialog-header .mui-btnCancel {
     position: absolute;
     left: 8px;
     top: 50%;
     margin-top: -12px;
     height: 15px;
-    line-height: 15px;
-    padding: 0 10px;
-    border-width: 5px 5px 4px 5px;
-    font-size: 12px;
-    font-weight: normal;
-    text-shadow: rgba(0, 0, 0, 0.8) 0 -1px 0;
-    color: white;
-    -webkit-border-image: url(../images/cancel.png) 10 10 8 10;
-    cursor: pointer;
-    -webkit-user-select: none;
 }
-.mui-dialog-header .mui-dialog-btnOk.mui-state-hover, .mui-dialog-header .mui-dialog-btnCancel.mui-state-hover {
-    opacity: 0.4;
-}
-.mui-dialog-header .mui-dialog-btnOk {
+.mui-dialog-header .mui-btnOk {
     left: auto;
     right: 8px;
-    -webkit-border-image: url(../images/confirm.png) 10 10 8 10;
 }
 .mui-dialog-header h3 {
     padding: 0;

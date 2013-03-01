@@ -12,12 +12,15 @@
     <script type="text/javascript" charset="utf-8" src="editor_api.js">
     </script>
     <link href="../themes/default/_css/core.css" rel="stylesheet" />
-    <link href="../themes/default/_css/toolbar.css" rel="stylesheet" />
-    <link href="../themes/default/_css/dialog.css" rel="stylesheet" />
     <link href="../themes/default/_css/button.css" rel="stylesheet" />
     <link href="../themes/default/_css/popup.css" rel="stylesheet" />
+    <link href="../themes/default/_css/dialog.css" rel="stylesheet" />
     <link href="../themes/default/_css/tabs.css" rel="stylesheet" />
     <link href="../themes/default/_css/smiley.css" rel="stylesheet" />
+    <link href="../themes/default/_css/toolbar.css" rel="stylesheet" />
+    <link href="../themes/default/_css/ui.css" rel="stylesheet" />
+
+
 </head>
 <body>
 <div class="mui-default">
@@ -31,13 +34,14 @@
     ME.getEditor('#editor',{
         toolbars:[
             'smiley',
-            {
-                name:'justifyjustify',type:'group',
-                items:['justifyleft','justifyright','justifycenter']
-            },
-            {
-                type:'scrollbox',items:['bold','underline','bold','underline','bold','underline']
-            }
+            {name:'justify',type:'group',items:['justifyleft']},
+            {type:'scrollbox',items:[
+                'bold',
+                'bold',
+                'bold',
+                'bold',
+                'bold',
+                'underline']}
         ]
     })
 </script>

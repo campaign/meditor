@@ -15,7 +15,7 @@
         _create: function () {
             var me = this,
                 opt = me._options,
-                cls = opt.prefix ? opt.prefix + '-mui-popup' : '';
+                cls = opt.prefix ? 'mui-' +opt.prefix + '-popup' : '';
             me._el = $('<div class="mui-popup ' + cls + '"></div>').append($('<div class="mui-popup-content ' + (cls ? cls + '-content' : '') + '"></div>')
                 .html(opt.content).append('<div class="mui-popup-arrow ' + (cls ? cls + '-arrow' : '') + '"><b></b></div>')).appendTo('body');
         },
@@ -33,13 +33,13 @@
         _fitSize: function (node) {
             var me = this,
                 root = me.root(),
-                width = parseInt(root.css('width')),
+                width = parseInt(root.css('width')) || root[0].getBoundingClientRect().width,
                 node = me._options._btn = node[0] || node,
                 rect = node.getBoundingClientRect();
 
             root.css({
-                top:        rect.top,
-                left:       rect.left - width - 15
+                top:        rect.top - 5,
+                left:       rect.left - width - 20
             }).children().last().css({
                 top:        rect.height / 2 - 16
             });
@@ -54,7 +54,8 @@
         show: function (node) {
             var me = this,
                 opt = me._options;
-            me._fitSize(node).root().show();
+            me.root().show();
+            me._fitSize(node);
             opt._isShow = true;
             if(opt.needIscroll && !opt._iscrollInited) {
                 me.root().children().first().iscroll();

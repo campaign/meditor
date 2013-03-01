@@ -18,8 +18,8 @@
 
             header = this._header = el.find('.mui-dialog-header');
             this._body = el.find('.mui-dialog-body');
-            opt.buttonType & 1 && header.append('<div class="mui-dialog-btnOk">确认</div>');
-            opt.buttonType & 2 && header.prepend('<div class="mui-dialog-btnCancel">取消</div>');
+            opt.buttonType & 1 && header.append('<div class="mui-btnOk">确认</div>');
+            opt.buttonType & 2 && header.prepend('<div class="mui-btnCancel">取消</div>');
         },
 
         _init: function(){
@@ -58,9 +58,9 @@
                 case 'widgetrender':
                     return this.refresh();
                 default:
-                    if((match = $(e.target).closest('.mui-dialog-btnOk, .mui-dialog-btnCancel')) && match.length){
+                    if((match = $(e.target).closest('.mui-btnOk, .mui-btnCancel')) && match.length){
                         e.preventDefault();
-                        evt = $.Event(match.is('.mui-dialog-btnOk')?'confirm':'cancel');
+                        evt = $.Event(match.is('.mui-btnOk')?'confirm':'cancel');
                         this.trigger(evt);
                         evt.defaultPrevented || this.close();
                     }

@@ -10,3 +10,23 @@
     -webkit-animation-duration: 0.001s;
     -webkit-animation-name: nodeInserted;
 }
+
+.mui-btnOk, .mui-btnCancel {
+    line-height: 15px;
+    display: inline-block;
+    padding: 0 10px;
+    border-width: 5px 5px 4px 5px;
+    font-size: 12px;
+    font-weight: normal;
+    text-shadow: rgba(0, 0, 0, 0.8) 0 -1px 0;
+    color: white;
+    -webkit-border-image: url(../images/cancel.png) 10 10 8 10;
+    cursor: pointer;
+    -webkit-user-select: none;
+}
+.mui-btnOk {
+    -webkit-border-image: url(../images/confirm.png) 10 10 8 10;
+}
+.mui-btnOk.mui-state-hover, .mui-btnCancel.mui-state-hover {
+    opacity: 0.4;
+}
