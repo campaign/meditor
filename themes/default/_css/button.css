@@ -16,10 +16,12 @@
     display: inline-block;
     text-decoration: inherit;
     text-align: center;
-    line-height: 1.0;
-    width: 17px;
-    height: 17px;
+    width: 22px;
+    height: 22px;
     overflow: hidden;
+    font-size: 20px;
+    line-height: 22px;
+    vertical-align: middle;
 }
 
 .mui-button-bold span.icon:before { content: '\e77a'} /*粗体*/
@@ -32,10 +34,10 @@
 .mui-button-bullet span.icon:before { content: '\f0ca'}/*无须列表*/
 .mui-button-numbered span.icon:before { content: '\f0cb'}/*无须列表*/
 
-.mui-button-justifyleft span.icon:before { content: '\e77e'}/*左对齐*/
-.mui-button-justifycenter span.icon:before { content: '\e77f'}/*居中*/
-.mui-button-justifyright span.icon:before { content: '\e780'}/*右对齐*/
-.mui-button-justifyjustify span.icon:before { content: '\e781'}/*两端对齐*/
+.mui-button-alignleft span.icon:before { content: '\e77e'}/*左对齐*/
+.mui-button-aligncenter span.icon:before { content: '\e77f'}/*居中*/
+.mui-button-alignright span.icon:before { content: '\e780'}/*右对齐*/
+.mui-button-alignjustify span.icon:before { content: '\e781'}/*两端对齐*/
 
 .mui-button-undo span.icon:before { content: '\27f2'}/*undo*/
 .mui-button-redo span.icon:before { content: '\27f3'}/*redo*/
@@ -53,8 +55,8 @@
     cursor: pointer;
     -webkit-user-select: none;
     vertical-align: bottom;
-    width:18px;
-    height: 18px;
+    width:22px;
+    height: 22px;
     overflow: hidden;
     padding: 5px 4px 3px;
 }
