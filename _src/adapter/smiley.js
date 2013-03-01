@@ -32,8 +32,12 @@
                                 ]
                             }
                         ],
-                        commit: function(e, url){
-                            editor.execCommand( 'inserthtml', '<img src="'+url+'" />' );
+                        commit: function(e, urls){
+                            var html = '';
+                            $.each(urls, function(){
+                                html += '<img src="'+this+'" />';
+                            });
+                            editor.execCommand( 'inserthtml', html );
                             pop.hide();
                         }
                     });

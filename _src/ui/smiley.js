@@ -7,13 +7,16 @@
         _create: function(){;
             var me = this,
                 opt = me._options,
-                panels = [];
+                panels = [],
+                content;
             $.each(opt.items || [], function(){
                 panels.push( me._creatPanel(this));
             });
-            this._content = opt.content = ui.tabs({
+            content = opt.content = $('<div></div>');
+            content.append(ui.tabs({
                 items: panels
-            }).root().addClass('smiley-tabs');
+            }).root().addClass('smiley-tabs'));
+            content.append('<div class="smiley-btns"><div class="mui-btnOk">确认</div></div>');
             return this.$super('_create');
         },
 
@@ -21,7 +24,7 @@
             var cells = obj.cells || 11,
                 arr = obj.items.concat(),
                 size = obj.size || 35,
-                row, i, item, index = 0, html='',
+                row, i, item, index = 0, html='', empty,
                 div = $('<table class="smiley-'+obj.cls+'" data-url="'+obj.url+'"></table>');
 
             while(arr.length) {
@@ -29,8 +32,9 @@
                 html += '<tr>';
                 for(i=0; i<cells; i++){
                     item = row[i];
-                    html += '<td data-index="'+index+'" title="'+item+'">';
-                    html += typeof item == 'string'?'<span style="background-position: 0 -'+index*size+'px"></span>':'&nbsp;';
+                    empty = typeof item !== 'string';
+                    html += '<td '+(empty?' class="empty"':'')+'data-index="'+index+'" title="'+item+'">';
+                    html += empty ? '&nbsp;' : '<span style="background-position: 0 -'+index*size+'px"></span>';
                     html += '</td>';
                     index++;
                 }
@@ -39,9 +43,22 @@
             return div.append(html);
         },
         _init: function(){
-            var me = this;
+            var me = this, opt = this._options;
             this.$super('_init');
-            this._content.on('click', 'td', function(){
+            opt.content.on('click', 'td:not(.empty)', function(){
+                $(this).toggleClass('active');
+            }).find('.mui-btnOk')
+                .highlight('mui-state-hover')
+                .on('click', function(e){
+                    me._commit();
+                });
+        },
+
+        _commit: function(){
+            var opt = this._options,
+                ret = [],
+                actives = $('td.active', opt.content);
+            actives.each(function(){
                 var td = $(this),
                     table = td.closest('table'),
                     url = table.attr('data-url'),
@@ -54,8 +71,9 @@
                     file = "0" + file;
                 }
                 file = url.replace(/#+/g, file);
-                me.trigger('commit', file);
-            });
+                ret.push(file);
+            }).removeClass('active');
+            ret.length && this.trigger('commit', [ret]);
         }
     }, "popup");
 })(Zepto, ME.ui)
