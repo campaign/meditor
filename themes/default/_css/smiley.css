@@ -28,7 +28,7 @@
     border-right-width: 0;
 }
 
-/*.smiley-tabs td.active::before {
+.smiley-tabs td.active::before {
     content: '\2713';
     font-family: 'fontello';
     font-style: normal;
@@ -38,7 +38,7 @@
     right: 3px;
     bottom: 0px;
     color: rgba(170, 170, 170, 1);
-}*/
+}
 .smiley-tabs td.active::after {
     content: '\0020';
     position: absolute;
