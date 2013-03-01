@@ -101,7 +101,7 @@
                                 }
                             },
                             commit: function(e, url){
-                                editor.execCommand( 'insertimage', {src: url} );
+                                editor.execCommand( 'inserthtml', '<img src="'+url+'" />' );
                                 pop.hide();
                             }
                         }).root(),
@@ -111,10 +111,7 @@
                 },
                 title:cmdName
             });
-            editor.on('selectionchange',function(cmdName){
-                var state = editor.queryCommandState(cmdName);
-                btn.highlight(state == 1).enable(state != -1);
-            });
+
             return btn;
         }
     )
