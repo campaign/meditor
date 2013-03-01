@@ -127,7 +127,7 @@ var TouchAction = {
 	 */
 	initGenericTouches: function(touchlist, touches, target){
 		var i = 0;
-		function Touch(target){
+		function Touch(target, identifier, touchesPageX, touchesPageY, touchesScreenX, touchesScreenY){
 			this.target = target;
 			this.identifier = identifier;
 			this.pageX = this.clientX = touchesPageX;
@@ -157,13 +157,16 @@ var TouchAction = {
 	 * @method createNativeTouchList
 	 * @static
 	 */
-	createNativeTouchList: function(touches, target){
-		var touchlists = this.initNativeTouches(touches, target);
-		var touchlist;
-		if(touchlists.length == 1)
-			touchlist = document.createTouchList(touchlists[0]);
-	    if(touchlists.length == 2)
-			touchlist = document.createTouchList(touchlists[0], touchlists[1]);
+	createNativeTouchList: function(touches, target){		
+		if(touches){
+			var touchlist, touchlists = this.initNativeTouches(touches, target);
+			if(touchlists.length == 1)
+				touchlist = document.createTouchList(touchlists[0]);
+		    if(touchlists.length == 2)
+				touchlist = document.createTouchList(touchlists[0], touchlists[1]);
+		}
+		else
+			var touchlist = document.createTouchList();
 		return touchlist;
 	},
 	
@@ -185,7 +188,8 @@ var TouchAction = {
 		    }
 		}
 		var touchlist = new TouchList();
-		this.initGenericTouches(touchlist, touches, target);
+		if(touches)
+			this.initGenericTouches(touchlist, touches, target);
 		return touchlist;
 	},
 	
@@ -242,8 +246,10 @@ var TouchAction = {
 	 */
 	simulateTouchEvent: function(type, target, options){
 		options = options || {};
-		options.touches = options.touches || [];
-		options.targetTouches = options.targetTouches || [];
+		if(type != "touchend" && type !="touchcancel"){
+			options.touches = options.touches || [];
+			options.targetTouches = options.targetTouches || [];
+		}
 		options.changedTouches = options.changedTouches || [];
 		var bubbles = typeof options.bubbles != 'undefined' ? options.bubbles : true ;
 		var cancelable = typeof options.cancelable != 'undefined' ? options.cancelable : (type != "touchcancel");
