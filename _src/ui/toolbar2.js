@@ -106,7 +106,6 @@
             opts.closeBtn && (me._$closeBtn = ui.button({
                 name: 'close',
                 click: function () {
-                    debugger;
                     me.toggle();
                 }
             }));
