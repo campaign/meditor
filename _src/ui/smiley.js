@@ -21,7 +21,7 @@
         },
 
         _creatPanel: function(obj){
-            var cells = obj.cells || 11,
+            var cells = obj.cells || 8,
                 arr = obj.items.concat(),
                 size = obj.size || 35,
                 url = obj.url,
@@ -34,7 +34,7 @@
                 for(i=0; i<cells; i++){
                     item = row[i];
                     empty = typeof item !== 'string';
-                    html += '<td '+(empty?' class="empty"':'')+'data-url="'+this._formatUrl(url, index)+'" title="'+item+'">';
+                    html += '<td '+(empty?' class="empty"':'')+'data-url="'+this._formatUrl(url, index+1)+'" title="'+item+'">';
                     html += empty ? '&nbsp;' : '<span style="background-position: 0 -'+index*size+'px"></span>';
                     html += '</td>';
                     index++;
@@ -64,7 +64,8 @@
 
                 me.trigger('select', [url, td.hasClass('active')]);
                 td.toggleClass('active');
-            }).find('.mui-btnOk')
+            }).highlight()
+                .find('.mui-btnOk')
                 .highlight('mui-state-hover')
                 .on('click', function(e){
                     me._commit();
