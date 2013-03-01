@@ -52,7 +52,7 @@
 
         combox2 =
                 ME.ui.combox({
-                    itemClick: function (e, index, value, node) {
+                    click: function (e, index, value, node) {
                         this.select(value);
                         combox4.toggle(node);
                     },
@@ -64,7 +64,7 @@
                 });
         var combox3 =
                 ME.ui.combox({
-                    itemClick: function (e, index, value, node) {
+                    click: function (e, index, value, node) {
                         this.select(value);
                         combox4.toggle(node);
                     },
@@ -76,7 +76,7 @@
                 });
         var combox4 =
                 ME.ui.combox({
-                    itemClick: function (e, index, value, node) {
+                    click: function (e, index, value, node) {
                         this.select(value);
                     },
                     renderFn: function (index) {
