@@ -38,8 +38,8 @@
                 rect = node.getBoundingClientRect();
 
             root.css({
-                top:        rect.top,
-                left:       rect.left - width - 15
+                top:        rect.top - 5,
+                left:       rect.left - width - 20
             }).children().last().css({
                 top:        rect.height / 2 - 16
             });
