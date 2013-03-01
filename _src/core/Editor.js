@@ -502,10 +502,6 @@
             domUtils.on(doc, ['click', 'keydown', 'keyup', 'keypress','touchstart','touchend','touchmove', 'selectstart'], me._proxyDomEvent);
             domUtils.on(win, ['focus', 'blur'], me._proxyDomEvent);
             domUtils.on(doc, ['touchend', 'keydown'], function (evt) {
-                //特殊键不触发selectionchange
-                if (evt.type == 'keydown' && (evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey)) {
-                    return;
-                }
                 me._selectionChange(250, evt);
             });
 
