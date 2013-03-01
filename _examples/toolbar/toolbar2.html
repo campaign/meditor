@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Toolbar</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <script type="text/javascript" charset="utf-8" src="../../editor_config.js"></script>
+
+    <!--开发版-->
+    <!--<script type="text/javascript" charset="utf-8" src="editor_api.js"></script>-->
+    <script type="text/javascript" charset="utf-8" src="../../_src/zepto.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../_src/zepto.extend.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../_src/zepto.iscroll.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../_src/meditor.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../_src/hammer.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../_src/zepto.hammer.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../_src/ui/ui.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../_src/ui/button.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../_src/ui/popup.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../_src/ui/toolbar2.js"></script>
+
+    <link href="../../themes/default/_css/button.css" rel="stylesheet" />
+    <link href="../../themes/default/_css/popup.css" rel="stylesheet" />
+    <link href="../../themes/default/_css/toolbar2.css" rel="stylesheet" />
+    <link href="../../themes/default/_css/ui.css" rel="stylesheet" />
+
+    <style>
+        #meditor{
+            border: 1px solid #000;
+            width: 100%;
+            height: 400px;
+            position: relative;
+        }
+    </style>
+
+</head>
+<body class="mui-default">
+
+<div id="meditor" contenteditable="true"></div>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+<p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p><p>测试测试测试</p>
+
+
+</body>
+<script type="text/javascript">
+
+    (function ($, ui) {
+        var toolbarCfg = [
+            'undo',
+            'redo',
+            {
+                type: 'group',
+                name: 'font',
+                items: ['fontfamily', 'fontsize']
+            },
+            {
+                type: 'scrollbox',
+                viewCount: 4,
+                items: [
+                    'bold',
+                    'underline',
+                    {
+                        type: 'group',
+                        name: 'justify',
+                        items: ['justifyleft', 'justifyright', 'justifycenter']
+                    },
+                    {
+                        type: 'group',
+                        name: 'insert',
+                        items: [
+                            'image',
+                            'link',
+                            {
+                                type: 'group',
+                                name: 'image',
+                                items: ['image', 'image', 'bullet']
+                            },
+                            {
+                                type: 'scrollbox',
+                                viewCount: 3,
+                                items: ['bold', 'underline', 'underline', 'underline']
+                            }
+                        ]
+                    }
+                ]
+            },
+            'test'];
+
+        function parseItems(items){
+            var ret = [];
+            $.each(items, function(k, v){
+                if (typeof v == 'string') {
+                    ret.push(ui.button({
+                        name: v
+                    }));
+                } else if (typeof v == 'object') {
+                    ret.push(ui[v.type]({
+                        name:v.name,
+                        items: parseItems(v.items),
+                        showCount: v.showCount
+                    }));
+                }
+            });
+            return ret;
+        }
+
+        var toolbar = ui.toolbar({
+            items: parseItems(toolbarCfg)
+        }).render(document.body, '#meditor');
+
+    })(Zepto, ME.ui);
+</script>
+</html>

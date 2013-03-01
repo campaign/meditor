@@ -1,0 +1,86 @@
+/* toolbar */
+.mui-toolbar {
+    width: 100%;
+    height: 40px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 1000;
+    right: 0px;
+    bottom: 352px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b9bdc5), color-stop(50%,#283144), color-stop(51%,#131e32), color-stop(100%,#283144), color-stop(100%,#207cca), color-stop(100%,#1e2a42));
+}
+
+.mui-toolbar.mui-toolbar-anim {
+    -webkit-transition-property: width;
+    -webkit-transition-duration: 350ms;
+    -webkit-transition-timing-function:linear;
+}
+
+.mui-toolbar .mui-toolbar-boxwrap{
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-align:center;
+    padding: 5px;
+}
+
+.mui-toolbar .mui-toolbar-toolBox {
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-align:center;
+    -webkit-box-flex: 1;
+
+}
+.mui-toolbar .mui-button{
+    display: block;
+    margin: 0 0.2em 0 0;
+
+}
+
+.mui-toolbar .mui-toolbar-arrowWrap{
+    position: relative;
+}
+.mui-toolbar .mui-button-close{
+    margin: 0 0.2em;
+}
+
+/*group*/
+.mui-group{
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-align: center;
+}
+
+/*scrollbox*/
+.mui-scrollbox{
+    border: 1px solid #8e8f93;
+    -webkit-box-shadow: inset -1px -2px 1px  #aeaeae;
+    background: #e9e9e9;
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-flex: 1;
+}
+.mui-scrollbox .mui-scrollBox-scroller{
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-orient: horizontal;
+}
+.mui-scrollbox .mui-button{
+    border-radius: 0;
+    background: none;
+    margin: 0;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #bebebe;
+}
+/*.mui-default .mui-scrollbox .mui-button:after{
+    content: '\0020';
+    height: 1px;
+    width: 100%;
+    background: #bebebe;
+    display: block;
+    margin:0;
+    padding-top:3px;
+
+
+
+}*/
+
