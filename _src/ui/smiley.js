@@ -34,9 +34,9 @@
                 for(i=0; i<cells; i++){
                     item = row[i];
                     empty = typeof item !== 'string';
-                    html += '<td '+(empty?' class="empty"':'')+'data-url="'+this._formatUrl(url, index+1)+'" title="'+item+'">';
-                    html += empty ? '&nbsp;' : '<span style="background-position: 0 -'+index*size+'px"></span>';
-                    html += '</td>';
+                    html += '<td '+(empty?' class="empty"':'')+'data-url="'+this._formatUrl(url, index+1)+'" title="'+item+'"><div>';
+                    html += empty ? '&nbsp;' : '<span class="icon" style="background-position: 0 -'+index*size+'px"></span>';
+                    html += '</div></td>';
                     index++;
                 }
                 html += '</tr>';

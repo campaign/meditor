@@ -3,59 +3,7 @@
         uid = function(){
             return _id ++;
         },
-        endEvent = $.fx.animationEnd + '.tabs',
-
-        durationThreshold = 1000, // 时间大于1s就不算。
-        horizontalDistanceThreshold = 30, // x方向必须大于30
-        verticalDistanceThreshold = 70, // y方向上只要大于70就不算
-        scrollSupressionThreshold = 30, //如果x方向移动大于这个直就禁掉滚动
-        tabs = [],
-        eventBinded = false,
-        isFromTabs = function (target) {
-            for (var i = tabs.length; i--;) {
-                if ($.contains(tabs[i], target)) return true;
-            }
-            return false;
-        }
-
-    function tabsSwipeEvents() {
-        $(document).on('touchstart.tabs', function (e) {
-            var point = e.touches ? e.touches[0] : e, start, stop;
-
-            start = {
-                x:point.clientX,
-                y:point.clientY,
-                time:Date.now(),
-                el:$(e.target)
-            }
-
-            $(document).on('touchmove.tabs',function (e) {
-                var point = e.touches ? e.touches[0] : e, xDelta;
-                if (!start)return;
-                stop = {
-                    x:point.clientX,
-                    y:point.clientY,
-                    time:Date.now()
-                }
-                if ((xDelta = Math.abs(start.x - stop.x)) > scrollSupressionThreshold ||
-                    xDelta > Math.abs(start.y - stop.y)) {
-                    isFromTabs(e.target) && e.preventDefault();
-                } else {//如果系统滚动开始了，就不触发swipe事件
-                    $(document).off('touchmove.tabs touchend.tabs');
-                }
-            }).one('touchend.tabs', function () {
-                    $(document).off('touchmove.tabs');
-                    if (start && stop) {
-                        if (stop.time - start.time < durationThreshold &&
-                            Math.abs(start.x - stop.x) > horizontalDistanceThreshold &&
-                            Math.abs(start.y - stop.y) < verticalDistanceThreshold) {
-                            start.el.trigger(start.x > stop.x ? "tabsSwipeLeft" : "tabsSwipeRight");
-                        }
-                    }
-                    start = stop = undefined;
-                });
-        });
-    }
+        endEvent = $.fx.animationEnd + '.tabs';
 
     ui.define('tabs', {
         _options: {
@@ -89,29 +37,29 @@
         },
 
         _init: function(){
-            var eventHandler = $.proxy(this._eventHandler, this);
-            this._nav.on('click', eventHandler);
-            this._titles.highlight('mui-state-hover');
+            var me = this,
+                eventHandler = $.proxy(me._eventHandler, me),
+                opt = me._options;
+            me._nav.on('click', eventHandler);
+            me._el.hammer('swipe', function(e){
+                var index;
+                switch(e.direction){
+                    case 'left':
+                        index = opt.active + 1;
+                        break;
+                    case 'right':
+                        index = opt.active - 1;
+                        break;
+                }
+                index !== undefined && me.switchTo(index);
+            }).on('widgetrender', $.debounce(15, eventHandler, false));
+            me._titles.highlight('mui-state-hover');
             $(window).on('ortchange', eventHandler);
-            tabs.push(this._content.get(0));
-            eventBinded =  eventBinded || (tabsSwipeEvents(), true);
-            this._el.on('tabsSwipeLeft tabsSwipeRight', eventHandler)
-                .on('widgetrender', $.debounce(15, eventHandler, false));
         },
 
         _eventHandler: function(e){
-            var match, items, active = this._options.active, index;
+            var match;
             switch(e.type) {
-                case 'tabsSwipeLeft':
-                case 'tabsSwipeRight':
-                    items = this._items;
-                    if (e.type == 'tabsSwipeLeft' && active < items.length - 1) {
-                        index = active + 1;
-                    } else if (e.type == 'tabsSwipeRight' && active > 0) {
-                        index = active - 1;
-                    }
-                    index !== undefined && (e.stopPropagation(), this.switchTo(index));
-                    break;
                 case 'ortchange':
                 case 'widgetrender':
                     return this.refresh();
@@ -190,10 +138,6 @@
 
         destroy:function () {
             var eventHandler = this._eventHandler, idx;
-
-            ~(idx = $.inArray(this._content.get(0), tabs)) && tabs.splice(idx, 1);
-            this._el.off('tabsSwipeLeft tabsSwipeRight', eventHandler);
-            tabs.length || ($(document).off('touchstart.tabs'), eventBinded = false);
 
             this._nav.off('tap', eventHandler);
             this._titles.highlight();

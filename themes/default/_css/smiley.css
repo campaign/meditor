@@ -9,8 +9,6 @@
 
 .smiley-tabs table td {
     border: 1px solid #f0f0f0;
-    vertical-align: middle;
-    text-align: center;
     position: relative;
     -webkit-user-select: none;
 }
@@ -51,13 +49,18 @@
     top: -1px;
 }
 
+.smiley-tabs table td div {
+    min-height: 35px;
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+}
 .smiley-tabs table td span {
     display: block;
     width: 35px;
     height: 35px;
     overflow: hidden;
     background-repeat: no-repeat;
-    margin: auto;
 }
 
 .smiley-tabs .smiley-bubble td span {

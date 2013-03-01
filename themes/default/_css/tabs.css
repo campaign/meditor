@@ -10,6 +10,7 @@
     z-index: 11;
     position: relative;
     border-top: 1px solid #c9c9c9;
+    -webkit-user-select: none;
 }
 .mui-tabs-content {
     position: relative;
