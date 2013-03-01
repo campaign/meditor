@@ -75,8 +75,8 @@
                 rect= node.getBoundingClientRect();
 
             root.css({
-                left:       rect.left - width - 15,
-                top:        rect.top
+                top:        rect.top - 5,
+                left:       rect.left - width - 20
             }).children().last().css({top: rect.height / 2 - 16});
             return me;
         },
