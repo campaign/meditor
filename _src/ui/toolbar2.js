@@ -39,6 +39,12 @@
             me._$scroller = $scroller;
             return me;
         },
+        _init: function () {
+            $(window).on('ortchange', $.proxy(this._eventHandler, this));
+        },
+        _eventHandler: function () {
+            this.iScroll.iScroll('refresh');
+        },
         _getWidth: function () {
             var me = this,
                 opts = me._options,
@@ -51,8 +57,15 @@
             return width;
         },
         _initIscroll: function () {
-            this.iScroll = this.root().css('width', this._getWidth()).iScroll().iScroll('refresh');
-            return this;
+            var me = this;
+            me.iScroll = me.root().css('width', me._getWidth()).iScroll({
+                vScroll: false
+            });
+            $.later(function () {
+                me.iScroll.iScroll('refresh');
+
+            }, 0);
+            return me;
         },
         addItem: function (item) {
             var me = this;
@@ -83,7 +96,7 @@
         _body: document.body,
         _kh: {
             portrait: 281+138,
-            landscape: 379+130
+            landscape: 379+128
         },
         _create: function () {
             var me = this,
@@ -92,7 +105,8 @@
             me.root($('<div class="mui-toolbar mui-toolbar-anim"></div>').append(me._$boxWrap = $('<div class="mui-toolbar-boxwrap"></div>').append(me._$toolBox = $('<div class="mui-toolbar-toolBox"></div>'))));
             opts.closeBtn && (me._$closeBtn = ui.button({
                 name: 'close',
-                buttonclick: function () {
+                click: function () {
+                    debugger;
                     me.toggle();
                 }
             }));
@@ -106,30 +120,31 @@
         },
         _initRender: function () {
             var me = this,
-                items = me._options.items, isSplice, i, len, item;
+                items = me._options.items;
 
-            //将scrollbox移至最后
-            for (i = 0, len = items.length; i < len; i++) {
-                item = items[i];
-                if (!isSplice && item instanceof ui.scrollbox) {
-                    items.splice(i,1);
-                    items.push(item);
-                    i--, isSplice = true;
-                } else {
-                    me.addItem(item);
-                }
-            }
+            $.each(items, function (i,item) {
+                me.addItem(item);
+            });
             me._$closeBtn.render(me._$boxWrap);
             return me.setFix();
         },
         _eventHandler: function (e) {
-            var me = this;
+            var me = this,
+                $el = me.root(), width;
 
             switch (e.type) {
                 case 'scrollStop':
-                    me.show().setFix();
+                    me.setFix();
                     break;
                 case 'ortchange':
+                    if (me._isShow) {
+                        $el.width('100%');     //覆盖设置的宽度
+                    } else {
+                        $.later(function () {
+                            width = $el.width();
+                            me._toolbarW = width < 700 ? me._win.innerWidth : width;
+                        }, 100);
+                    }
                     me.setFix();
                     break;
                 case 'webkitTransitionEnd':
@@ -158,7 +173,7 @@
                 $el = me.root(), $closeBtn = me._$closeBtn.root();
             me._isShow ? me.hide(function () {
                 me._toolbarW = $el.width();
-                $el.on('webkitTransitionEnd', $.proxy(me._eventHandler, me)).width($closeBtn.width() + 10);
+                $el.on('webkitTransitionEnd', $.proxy(me._eventHandler, me)).width($closeBtn.width() + parseInt($closeBtn.css('margin-left')) + parseInt($closeBtn.css('margin-right')) + 10);
             }) : me.show(function () {
                     $el.width(me._toolbarW);
                     me._$toolBox.show();
