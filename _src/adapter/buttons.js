@@ -1,5 +1,7 @@
-;(function($,ui){
-    ME.registerUI(
+;(function($, ns){
+    var ui = ns.ui;
+
+    ns.registerUI(
         'undo redo bold italic underline strikethrough '+
         'removeformat',
 
@@ -20,8 +22,8 @@
         }
     );
 
-    //零时
-    ME.registerUI(
+    //临时, 为了让按钮能正常显示.
+    ns.registerUI(
         [ 'formatmatch',
             'orderedlist', 'unorderedlist', 'indent',
             'alignleft', 'aligncenter', 'alignright', 'alignjustify',
@@ -43,4 +45,4 @@
             return btn;
         }
     );
-})(Zepto,ME.ui)
+})(Zepto,ME)
