@@ -49,8 +49,8 @@
 
 .mui-button {
     display: inline-block;
-    background: rgba(238, 238, 238, 1);
-    border-radius: 2px;
+    background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#d1d1d1));
+    border-radius: 3px;
     margin: 0.2em 0.2em 0 0;
     cursor: pointer;
     -webkit-user-select: none;

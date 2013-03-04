@@ -1,14 +1,14 @@
 /* toolbar */
 .mui-toolbar {
     width: 100%;
-    height: 48px;
+    height: 44px;
     overflow: hidden;
     position: absolute;
     z-index: 1000;
     right: 0px;
     bottom: 352px;
-    opacity: 0.9;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b9bdc5), color-stop(50%,#283144), color-stop(51%,#131e32), color-stop(100%,#283144), color-stop(100%,#207cca), color-stop(100%,#1e2a42));
+    /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b9bdc5), color-stop(50%,#283144), color-stop(51%,#131e32), color-stop(100%,#283144), color-stop(100%,#207cca), color-stop(100%,#1e2a42));*/
+    background: -webkit-gradient(linear, left top, left bottom, from(#9c9ba6), to(#585961));
 }
 
 .mui-toolbar.mui-toolbar-anim {
@@ -21,7 +21,7 @@
     display: -webkit-box;
     -webkit-box-orient: horizontal;
     -webkit-box-align:center;
-    padding: 10px 5px;
+    padding: 5px 5px;
 }
 
 .mui-toolbar .mui-toolbar-toolBox {
@@ -50,27 +50,43 @@
     -webkit-box-orient: horizontal;
     -webkit-box-align: center;
     margin: 0 0.5em 0 0;
+    border-radius: 3px;
+    border: 1px solid #7e8085;
+    padding: 1px;
+    -webkit-box-shadow: 2px 2px 2px #282828;
 }
 .mui-group .mui-button{
-    border-radius: 0;
     margin: 0;
+    border-radius: 0px;
     border-left: 1px solid #fff;
     border-right: 1px solid #bebebe;
+}
+.mui-group .mui-button:last-child{
+   border-right: none;
 }
 
 /*scrollbox*/
 .mui-scrollbox{
-    -webkit-box-shadow: inset -1px -2px 1px  #aeaeae;
     display: -webkit-box;
     -webkit-box-align: center;
     -webkit-box-flex: 1;
     margin: 0 0.5em 0 0;
-    border: 1px solid #aeaeae;
+    border: 1px solid #7e8085;
+    -webkit-box-shadow: 2px 2px 2px #282828;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#d1d1d1));
+    border-radius: 3px;
 }
 .mui-scrollbox .mui-scrollBox-scroller{
     display: -webkit-box;
     -webkit-box-align: center;
     -webkit-box-orient: horizontal;
+}
+.mui-scrollbox .mui-group{
+    border-radius: 0;
+    border: none;
+    -webkit-box-shadow: none;
+
+
 }
 .mui-scrollbox .mui-button{
 }
