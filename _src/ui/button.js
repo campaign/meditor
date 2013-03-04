@@ -37,7 +37,7 @@
 
         enable: function(flag){
             var el = this.root(),
-                setter = $.isUndefined(flag);
+                setter = !$.isUndefined(flag);
             return setter?(el[flag?'removeClass':'addClass']('mui-state-disable')
                 .highlight(flag?'mui-state-hover':null), this): !el.hasClass('mui-state-disable');
         },
