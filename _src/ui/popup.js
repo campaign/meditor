@@ -25,8 +25,9 @@
             var me = this,
                 root = me.root();
             //点击隐藏
-            $(document).on('tap', function (e) {
-                if ($.contains(root[0], e.target) || me._options._btn === e.target || $.contains(me._options._btn, e.target)) return;
+            $('body').hammer('tap', function (e) {
+                var target = e.originalEvent.target;
+                if ($.contains(root[0], target) || me._options._btn === target || $.contains(me._options._btn, target)) return;
                 me.hide();
             });
         },

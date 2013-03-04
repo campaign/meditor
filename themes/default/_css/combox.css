@@ -1,8 +1,8 @@
 .mui-combox {
     display: none;
     position: absolute;
-    height: 150px;
-    width:200px;
+    height: 100px;
+    width:150px;
     z-index: 9990;
 }
 
@@ -14,10 +14,15 @@
     border-radius: 4px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
 }
+
+.mui-combox ul {
+    margin: 0;
+    padding: 0;
+}
 .mui-combox ul li {
     list-style:none;
-    height: 50px;
-    line-height: 50px;
+    height: 30px;
+    line-height: 30px;
     border-bottom: 1px solid #ddd;
     text-indent: 2em;
 }
@@ -30,23 +35,24 @@
 .mui-combox-highlight {
     background-color: #efefef;
 }
+
 .mui-combox-arrow {
     position: absolute;
     overflow: hidden;
-    right: -23px;
-    top:0;
-    width:15px;
-    height: 32px;
+    right: 30px;
+    bottom: -28px;
+    width: 32px;
+    height: 18px;
 }
 
 .mui-combox-arrow b {
     position: absolute;
-    left:-8px;
-    top:8px;
+    left:8px;
+    top:-8px;
     height: 16px;
     width:16px;
     display: inline-block;
     background: #666;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
     -webkit-transform: rotate(45deg);
 }

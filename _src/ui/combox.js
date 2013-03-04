@@ -3,6 +3,7 @@
     ME.ui.define('combox', {
 
         _options: {
+            container:      '',
             renderFn:       null,
             prefix:         '',
             needIscroll:    true,
@@ -18,7 +19,7 @@
             var me = this,
                 opt = me._options,
                 cls = opt.prefix ? 'mui-' + opt.prefix + '-popup' : '',
-                root = me._el = $('<div class="mui-combox ' + cls + '"></div>').appendTo('body'),
+                root = me._el = $('<div class="mui-combox ' + cls + '"></div>').appendTo(opt.container),
                 i = 0, j, html = '<div class="mui-combox-content ' + (cls ? cls + '-content' : '') + '"><ul>';
             while(true) {
                 j = opt.renderFn(i++);
@@ -44,14 +45,14 @@
             });
 
             //autohide
-            content.on('tap', function (e) {
-                var li = opt._lastClick =  $(e.target).closest('li');
+            content.hammer('tap', function (e) {
+                var li = opt._lastClick =  $(e.originalEvent.target).closest('li');
                 me.closeChildren(li);
                 proto._needCloseAll = false;
                 me.trigger('click', [li.index(), li.children().attr('value'), li]);
             });
             if(!proto._addEventInited) {
-                $(document).on('tap', function () {
+                $('body').hammer('tap', function () {
                     proto._needCloseAll && me.closeAll();
                     proto._needCloseAll = true;
                 });
@@ -70,14 +71,24 @@
         _fitSize: function (node) {
             var me = this,
                 root = me.root(),
-                width = parseInt(me.root().css('width')) || root[0].getBoundingClientRect().width,
-                node = me._options._lastClicked = node[0] || node,
-                rect= node.getBoundingClientRect();
+                height = parseInt(root.css('height')) || root[0].getBoundingClientRect().height,
+                width = parseInt(root.css('width')) || root[0].getBoundingClientRect().width,
+                node = me._options._btn = node[0] || node,
+                rect = node.getBoundingClientRect(),
+                top = -height - 20,
+                popLeft = Math.max(0, rect.left - (width - rect.width)/2 - 5);
+            if(popLeft < 0) {
+                popLeft = 0;
+            } else if (popLeft + width > window.innerWidth) {
+                popLeft -= popLeft + width - window.innerWidth + 30
+            }
 
             root.css({
-                top:        rect.top - 5,
-                left:       rect.left - width - 20
-            }).children().last().css({top: rect.height / 2 - 16});
+                top:        top,
+                left:       popLeft
+            }).children().last().css({
+                    left:       Math.min(rect.left, rect.left - popLeft)
+                });
             return me;
         },
 
