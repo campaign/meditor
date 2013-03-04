@@ -20,7 +20,7 @@
             'plugins/paste.js',
             'ui/ui.js',
             'ui/button.js',
-            'ui/toolbar.js',
+            'ui/toolbar.horizontal.js',
             'ui/tabs.js',
             'ui/popup.js',
             'ui/smiley.js',
