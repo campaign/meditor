@@ -16,16 +16,16 @@
 .mui-popup-arrow {
     position: absolute;
     overflow: hidden;
-    right: -23px;
-    top:0;
-    width:15px;
-    height: 32px;
+    right: 30px;
+    bottom: -18px;
+    width: 32px;
+    height: 18px;
 }
 
 .mui-popup-arrow b {
     position: absolute;
-    left:-8px;
-    top:8px;
+    left:8px;
+    top:-8px;
     height: 16px;
     width:16px;
     display: inline-block;
