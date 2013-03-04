@@ -6,6 +6,7 @@
                 name : cmdName,
                 click:function(){
                     pop = pop || ui.emotion({
+                        container: $('.mui-toolbar'),
                         items: [
                             {
                                 cls: 'bubble',

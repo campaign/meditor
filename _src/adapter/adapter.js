@@ -3,8 +3,9 @@
     var _registerUIs = {};
     $.extend(ME, {
         registerUI:function (cmdName, fn) {
-            $.each(cmdName, function (i, c) {
-                _registerUIs[c.toLowerCase()] = fn;
+            cmdName = typeof cmdName == 'string' ? cmdName.split(/\s/) : cmdName;
+            $.each(cmdName, function () {
+                _registerUIs[this.toLowerCase()] = fn;
             });
         },
         getUI:function (editor, cmdName) {
