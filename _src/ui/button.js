@@ -14,6 +14,13 @@
                 '</div>'));
         },
 
+        name: function(val){
+            var setter = !$.isUndefined(val),
+                opt = this._options,
+                key = opt.name;
+            return setter?(this.root().removeClass('mui-button-'+key).addClass('mui-button-'+(opt.name = val)) , this):key;
+        },
+
         _init: function(){
             var el = this.root(), opt = this._options, _eH = $.proxy(this._eventHandler, this);
             el.on('click', _eH);
