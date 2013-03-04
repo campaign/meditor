@@ -4,6 +4,7 @@
     ME.ui.define('popup', {
 
         _options: {
+            container:      '',
             content:        null,
             prefix:         '',
             needIscroll:    false,
@@ -17,7 +18,7 @@
                 opt = me._options,
                 cls = opt.prefix ? 'mui-' +opt.prefix + '-popup' : '';
             me._el = $('<div class="mui-popup ' + cls + '"></div>').append($('<div class="mui-popup-content ' + (cls ? cls + '-content' : '') + '"></div>')
-                .html(opt.content).append('<div class="mui-popup-arrow ' + (cls ? cls + '-arrow' : '') + '"><b></b></div>')).appendTo('body');
+                .html(opt.content)).append('<div class="mui-popup-arrow ' + (cls ? cls + '-arrow' : '') + '"><b></b></div>').appendTo(opt.container);
         },
 
         _init: function () {
@@ -33,15 +34,23 @@
         _fitSize: function (node) {
             var me = this,
                 root = me.root(),
+                height = parseInt(root.css('height')) || root[0].getBoundingClientRect().height,
                 width = parseInt(root.css('width')) || root[0].getBoundingClientRect().width,
                 node = me._options._btn = node[0] || node,
-                rect = node.getBoundingClientRect();
+                rect = node.getBoundingClientRect(),
+                top = -height - 10,
+                popLeft = Math.max(0, rect.left - (width - rect.width)/2 - 5);
+            if(popLeft < 0) {
+                popLeft = 0;
+            } else if (popLeft + width > window.innerWidth) {
+                popLeft -= popLeft + width - window.innerWidth + 30
+            }
 
             root.css({
-                top:        rect.top - 5,
-                left:       rect.left - width - 20
+                top:        top,
+                left:       popLeft
             }).children().last().css({
-                top:        rect.height / 2 - 16
+                left:       Math.min(rect.left, rect.left - popLeft)
             });
             return me;
         },
