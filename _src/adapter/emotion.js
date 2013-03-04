@@ -1,11 +1,11 @@
 ;(function($,ui){
     ME.registerUI(
-        'smiley', function(editor,cmdName){
+        ['emotion'], function(editor,cmdName){
             var pop,
                 btn = ui.button({
                 name : cmdName,
                 click:function(){
-                    pop = pop || ui.smiley({
+                    pop = pop || ui.emotion({
                         items: [
                             {
                                 cls: 'bubble',

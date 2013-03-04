@@ -27,12 +27,28 @@
 .mui-button-bold span.icon:before { content: '\e77a'} /*粗体*/
 .mui-button-italic span.icon:before { content: '\e77b'}/*斜体*/
 .mui-button-underline span.icon:before { content: '\f0cd'}/*下划线*/
-.mui-button-strike span.icon:before { content: '\f0cc'}/*删除线*/
-.mui-button-font span.icon:before { content: '\e779'}/*字体*/
-.mui-button-image span.icon:before { content:'🌄'}/*图片*/
+.mui-button-removeformat span.icon:before { content: '\e729'}/*清除格式*/
 
-.mui-button-bullet span.icon:before { content: '\f0ca'}/*无须列表*/
-.mui-button-numbered span.icon:before { content: '\f0cb'}/*无须列表*/
+.mui-button-orderedlist span.icon:before { content: '\f0ca'}/*无序列表*/
+.mui-button-unorderedlist span.icon:before { content: '\f0cb'}/*有序列表*/
+.mui-button-indent span.icon:before { content: '\e784'}/*首行缩进*/
+.mui-button-alignleft span.icon:before { content: '\e77e'}/*左对齐*/
+.mui-button-aligncenter span.icon:before { content: '\e77f'}/*中间对齐*/
+.mui-button-alignright span.icon:before { content: '\e780'}/*右对齐*/
+.mui-button-alignjustify span.icon:before { content: '\e781'}/*两端对齐*/
+
+.mui-button-fontfamily span.icon:before { content: '\e779'}/*字体*/
+.mui-button-fontsize span.icon:before { content:'\e094'}/*字体大小*/
+.mui-button-fontcolor span.icon:before { content:'\270d'}/*字体前景色*/
+.mui-button-bgcolor span.icon:before { content:'\e793'}/*字体背景色*/
+
+.mui-button-emotion span.icon:before { content: '\e800'}/*无须列表*/
+.mui-button-image span.icon:before { content: '\1f304'}/*无须列表*/
+.mui-button-attach span.icon:before { content: '\1f4ce'}/*无须列表*/
+
+.mui-button-collapse span.icon:before { content: '\e746'}/*收起*/
+.mui-button-expand span.icon:before { content: '\e744'}/*展开*/
+
 
 .mui-button-alignleft span.icon:before { content: '\e77e'}/*左对齐*/
 .mui-button-aligncenter span.icon:before { content: '\e77f'}/*居中*/

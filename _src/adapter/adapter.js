@@ -3,7 +3,7 @@
     var _registerUIs = {};
     $.extend(ME, {
         registerUI:function (cmdName, fn) {
-            $.each(cmdName.split(/\s+/), function (i, c) {
+            $.each(cmdName, function (i, c) {
                 _registerUIs[c.toLowerCase()] = fn;
             });
         },
