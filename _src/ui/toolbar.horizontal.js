@@ -89,7 +89,7 @@
             closeBtn: true,    //'swipe' || 'static',
             items: []
         },
-        _isShow: false,
+        _isShow: true,
         _initDone: false,
         _isAnim: false,
         _win: window,
@@ -172,10 +172,11 @@
                 $el = me.root(), $closeBtn = me._$closeBtn.root();
             me._isShow ? me.hide(function () {
                 me._toolbarW = $el.width();
+                me._$toolBox.css('visibility', 'hidden');
                 $el.on('webkitTransitionEnd', $.proxy(me._eventHandler, me)).width($closeBtn.width() + parseInt($closeBtn.css('margin-left')) + parseInt($closeBtn.css('margin-right')) + 10);
             }) : me.show(function () {
                     $el.width(me._toolbarW);
-                    me._$toolBox.show();
+                    me._$toolBox.css('visibility', 'visible').show();
                 }
             );
             return this;
