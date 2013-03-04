@@ -1,34 +1,34 @@
-.smiley-tabs table {
+.emotion-tabs table {
     border-collapse: collapse;
     width: 100%;
 }
 
-.smiley-tabs .mui-tabs-content .mui-tabs-panel {
+.emotion-tabs .mui-tabs-content .mui-tabs-panel {
     padding: 2px;
 }
 
-.smiley-tabs table td {
+.emotion-tabs table td {
     border: 1px solid #f0f0f0;
     position: relative;
     -webkit-user-select: none;
 }
-.smiley-tabs table tr:first-child td {
+.emotion-tabs table tr:first-child td {
     border-top-width: 0;
 }
 
-.smiley-tabs table tr:last-child td {
+.emotion-tabs table tr:last-child td {
     border-bottom-width: 0;
 }
 
-.smiley-tabs table td:first-child {
+.emotion-tabs table td:first-child {
     border-left-width: 0;
 }
 
-.smiley-tabs table td:last-child {
+.emotion-tabs table td:last-child {
     border-right-width: 0;
 }
 
-/*.smiley-tabs td.active::before {
+/*.emotion-tabs td.active::before {
     content: '\2713';
     font-family: 'fontello';
     font-style: normal;
@@ -39,7 +39,7 @@
     bottom: 0px;
     color: rgba(170, 170, 170, 1);
 }*/
-.smiley-tabs td.active::after {
+.emotion-tabs td.active::after {
     content: '\0020';
     position: absolute;
     width: 100%;
@@ -49,13 +49,13 @@
     top: -1px;
 }
 
-.smiley-tabs table td div {
+.emotion-tabs table td div {
     min-height: 35px;
     display:-webkit-box;
     -webkit-box-pack:center;
     -webkit-box-align:center;
 }
-.smiley-tabs table td span {
+.emotion-tabs table td span {
     display: block;
     width: 35px;
     height: 35px;
@@ -63,29 +63,29 @@
     background-repeat: no-repeat;
 }
 
-.smiley-tabs .smiley-bubble td span {
+.emotion-tabs .emotion-bubble td span {
     width: 26px;
     height: 26px;
-    background-image: url(../images/smiley/fface.gif);
+    background-image: url(../images/emotion/fface.gif);
 }
 
-.smiley-tabs .smiley-lvdouwa td span {
-    background-image: url(../images/smiley/bface.gif);
+.emotion-tabs .emotion-lvdouwa td span {
+    background-image: url(../images/emotion/bface.gif);
 }
 
-.smiley-tabs .smiley-bobo td span {
-    background-image: url(../images/smiley/wface.gif);
+.emotion-tabs .emotion-bobo td span {
+    background-image: url(../images/emotion/wface.gif);
 }
 
-.mui-smiley-popup {
+.mui-emotion-popup {
     width: 500px;
 }
 
-.mui-smiley-popup .mui-tabs {
+.mui-emotion-popup .mui-tabs {
     border: 0 none;
 }
 
-.smiley-btns {
+.emotion-btns {
     text-align: right;
     padding: 0 15px 10px;
 }

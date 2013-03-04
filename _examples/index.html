@@ -18,7 +18,7 @@
     <link href="../themes/default/_css/popup.css" rel="stylesheet"/>
     <link href="../themes/default/_css/dialog.css" rel="stylesheet"/>
     <link href="../themes/default/_css/tabs.css" rel="stylesheet"/>
-    <link href="../themes/default/_css/smiley.css" rel="stylesheet"/>
+    <link href="../themes/default/_css/emotion.css" rel="stylesheet"/>
     <link href="../themes/default/_css/toolbar.horizontal.css" rel="stylesheet"/>
     <link href="../themes/default/_css/ui.css" rel="stylesheet"/>
 
@@ -40,9 +40,21 @@
             'undo',
             'redo',
             {
-                name:'alignleft',
                 type:'group',
+                name:'basic',
                 items:[
+                    'bold',
+                    'italic',
+                    'underline',
+                    'removeformat'
+                ]
+            },
+            {
+                type:'scrollbox',
+                items:[
+                    'orderedlist',
+                    'unorderedlist',
+                    'indent',
                     'alignleft',
                     'aligncenter',
                     'alignright',
@@ -50,19 +62,18 @@
                 ]
             },
             {
-                type:'scrollbox',
+                type:'group',
+                name: 'font',
                 items:[
-                    'bold',
-                    'italic',
-                    'underline',
-                    'bold',
-                    'italic',
-                    'underline'
+                    'fontfamily',
+                    'fontsize',
+                    'fontcolor',
+                    'bgcolor'
                 ]
             },
-            'smiley',
-            'font',
-            'image'
+            'emotion',
+            'image',
+            'attach'
         ]
     });
 </script>

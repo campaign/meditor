@@ -95,8 +95,8 @@
         _win: window,
         _body: document.body,
         _kh: {
-            portrait: 281+138,
-            landscape: 379+128
+            portrait: 281+128,
+            landscape: 379+118
         },
         _create: function () {
             var me = this,
@@ -104,7 +104,7 @@
 
             me.root($('<div class="mui-toolbar mui-toolbar-anim"></div>').append(me._$boxWrap = $('<div class="mui-toolbar-boxwrap"></div>').append(me._$toolBox = $('<div class="mui-toolbar-toolBox"></div>'))));
             opts.closeBtn && (me._$closeBtn = ui.button({
-                name: 'close',
+                name: 'collapse',
                 click: function () {
                     me.toggle();
                 }
@@ -173,8 +173,10 @@
             me._isShow ? me.hide(function () {
                 me._toolbarW = $el.width();
                 me._$toolBox.css('visibility', 'hidden');
+                $closeBtn.addClass('mui-button-expand');
                 $el.on('webkitTransitionEnd', $.proxy(me._eventHandler, me)).width($closeBtn.width() + parseInt($closeBtn.css('margin-left')) + parseInt($closeBtn.css('margin-right')) + 10);
             }) : me.show(function () {
+                    $closeBtn.removeClass('mui-button-expand');
                     $el.width(me._toolbarW);
                     me._$toolBox.css('visibility', 'visible').show();
                 }

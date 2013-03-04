@@ -19,10 +19,17 @@
 
     //零时
     ME.registerUI(
-        'font image bullet numbered alignleft' +
-            ' aligncenter alignright alignjustify' +
-            ' undo redo table delete color'+
-            '', function(editor,cmdName){
+        ['undo', 'redo', 'bold', 'italic', 'underline', 'formatmatch',
+            'orderedlist', 'unorderedlist', 'indent',
+            'alignleft', 'aligncenter', 'alignright', 'alignjustify',
+            'fontfamily', 'fontsize', 'fontcolor', 'bgcolor',
+            'image', 'attach',
+            'touppercase', 'tolowercase',
+            'strikethrough', 'subscript', 'superscript', 'source', 'indent', 'outdent',
+            'blockquote', 'pasteplain', 'pagebreak',
+            'selectall', 'print', 'preview', 'horizontal', 'removeformat', 'time', 'date', 'unlink',
+            'insertparagraphbeforetable', 'insertrow', 'insertcol', 'mergeright', 'mergedown', 'deleterow',
+            'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable'], function(editor,cmdName){
             var btn = ui.button({
                 name : cmdName,
                 click:function(){

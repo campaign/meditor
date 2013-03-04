@@ -1,22 +1,23 @@
 ;(function($, ui){
-    ui.define('smiley', {
+    ui.define('emotion', {
         _options: {
             items: null,
-            prefix: 'smiley'
+            prefix: 'emotion'
         },
         _create: function(){
             var me = this,
                 opt = me._options,
                 panels = [],
                 content;
+
             $.each(opt.items || [], function(){
                 panels.push( me._creatPanel(this));
             });
             content = opt.content = $('<div></div>');
             content.append(ui.tabs({
                 items: panels
-            }).root().addClass('smiley-tabs'));
-            content.append('<div class="smiley-btns">' +
+            }).root().addClass('emotion-tabs'));
+            content.append('<div class="emotion-btns">' +
                 '<div class="mui-btnCancel">重置</div>' +
                 '<div class="mui-btnOk">确认</div>' +
                 '</div>');
@@ -29,7 +30,7 @@
                 size = obj.size || 35,
                 url = obj.url,
                 row, i, item, index = 0, html='', empty,
-                div = $('<table class="smiley-'+obj.cls+'"></table>');
+                div = $('<table class="emotion-'+obj.cls+'"></table>');
 
             while(arr.length) {
                 row = arr.splice(0, cells);
