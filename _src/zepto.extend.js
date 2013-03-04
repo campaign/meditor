@@ -4,16 +4,15 @@
  * @desc 对Zepto一些扩展，组件必须依赖
  * @import core/zepto.js
  */
-
-
 //     Zepto.js
 //     (c) 2010-2012 Thomas Fuchs
 //     Zepto.js may be freely distributed under the MIT license.
 
 // The following code is heavily inspired by jQuery's $.fn.data()
 
-;(function($) {
-    var data = {}, dataAttr = $.fn.data, camelize = $.zepto.camelize,
+;
+(function ($) {
+    var data = {}, dataAttr = $.fn.data, camelize = $.camelCase,
         exp = $.expando = 'Zepto' + (+new Date())
 
     // Get value from node:
@@ -44,72 +43,64 @@
     // Read all "data-*" attributes from a node
     function attributeData(node) {
         var store = {}
-        $.each(node.attributes, function(i, attr){
+        $.each(node.attributes, function (i, attr) {
             if (attr.name.indexOf('data-') == 0)
-                store[camelize(attr.name.replace('data-', ''))] = attr.value
+                store[camelize(attr.name.replace('data-', ''))] =
+                    $.zepto.deserializeValue(attr.value)
         })
         return store
     }
 
-    $.fn.data = function(name, value) {
+    $.fn.data = function (name, value) {
         return value === undefined ?
             // set multiple values via object
             $.isPlainObject(name) ?
-                this.each(function(i, node){
-                    $.each(name, function(key, value){ setData(node, key, value) })
+                this.each(function (i, node) {
+                    $.each(name, function (key, value) {
+                        setData(node, key, value)
+                    })
                 }) :
                 // get value from first element
                 this.length == 0 ? undefined : getData(this[0], name) :
             // set value on all elements
-            this.each(function(){ setData(this, name, value) })
+            this.each(function () {
+                setData(this, name, value)
+            })
     }
 
-    $.fn.removeData = function(names) {
+    $.fn.removeData = function (names) {
         if (typeof names == 'string') names = names.split(/\s+/)
-        return this.each(function(){
+        return this.each(function () {
             var id = this[exp], store = id && data[id]
-            if (store) $.each(names, function(){ delete store[camelize(this)] })
+            if (store) $.each(names, function () {
+                delete store[camelize(this)]
+            })
         })
     }
 })(Zepto);
 
-(function($){
-    var rootNodeRE = /^(?:body|html)$/i,
-        slice = Array.prototype.slice,
+(function ($) {
+    var slice = Array.prototype.slice,
         isPlainObject = $.isPlainObject,
         isArray = $.isArray;
 
-    function extend(target, source, deep,override) {
+    function extend(target, source, deep, override) {
         for (var key in source)
             if (deep && (isPlainObject(source[key]) || isArray(source[key]))) {
                 if (isPlainObject(source[key]) && !isPlainObject(target[key]))
                     target[key] = {}
                 if (isArray(source[key]) && !isArray(target[key]))
                     target[key] = []
-                extend(target[key], source[key], deep,override)
+                extend(target[key], source[key], deep, override)
             }
             else if (source[key] !== undefined) {
-                if(override || !target.hasOwnProperty(key))
+                if (override || !target.hasOwnProperty(key))
                     target[key] = source[key]
             }
     }
 
-    $.extend($.fn, {
-        offsetParent: function() {
-            return $($.map(this, function(el){
-                var parent = el.offsetParent || document.body
-                while (parent && !rootNodeRE.test(parent.nodeName) && $(parent).css("position") == "static")
-                    parent = parent.offsetParent
-                return parent
-            }));
-        },
-        scrollTop: function(){
-            if (!this.length) return
-            return ('scrollTop' in this[0]) ? this[0].scrollTop : this[0].scrollY
-        }
-    });
     $.extend($, {
-        contains: function(parent, node) {
+        contains:function (parent, node) {
             /**
              * modified by chenluyang
              * @reason ios4 safari下，无法判断包含文字节点的情况
@@ -120,24 +111,25 @@
                 : parent !== node && parent.contains(node)
         },
 
-        extend: function(target){
-            var deep, args = slice.call(arguments, 1),override;
+        extend:function (target) {
+            var deep, args = slice.call(arguments, 1), override;
             if (typeof target == 'boolean') {
                 deep = target
                 target = args.shift()
             }
             override = args.pop();
-            if(typeof override == 'boolean'){
-                override = !override
-            }else{
+            if (typeof override != 'boolean') {
                 args.push(override)
             }
-            args.forEach(function(arg){ extend(target, arg, deep,override)})
+            args.forEach(function (arg) {
+                extend(target, arg, deep, !!override)
+            })
             return target
         },
-        getOrientation: "matchMedia" in window ? function(){
-            return window.matchMedia("(orientation: portrait)").matches?'portrait':'landscape';
-        }:function(){
+
+        getOrientation:"matchMedia" in window ? function () {
+            return window.matchMedia("(orientation: portrait)").matches ? 'portrait' : 'landscape';
+        } : function () {
             var elem = document.documentElement;
             return elem.clientWidth / Math.max(elem.clientHeight, 320) < 1.1 ? "portrait" : "landscape";
         }
@@ -146,7 +138,8 @@
 
 
 //Core.js
-;(function($) {
+;
+(function ($) {
     //扩展在Zepto静态类上
     $.extend($, {
         /**
@@ -154,7 +147,7 @@
          * @name $.toString
          * @desc toString转化
          */
-        toString: function(obj) {
+        toString:function (obj) {
             return Object.prototype.toString.call(obj);
         },
 
@@ -167,7 +160,7 @@
          *     console.log(args); // => [3]
          * })(1, 2, 3);
          */
-        slice: function(array, index) {
+        slice:function (array, index) {
             return Array.prototype.slice.call(array, index || 0);
         },
 
@@ -185,8 +178,8 @@
          *     console.log(this.name + ' ' + str); // => Example hello
          * }, 250, false, {name:'Example'}, ['hello']);
          */
-        later: function(fn, when, periodic, context, data) {
-            return window['set' + (periodic ? 'Interval' : 'Timeout')](function() {
+        later:function (fn, when, periodic, context, data) {
+            return window['set' + (periodic ? 'Interval' : 'Timeout')](function () {
                 fn.apply(context, data);
             }, when || 0);
         },
@@ -199,10 +192,10 @@
          * obj = {name: 'ajean'};
          * console.log($.parseTpl(str, data)); // => <p>ajean</p>
          */
-        parseTpl: function(str, data) {
-            var tmpl = 'var __p=[],print=function(){__p.push.apply(__p,arguments);};' + 'with(obj||{}){__p.push(\'' + str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g, function(match, code) {
+        parseTpl:function (str, data) {
+            var tmpl = 'var __p=[],print=function(){__p.push.apply(__p,arguments);};' + 'with(obj||{}){__p.push(\'' + str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function (match, code) {
                 return "'," + code.replace(/\\'/g, "'") + ",'";
-            }).replace(/<%([\s\S]+?)%>/g, function(match, code) {
+            }).replace(/<%([\s\S]+?)%>/g,function (match, code) {
                     return "');" + code.replace(/\\'/g, "'").replace(/[\r\n\t]/g, ' ') + "__p.push('";
                 }).replace(/\r/g, '\\r').replace(/\n/g, '\\n').replace(/\t/g, '\\t') + "');}return __p.join('');";
             var func = new Function('obj', tmpl);
@@ -231,7 +224,7 @@
          * $(document).unbind('touchmove', touchmoveHander);//注意这里面unbind还是touchmoveHander,而不是$.throttle返回的function, 当然unbind那个也是一样的效果
          *
          */
-        throttle: function(delay, fn, debounce_mode) {
+        throttle:function (delay, fn, debounce_mode) {
             var last = 0,
                 timeId;
 
@@ -299,7 +292,7 @@
          * //解绑事件
          * $(document).unbind('touchmove', touchmoveHander);//注意这里面unbind还是touchmoveHander,而不是$.debounce返回的function, 当然unbind那个也是一样的效果
          */
-        debounce: function(delay, fn, t) {
+        debounce:function (delay, fn, t) {
             return fn === undefined ? $.throttle(250, delay, false) : $.throttle(delay, fn, t === undefined ? false : t !== false);
         }
 
@@ -375,7 +368,7 @@
      * console.log($.isUndefined(0));// => false
      * console.log($.isUndefined(a));// => true
      */
-    $.each("String Boolean RegExp Number Date Object Null Undefined".split(" "), function(i, name) {
+    $.each("String Boolean RegExp Number Date Object Null Undefined".split(" "), function (i, name) {
         var fnbody = '';
         switch (name) {
             case 'Null':
@@ -388,13 +381,12 @@
                 //fnbody = "new RegExp('" + name + "]', 'i').test($.toString(obj))";
                 fnbody = "new RegExp('" + name + "]', 'i').test(Object.prototype.toString.call(obj))";//解决zepto与jQuery共存时报错的问题，$被jQuery占用了。
         }
-        $['is' + name] = new Function('obj', "return " + fnbody);
+        $['is' + name] = $['is' + name] || new Function('obj', "return " + fnbody);
     });
-
 })(Zepto);
 
 //Support.js
-(function($, undefined) {
+(function ($, undefined) {
     var ua = navigator.userAgent,
         na = navigator.appVersion,
         br = $.browser;
@@ -415,16 +407,17 @@
      * }
      */
     $.extend($.browser, {
-        qq: /qq/i.test(ua),
-        chrome: /chrome/i.test(ua) || /CriOS/i.test(ua),
-        uc: /UC/i.test(ua) || /UC/i.test(na)
+        qq:/qq/i.test(ua),
+        chrome:/chrome/i.test(ua) || /CriOS/i.test(ua),
+        uc:/UC/i.test(ua) || /UC/i.test(na)
     });
 
     $.browser.uc = $.browser.uc || !$.browser.qq && !$.browser.chrome && !/safari/i.test(ua);
 
     try {
         $.browser.version = br.uc ? na.match(/UC(?:Browser)?\/([\d.]+)/)[1] : br.qq ? ua.match(/MQQBrowser\/([\d.]+)/)[1] : br.chrome ? ua.match(/(?:CriOS|Chrome)\/([\d.]+)/)[1] : br.version;
-    } catch (e) {}
+    } catch (e) {
+    }
 
 
     /**
@@ -443,38 +436,33 @@
      * }
      */
     $.support = $.extend($.support || {}, {
-        orientation: !($.browser.uc || (parseFloat($.os.version)<5 && ($.browser.qq || $.browser.chrome))) && "orientation" in window && "onorientationchange" in window,
-        touch: "ontouchend" in document,
-        cssTransitions: "WebKitTransitionEvent" in window,
-        has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
+        orientation:!($.browser.uc || (parseFloat($.os.version) < 5 && ($.browser.qq || $.browser.chrome))) && "orientation" in window && "onorientationchange" in window,
+        touch:"ontouchend" in document,
+        cssTransitions:"WebKitTransitionEvent" in window,
+        has3d:'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
     });
 
 })(Zepto);
 
 //Event.js
-(function($) {
+(function ($) {
     /** detect orientation change */
     $(document).ready(function () {
-        var getOrt = "matchMedia" in window ? function(){
-                return window.matchMedia("(orientation: portrait)").matches?'portrait':'landscape';
-            }:function(){
-                var elem = document.documentElement;
-                return elem.clientWidth / Math.max(elem.clientHeight, 320) < 1.1 ? "portrait" : "landscape";
-            },
+        var getOrt = $.getOrientation,
             lastOrt = getOrt(),
-            handler = function(e) {
-                if(e.type == 'orientationchange'){
+            handler = function (e) {
+                if (e.type == 'orientationchange') {
                     return $(window).trigger('ortchange');
                 }
                 maxTry = 20;
                 clearInterval(timer);
-                timer = $.later(function() {
+                timer = $.later(function () {
                     var curOrt = getOrt();
                     if (lastOrt !== curOrt) {
                         lastOrt = curOrt;
                         clearInterval(timer);
                         $(window).trigger('ortchange');
-                    } else if(--maxTry){//最多尝试20次
+                    } else if (--maxTry) {//最多尝试20次
                         clearInterval(timer);
                     }
                 }, 50, true);
@@ -498,48 +486,50 @@
      * });
      */
     /** dispatch scrollStop */
-    function _registerScrollStop(){
-        $(window).on('scroll', $.debounce(80, function() {
+    function _registerScrollStop() {
+        $(window).on('scroll', $.debounce(80, function () {
             $(document).trigger('scrollStop');
         }, false));
     }
+
     //在离开页面，前进或后退回到页面后，重新绑定scroll, 需要off掉所有的scroll，否则scroll时间不触发
     function _touchstartHander() {
         $(window).off('scroll');
         _registerScrollStop();
     }
+
     _registerScrollStop();
-    $(window).on('pageshow', function(e){
-        if(e.persisted) {//如果是从bfcache中加载页面
+    $(window).on('pageshow', function (e) {
+        if (e.persisted) {//如果是从bfcache中加载页面
             $(document).off('touchstart', _touchstartHander).one('touchstart', _touchstartHander);
         }
     });
 })(Zepto);
 
-Zepto.fn.iscroll = function(opt) {
-    if(this.attr('_iscroll-initialized')) return;
+Zepto.fn.iscroll = function (opt) {
+    if (this.attr('_iscroll-initialized')) return;
     var that = this,
-        me = this.attr('_iscroll-initialized',true).css({'overflow': 'hidden','-webkit-user-select': 'none'})[0],
+        me = this.attr('_iscroll-initialized', true).css({'overflow':'hidden', '-webkit-user-select':'none'})[0],
         scroller = me.children[0],
         M = Math, scrolling = false, top = 0, containerH, scrollerH, bottom, touch, stamp, startX, startY, isVertical, isTested, movedY, baseY, nowY, TID;
-    me.addEventListener('touchstart', function(e) {
-        if(scrolling) {
+    me.addEventListener('touchstart', function (e) {
+        if (scrolling) {
             e.preventDefault();
-            if(top > bottom && top < 0) {
+            if (top > bottom && top < 0) {
                 clearTimeout(TID);
                 scrolling = false;
             }
         }
         touch = e.touches[0], stamp = Date.now(), startX = touch.pageX, startY = touch.pageY, isVertical = isTested = false, movedY = 0, baseY = top;
     });
-    me.addEventListener('touchmove', function(e) {
+    me.addEventListener('touchmove', function (e) {
         touch = e.touches[0];
-        if(!isTested) {
+        if (!isTested) {
             isVertical = M.abs(touch.pageX - startX) < M.abs(touch.pageY - startY);
             isVertical && (scroller.style.webkitTransition = '0ms', scrolling = false);
             isTested = true;
         }
-        if(isVertical) {
+        if (isVertical) {
             e.preventDefault();
             opt && opt.stopPropagation && e.stopPropagation();
             movedY = touch.pageY - startY;
@@ -552,12 +542,12 @@ Zepto.fn.iscroll = function(opt) {
     me.addEventListener('touchend', touchEnd);
     me.addEventListener('touchcancel', touchEnd);
     function touchEnd() {
-        if(isVertical) {
+        if (isVertical) {
             top += movedY;
             var deltaY = top - baseY, time = Date.now() - stamp;
-            if(top < bottom) roll(400, bottom);
-            else if(top > 0) roll(400, 0);
-            else{
+            if (top < bottom) roll(400, bottom);
+            else if (top > 0) roll(400, 0);
+            else {
                 var t = -top,
                     b = top - bottom,
                     v = M.abs(deltaY) / time,
@@ -575,6 +565,7 @@ Zepto.fn.iscroll = function(opt) {
             }
         }
     }
+
     function roll(time, to) {
         if (scrolling) return;
         if (to === top) time = 0;
@@ -586,7 +577,7 @@ Zepto.fn.iscroll = function(opt) {
                     scroller.style.webkitTransform = 'translate(0,' + to + 'px) translateZ(0px)';
                     scrolling = false;
                     nowY = to;
-                    top > 0 ? roll(400, 0) : top < bottom ? roll(400, bottom) :'';
+                    top > 0 ? roll(400, 0) : top < bottom ? roll(400, bottom) : '';
                     return;
                 }
                 now = (now - startTime) / time - 1;
@@ -596,12 +587,13 @@ Zepto.fn.iscroll = function(opt) {
             };
         animate();
     }
-    (function(handler) {
+
+    (function (handler) {
         containerH = me.offsetHeight;
         scrollerH = scroller.offsetHeight;
         bottom = M.min(0, containerH - scrollerH);
         top < bottom && roll(400, bottom);
-        if(handler) {
+        if (handler) {
             window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', arguments.callee);
             me[handler] = that[handler] = arguments.callee;
         }
@@ -609,10 +601,10 @@ Zepto.fn.iscroll = function(opt) {
     return this;
 };
 
-(function($) {
-    var actElem, inited = false, timer, cls, removeCls = function(){
+(function ($) {
+    var actElem, inited = false, timer, cls, removeCls = function () {
         clearTimeout(timer);
-        if(actElem && (cls = actElem.attr('highlight-cls'))){
+        if (actElem && (cls = actElem.attr('highlight-cls'))) {
             actElem.removeClass(cls).attr('highlight-cls', '');
             actElem = null;
         }
@@ -627,14 +619,14 @@ Zepto.fn.iscroll = function(opt) {
          *
          * $('a').highlight();// 把所有a的自带的高亮效果去掉。
          */
-        highlight: function(className) {
+        highlight:function (className) {
             inited = inited || !!$(document).on('touchend.highlight touchmove.highlight touchcancel.highlight', removeCls);
             removeCls();
-            return this.each(function() {
+            return this.each(function () {
                 var $el = $(this);
                 $el.css('-webkit-tap-highlight-color', 'rgba(255,255,255,0)').off('touchstart.highlight');
-                className && $el.on('touchstart.highlight', function() {
-                    timer = $.later(function() {
+                className && $el.on('touchstart.highlight', function () {
+                    timer = $.later(function () {
                         actElem = $el.attr('highlight-cls', className).addClass(className);
                     }, 100);
                 });
