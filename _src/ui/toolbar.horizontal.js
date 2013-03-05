@@ -43,7 +43,10 @@
             $(window).on('ortchange', $.proxy(this._eventHandler, this));
         },
         _eventHandler: function () {
-            this.iScroll.iScroll('refresh');
+            var me = this;
+            $.later(function () {
+                me.iScroll.iScroll('refresh');
+            }, 100);
         },
         _getWidth: function () {
             var me = this,
@@ -63,8 +66,7 @@
             });
             $.later(function () {
                 me.iScroll.iScroll('refresh');
-
-            }, 0);
+            }, 100);
             return me;
         },
         addItem: function (item) {
@@ -93,15 +95,12 @@
         _initDone: false,
         _isAnim: false,
         _win: window,
-        _kh: {
-            portrait: 281+171,
-            landscape: 379+161
-        },
+
         _create: function () {
             var me = this,
-                opts = me._options, $el;
+                opts = me._options;
 
-            me.root($('<div class="mui-toolbar mui-toolbar-anim"></div>').append(me._$boxWrap = $('<div class="mui-toolbar-boxwrap"></div>').append(me._$toolBox = $('<div class="mui-toolbar-toolBox"></div>'))));
+            me.root($('<div class="mui-toolbar"></div>').append(me._$boxWrap = $('<div class="mui-toolbar-boxwrap"></div>').append(me._$toolBox = $('<div class="mui-toolbar-toolBox"></div>'))));
             opts.closeBtn && (me._$closeBtn = ui.button({
                 name: 'collapse',
                 click: function () {
@@ -137,7 +136,6 @@
                     me.setFix();
                     break;
                 case 'ortchange':
-                    me._winH = me._win.innerHeight;
                     if (me._isShow) {
                         $el.width('100%');     //覆盖设置的宽度
                     } else {
@@ -198,17 +196,13 @@
         },
         setFix: function (pos, offset) {
             var me = this,
-                $el = me.root(),
-                scrollH = document.body.scrollHeight,
-                winH = me._win.innerHeight,
-                scrollT = $(me._win).scrollTop(),
-                viewScreenH = Math.max(winH, me._winH) - me._kh[$.getOrientation()];
+                $el = me.root();
 
             if (pos) {
                 $el.css('top', pos.y );
             } else {
                 pos = offset || {x:0,y:0};
-                $el.css('top', (scrollH == winH + scrollT ? scrollT + Math.min(viewScreenH, winH) : scrollT + winH - me._kh[$.getOrientation()]) + pos.y);
+                $el.css('top', $(me._win).scrollTop() + pos.y);
             }
             return me;
         }

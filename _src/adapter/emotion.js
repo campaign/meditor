@@ -31,13 +31,15 @@
                     ]
                 }
             ],
-            confirm: function(e, urls){
-                var html = '';
+            confirm: function(){
+                var html = '',
+                    urls = this.value();
+
                 $.each(urls, function(){
                     html += '<img src="'+this+'" />';
                 });
                 editor.execCommand( 'inserthtml', html );
-                pop.hide();
+                pop.close();
             }
         });
     }
