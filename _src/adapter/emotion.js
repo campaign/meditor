@@ -31,8 +31,10 @@
                     ]
                 }
             ],
-            confirm: function(e, urls){
-                var html = '';
+            confirm: function(){
+                var html = '',
+                    urls = this.value();
+
                 $.each(urls, function(){
                     html += '<img src="'+this+'" />';
                 });

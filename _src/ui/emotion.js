@@ -38,7 +38,9 @@
                 for(i=0; i<cells; i++){
                     item = row[i];
                     empty = typeof item !== 'string';
-                    html += '<td '+(empty?' class="empty"':'')+'data-url="'+this._formatUrl(url, index+1)+'" title="'+(item||'')+'"><div>';
+                    html += '<td '+(empty?' class="empty"':'')+'data-url="'+
+                        this._formatUrl(url, index+1)+
+                        '" title="'+(item||'')+'"><div>';
                     html += empty ? '&nbsp;' : '<span class="icon" style="background-position: 0 -'+index*size+'px"></span>';
                     html += '</div></td>';
                     index++;
@@ -71,25 +73,28 @@
                 .find('.mui-btnOk, .mui-btnCancel')
                 .highlight('mui-state-hover')
                 .on('click', function(){
-                    me[$(this).is('.mui-btnOk')?'_commit':'_reset']();
+                    me.trigger( $(this).is('.mui-btnOk')?'confirm':'reset');
                 });
+
+            me.on('reset confirm', function(e){
+                e.type === 'confirm' && me.value(true);
+                $('td.active', opt.content).removeClass('active');
+            });
         },
 
-        _commit: function(){
-            var opt = this._options,
-                ret = [],
-                actives = $('td.active', opt.content);
-            actives.each(function(){
-                ret.push($(this).attr('data-url'));
-            }).removeClass('active');
-            this.trigger('confirm', [ret]);
-        },
+        value: function(reload){
+            var ret = this._val;
 
-        _reset: function(){
-            var opt = this._options,
-                actives = $('td.active', opt.content);
-            actives.removeClass('active');
-            this.trigger('reset');
+            if(!ret || reload) {
+                ret = this._val = [];
+                $('td.active', this._options.content).each(function(){
+                    ret.push($(this).attr('data-url'));
+                });
+            }
+
+            return ret;
         }
+
     }, "popup");
+
 })(Zepto, ME.ui)
