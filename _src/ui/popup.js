@@ -39,7 +39,7 @@
                 width = parseInt(root.css('width')) || root[0].getBoundingClientRect().width,
                 node = me._options._btn = node[0] || node,
                 rect = node.getBoundingClientRect(),
-                top = -height - 10,
+                top = rect.height + 20,
                 popLeft = Math.max(0, rect.left - (width - rect.width)/2 - 5);
             if(popLeft < 0) {
                 popLeft = 0;

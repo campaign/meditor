@@ -9,7 +9,7 @@
             needIscroll:    true,
             _isShow:        false,
             _iscrollInited: false,
-            _lastClicked:     null
+            _lastClicked:   null
         },
         _allShowedCombox:   [],
         _addEventInited:    false,
@@ -75,7 +75,7 @@
                 width = parseInt(root.css('width')) || root[0].getBoundingClientRect().width,
                 node = me._options._btn = node[0] || node,
                 rect = node.getBoundingClientRect(),
-                top = -height - 20,
+                top = rect.height + 20,
                 popLeft = Math.max(0, rect.left - (width - rect.width)/2 - 5);
             if(popLeft < 0) {
                 popLeft = 0;
@@ -87,8 +87,8 @@
                 top:        top,
                 left:       popLeft
             }).children().last().css({
-                    left:       Math.min(rect.left, rect.left - popLeft)
-                });
+                left:       Math.min(rect.left, rect.left - popLeft)
+            });
             return me;
         },
 
