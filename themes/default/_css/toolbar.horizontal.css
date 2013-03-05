@@ -10,11 +10,14 @@
     background: -webkit-gradient(linear, left top, left bottom, from(#9c9ba6), to(#585961));
 }
 
+/*
 .mui-toolbar.mui-toolbar-anim {
-    -webkit-transition-property: width;
+    -webkit-transition-property: opacity;
     -webkit-transition-duration: 250ms;
     -webkit-transition-timing-function:linear;
+    opacity: 1;
 }
+*/
 
 .mui-toolbar .mui-toolbar-boxwrap{
     display: -webkit-box;
@@ -89,5 +92,6 @@
 
 }
 .mui-scrollbox .mui-button{
+    border-radius: 0;
 }
 

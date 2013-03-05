@@ -10,8 +10,8 @@
  * @author zhanyi
  */
 ;
-(function ($) {
-    ME.plugins['paste'] = function () {
+(function ($, ns) {
+    ns.plugins['paste'] = function () {
         function getClipboardData(callback) {
             var doc = this.document;
             if (doc.getElementById('baidu_pastebin')) {
@@ -110,25 +110,22 @@
                 //ie下使用innerHTML会产生多余的\r\n字符，也会产生&nbsp;这里过滤掉
                 html = div.innerHTML.replace(/>(?:(\s|&nbsp;)*?)</g, '><');
 
-                //过滤word粘贴过来的冗余属性
-                html = UE.filterWord(html);
-
-                var root = UE.htmlparser(html);
+                var root = ns.htmlparser(html);
                 //如果给了过滤规则就先进行过滤
                 if (me.options.filterRules) {
-                    UE.filterNode(root, me.options.filterRules);
+                    ns.filterNode(root, me.options.filterRules);
                 }
                 //执行默认的处理
                 me.filterInputRule(root);
                 html = {'html':root.toHtml()};
                 me.trigger('beforepaste', html);
-                root = UE.htmlparser(html.html);
+                root = ns.htmlparser(html.html);
                 //如果开启了纯文本模式
                 if (me.queryCommandState('pasteplain')) {
-                    me.execCommand('insertHtml', UE.filterNode(root, me.options.filterTxtRules).toHtml(), true);
+                    me.execCommand('insertHtml', ME.filterNode(root, me.options.filterTxtRules).toHtml(), true);
                 } else {
                     //文本模式
-                    UE.filterNode(root, me.options.filterTxtRules);
+                    ME.filterNode(root, me.options.filterTxtRules);
                     txtContent = root.toHtml();
                     //完全模式
                     htmlContent = html.html;
@@ -199,6 +196,6 @@
 
         });
     };
-})(Zepto)
+})(Zepto, ME)
 
 

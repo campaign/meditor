@@ -24,13 +24,16 @@
     vertical-align: middle;
 }
 
+.mui-button-undo span.icon:before { content: '\27f2'}/*undo*/
+.mui-button-redo span.icon:before { content: '\27f3'}/*redo*/
+
 .mui-button-bold span.icon:before { content: '\e77a'} /*粗体*/
 .mui-button-italic span.icon:before { content: '\e77b'}/*斜体*/
 .mui-button-underline span.icon:before { content: '\f0cd'}/*下划线*/
 .mui-button-removeformat span.icon:before { content: '\e729'}/*清除格式*/
 
-.mui-button-orderedlist span.icon:before { content: '\f0ca'}/*无序列表*/
-.mui-button-unorderedlist span.icon:before { content: '\f0cb'}/*有序列表*/
+.mui-button-orderedlist span.icon:before { content: '\f0cb'}/*无序列表*/
+.mui-button-unorderedlist span.icon:before { content: '\f0ca'}/*有序列表*/
 .mui-button-indent span.icon:before { content: '\e784'}/*首行缩进*/
 .mui-button-alignleft span.icon:before { content: '\e77e'}/*左对齐*/
 .mui-button-aligncenter span.icon:before { content: '\e77f'}/*中间对齐*/
@@ -43,25 +46,11 @@
 .mui-button-bgcolor span.icon:before { content:'\e793'}/*字体背景色*/
 
 .mui-button-emotion span.icon:before { content: '\e800'}/*无须列表*/
-.mui-button-image span.icon:before { content: '\1f304'}/*无须列表*/
-.mui-button-attach span.icon:before { content: '\1f4ce'}/*无须列表*/
+.mui-button-image span.icon:before { content: '🌄'}/*无须列表*/
+.mui-button-attach span.icon:before { content: '📎'}/*无须列表*/
 
 .mui-button-collapse span.icon:before { content: '\e746'}/*收起*/
 .mui-button-expand span.icon:before { content: '\e744'}/*展开*/
-
-
-.mui-button-alignleft span.icon:before { content: '\e77e'}/*左对齐*/
-.mui-button-aligncenter span.icon:before { content: '\e77f'}/*居中*/
-.mui-button-alignright span.icon:before { content: '\e780'}/*右对齐*/
-.mui-button-alignjustify span.icon:before { content: '\e781'}/*两端对齐*/
-
-.mui-button-undo span.icon:before { content: '\27f2'}/*undo*/
-.mui-button-redo span.icon:before { content: '\27f3'}/*redo*/
-.mui-button-table span.icon:before { content: '\f0ce'}/*表格*/
-.mui-button-delete span.icon:before { content: '\2716'}/*删除*/
-.mui-button-color span.icon:before { content: '\f020'}/*颜色*/
-.mui-button-smiley span.icon:before { content: '\e800'}/*表情*/
-
 
 .mui-button {
     display: inline-block;
@@ -79,7 +68,7 @@
 
 .mui-button.mui-state-disable {
     color: grey;
-    background: rgba(238, 238, 238, 1) !important;
+    background: rgba(238, 238, 238, 0.5) !important;
 }
 
 .mui-button.mui-state-hover {
