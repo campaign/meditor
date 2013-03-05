@@ -93,10 +93,9 @@
         _initDone: false,
         _isAnim: false,
         _win: window,
-        _body: document.body,
         _kh: {
-            portrait: 281+128,
-            landscape: 379+118
+            portrait: 281+171,
+            landscape: 379+161
         },
         _create: function () {
             var me = this,
@@ -113,6 +112,8 @@
         },
         _init: function () {
             var me = this;
+            me._winH = me._win.innerHeight;
+
             $(document).on('scrollStop', $.proxy(me._eventHandler, me));
             $(me._win).on('ortchange', $.proxy(me._eventHandler, me));
             return this;
@@ -136,6 +137,7 @@
                     me.setFix();
                     break;
                 case 'ortchange':
+                    me._winH = me._win.innerHeight;
                     if (me._isShow) {
                         $el.width('100%');     //覆盖设置的宽度
                     } else {
@@ -188,7 +190,7 @@
             return this;
         },
         render: function (container) {
-            this.$super('render', container || this._body);
+            this.$super('render', container || document.body);
             return this._initRender();
         },
         zIndex: function (zindex) {
@@ -196,14 +198,22 @@
         },
         setFix: function (pos, offset) {
             var me = this,
-                $el = me.root(), _win;
+                $el = me.root(),
+                scrollH = document.body.scrollHeight,
+                winH = me._win.innerHeight,
+                scrollT = $(me._win).scrollTop(),
+                viewScreenH = Math.max(winH, me._winH) - me._kh[$.getOrientation()];
 
             if (pos) {
                 $el.css('top', pos.y );
             } else {
-                pos = offset || {x:10,y:10};
-                _win = me._win;
-                $el.css('top', Math.max($(_win).scrollTop() + _win.innerHeight - me._kh[$.getOrientation()]) + pos.y);
+                pos = offset || {x:0,y:0};
+/*                alert('scrollT + winH:'+(scrollT + winH), scrollH);
+                alert('scrollH:'+scrollH);*/
+                //alert(scrollH == winH + scrollT);
+                alert(document.body.clientHeight);
+
+                $el.css('top', (scrollH == winH + scrollT ? scrollT + Math.min(viewScreenH, winH) : scrollT + winH - me._kh[$.getOrientation()]) + pos.y);
             }
             return me;
         }
