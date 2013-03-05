@@ -44,7 +44,6 @@
 
                     ui.toolbar({items:traversal(meditor.options.toolbars)})
                         .render($(meditor.iframe.parentNode).css({
-                        position:'relative',
                         overflow:'visible'
                     }))
                         .zIndex(meditor.options.zIndex);
