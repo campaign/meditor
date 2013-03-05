@@ -137,6 +137,15 @@
             return this.select(index, true);
         },
 
+        singleSelect: function (index) {
+            var me = this,
+                opt = me._options;
+            for(var i = 0, l = opt.items.length; i < l; i++) {
+                me.unSelect(i);
+            }
+            me.select(index);
+        },
+
         label: function (index, label) {
             var _lable = this._options.children.eq(index).html(label);
             return label === undefined ? _lable : this;

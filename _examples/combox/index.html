@@ -43,7 +43,7 @@
         combox1 = ME.ui.combox({
                         container:$('.mui-toolbar'),
                         click: function (e, index, value, node) {
-                            this.select(value);
+                            this.singleSelect(value);
                         },
                         renderFn: function (index) {
                             if(index < 10) {
