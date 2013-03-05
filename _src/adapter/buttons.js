@@ -1,33 +1,63 @@
-;(function($,ui){
-    ME.registerUI(
-        'bold italic underline', function(editor,cmdName){
-            var btn = ui.button({
+;(function($, ns, undefined){
+    var ui = ns.ui;
+
+    //translate
+    function _t(cmd){
+        return {
+            align: 'justify',
+            orderedlist: 'insertorderedlist',
+            unorderedlist: 'insertunorderedlist'
+        }[cmd] || cmd;
+    }
+
+    ns.registerUI(
+        'undo redo bold italic underline strikethrough ' +
+        'alignleft aligncenter alignright alignjustify ' +
+        'orderedlist unorderedlist indent ' +
+        'removeformat',
+
+        function(editor,cmdName){
+            var btn,
+                cmd = cmdName,
+                flag = undefined;
+
+            if(/^(align)(.*)$/.test(cmdName)){
+                cmd = RegExp.$1;
+                flag = RegExp.$2;
+            }
+
+            cmd = _t(cmd);
+
+            btn = ui.button({
                 name : cmdName,
                 click:function(){
-                    editor.execCommand(cmdName)
+                    editor.execCommand(cmd, flag);
                 },
                 title:cmdName
             });
 
             editor.on('selectionchange',function(){
-                var state = editor.queryCommandState(cmdName);
+                var state = editor.queryCommandState(cmd);
+
+                if(flag && -1 !== state) {
+                    state = editor.queryCommandValue(cmd) === flag ? 1 : 0;
+                }
+
                 btn.highlight(state == 1).enable(state != -1);
             });
             return btn;
         }
     );
 
-    //零时
-    ME.registerUI(
-        ['undo', 'redo', 'bold', 'italic', 'underline', 'formatmatch',
-            'orderedlist', 'unorderedlist', 'indent',
-            'alignleft', 'aligncenter', 'alignright', 'alignjustify',
+    //临时, 为了让按钮能正常显示.
+    ns.registerUI(
+        [ 'formatmatch',
             'fontfamily', 'fontsize', 'fontcolor', 'bgcolor',
             'image', 'attach',
             'touppercase', 'tolowercase',
-            'strikethrough', 'subscript', 'superscript', 'source', 'indent', 'outdent',
+            'subscript', 'superscript', 'source', 'outdent',
             'blockquote', 'pasteplain', 'pagebreak',
-            'selectall', 'print', 'preview', 'horizontal', 'removeformat', 'time', 'date', 'unlink',
+            'selectall', 'print', 'preview', 'horizontal', 'time', 'date', 'unlink',
             'insertparagraphbeforetable', 'insertrow', 'insertcol', 'mergeright', 'mergedown', 'deleterow',
             'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable'], function(editor,cmdName){
             var btn = ui.button({
@@ -40,4 +70,4 @@
             return btn;
         }
     );
-})(Zepto,ME.ui)
+})(Zepto, ME)
