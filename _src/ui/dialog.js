@@ -123,6 +123,14 @@
             this._mask.remove();
             $(window).off('ortchange', eventHandler);
             return this.$super('destroy');
+        },
+
+        show: function(){
+            this.open.apply(this, arguments);
+        },
+
+        hide: function(){
+            this.close.apply(this, arguments);
         }
     });
 

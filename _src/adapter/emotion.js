@@ -39,7 +39,7 @@
                     html += '<img src="'+this+'" />';
                 });
                 editor.execCommand( 'inserthtml', html );
-                pop.hide();
+                pop.close();
             }
         });
     }

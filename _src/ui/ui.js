@@ -6,32 +6,35 @@
  * @import core/zepto.js, core/zepto.extend.js
  */
 (function($, ns, undefined) {
-    var id = 1, _blankFn = function(){};
+    var id = 1,
+        _blankFn = function(){},
+        _widget = function() {};
 
-    function _guid() {
+    function _guid(key) {
         return id++;
     };
 
     //创建一个新object
     function _createObject(proto, data) {
-        var obj = {};
-        Object.create ? obj = Object.create(proto) : obj.__proto__ = proto;
+        var obj;
+        Object.create ? obj = Object.create(proto) : (obj = {}).__proto__ = proto;
         return $.extend(obj, data || {});
     }
 
     //创建构造器:继承father.prototype，将data扩展到prototype中
     function _createClass(Class, data) {
         var father = data.inherit || _widget,
-            proto = father.prototype;
+            proto = father.prototype,
+            obj;
 
-        $.extend(Class.prototype, _createObject(proto, {
+        obj = Class.prototype = _createObject(proto, {
             $super: function (name) {
                 var fn = proto[name];
                 return $.isFunction(fn) ? fn.apply(this, $.slice(arguments, 1)) : fn;
             }
-        }));
+        });
 
-        $.isObject(data) && $.extend(true, Class.prototype, data);
+        $.isObject(data) && $.extend(true, obj, data);
         return Class;
     }
 
@@ -39,10 +42,11 @@
         version: '1.0.0',
         define: function(name, data, superClass) {
             if(superClass) data.inherit = $.isString(superClass)?ns.ui[superClass]:superClass;
+
             var Class = ns.ui[name] = _createClass(function(options) {
                 var obj = _createObject(Class.prototype, {
-                    _id: name + '-' + _guid()
-                })
+                    _id: name + '-' + _guid(name)
+                });
                 obj._createWidget.call(obj, options);
                 return obj;
             }, data);
@@ -57,7 +61,6 @@
      * @name widget基类
      * @desc GMU所有的组件都是此类的子类，即以下此类里面的方法都可在其他组建中调用。
      */
-    var _widget = function() {};
     $.extend(_widget.prototype, {
         /**
          * common constructor
