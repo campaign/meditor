@@ -208,11 +208,6 @@
                 $el.css('top', pos.y );
             } else {
                 pos = offset || {x:0,y:0};
-/*                alert('scrollT + winH:'+(scrollT + winH), scrollH);
-                alert('scrollH:'+scrollH);*/
-                //alert(scrollH == winH + scrollT);
-                alert(document.body.clientHeight);
-
                 $el.css('top', (scrollH == winH + scrollT ? scrollT + Math.min(viewScreenH, winH) : scrollT + winH - me._kh[$.getOrientation()]) + pos.y);
             }
             return me;
