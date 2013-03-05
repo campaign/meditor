@@ -32,8 +32,8 @@
 .mui-button-underline span.icon:before { content: '\f0cd'}/*下划线*/
 .mui-button-removeformat span.icon:before { content: '\e729'}/*清除格式*/
 
-.mui-button-orderedlist span.icon:before { content: '\f0ca'}/*无序列表*/
-.mui-button-unorderedlist span.icon:before { content: '\f0cb'}/*有序列表*/
+.mui-button-orderedlist span.icon:before { content: '\f0cb'}/*无序列表*/
+.mui-button-unorderedlist span.icon:before { content: '\f0ca'}/*有序列表*/
 .mui-button-indent span.icon:before { content: '\e784'}/*首行缩进*/
 .mui-button-alignleft span.icon:before { content: '\e77e'}/*左对齐*/
 .mui-button-aligncenter span.icon:before { content: '\e77f'}/*中间对齐*/
