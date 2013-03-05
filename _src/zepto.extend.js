@@ -511,12 +511,13 @@ Zepto.fn.iscroll = function (opt) {
     var that = this,
         me = this.attr('_iscroll-initialized', true).css({'overflow':'hidden', '-webkit-user-select':'none'})[0],
         scroller = me.children[0],
+        hor = opt && opt.horizontal,
         M = Math, scrolling = false, top = 0, containerH, scrollerH, bottom, touch, stamp, startX, startY, isVertical, isTested, movedY, baseY, nowY, TID;
     me.addEventListener('touchstart', function (e) {
         if (scrolling) {
             e.preventDefault();
             if (top > bottom && top < 0) {
-                clearTimeout(TID);
+                (window.cancelAnimationFrame ||clearTimeout)(TID);
                 scrolling = false;
             }
         }
@@ -526,23 +527,23 @@ Zepto.fn.iscroll = function (opt) {
         touch = e.touches[0];
         if (!isTested) {
             isVertical = M.abs(touch.pageX - startX) < M.abs(touch.pageY - startY);
-            isVertical && (scroller.style.webkitTransition = '0ms', scrolling = false);
+            hor ? !isVertical ? (scrolling = false): '' : isVertical ? (scrolling = false) : '';
             isTested = true;
         }
-        if (isVertical) {
+        if (!hor && isVertical || hor && !isVertical) {
             e.preventDefault();
             opt && opt.stopPropagation && e.stopPropagation();
-            movedY = touch.pageY - startY;
+            movedY = touch[hor ? 'pageX' : 'pageY'] - (hor ? startX : startY);
             nowY = top + movedY;
             nowY = nowY > 0 ? 0.3 * nowY : nowY < bottom ? bottom - 0.3 * (bottom - nowY) : nowY;
             (e.timeStamp - stamp > 300) && (stamp = e.timeStamp, baseY = nowY);
-            scroller.style.webkitTransform = 'translate(0,' + nowY + 'px) translateZ(0px)';
+            scroller.style.webkitTransform = 'translate(' + (hor ? nowY + 'px,0' : '0,' + nowY) + 'px) translateZ(0px)';
         }
     });
     me.addEventListener('touchend', touchEnd);
     me.addEventListener('touchcancel', touchEnd);
     function touchEnd() {
-        if (isVertical) {
+        if (!hor && isVertical || hor && !isVertical) {
             top += movedY;
             var deltaY = top - baseY, time = Date.now() - stamp;
             if (top < bottom) roll(400, bottom);
@@ -574,7 +575,7 @@ Zepto.fn.iscroll = function (opt) {
             animate = function () {
                 var now = Date.now();
                 if (now >= startTime + time) {
-                    scroller.style.webkitTransform = 'translate(0,' + to + 'px) translateZ(0px)';
+                    scroller.style.webkitTransform = 'translate(' + (hor ? to + 'px,0' : '0,' + to) + 'px) translateZ(0px)';
                     scrolling = false;
                     nowY = to;
                     top > 0 ? roll(400, 0) : top < bottom ? roll(400, bottom) : '';
@@ -582,19 +583,20 @@ Zepto.fn.iscroll = function (opt) {
                 }
                 now = (now - startTime) / time - 1;
                 top = (to - nowY) * M.sqrt(1 - now * now) + nowY;
-                scroller.style.webkitTransform = 'translate(0,' + top + 'px) translateZ(0px)';
-                if (scrolling) TID = setTimeout(animate, 1);
+                scroller.style.webkitTransform = 'translate(' + (hor ? top + 'px,0' : '0,' + top) + 'px) translateZ(0px)';
+                if (scrolling) TID = (window.requestAnimationFrame || setTimeout)(animate, 1);
             };
         animate();
     }
 
     (function (handler) {
-        containerH = me.offsetHeight;
-        scrollerH = scroller.offsetHeight;
+        var offset = hor ? 'offsetWidth' : 'offsetHeight';
+        containerH = me[offset] - 2 * parseInt(getComputedStyle(me, '').getPropertyValue("border-width"));
+        scrollerH = scroller[offset];
         bottom = M.min(0, containerH - scrollerH);
         top < bottom && roll(400, bottom);
         if (handler) {
-            window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', arguments.callee);
+            $(window).on('ortchange', arguments.callee);
             me[handler] = that[handler] = arguments.callee;
         }
     }('refresh'));
