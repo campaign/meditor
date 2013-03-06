@@ -35,7 +35,7 @@
                 opt = me._options,
                 proto = me.__proto__,
                 root = me.root(),
-                content = root.children().first().next(),
+                content = root.find('.mui-combox-content'),
                 cls = 'mui-' + (opt.prefix ? opt.prefix + '-' : '') + 'combox-highlight';
 
             //highlight
