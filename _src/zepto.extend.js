@@ -517,7 +517,7 @@ Zepto.fn.iscroll = function (opt) {
         if (scrolling) {
             e.preventDefault();
             if (top > bottom && top < 0) {
-                (window.cancelAnimationFrame ||clearTimeout)(TID);
+                (window.webkitCancelAnimationFrame ||clearTimeout)(TID);
                 scrolling = false;
             }
         }
@@ -584,7 +584,7 @@ Zepto.fn.iscroll = function (opt) {
                 now = (now - startTime) / time - 1;
                 top = (to - nowY) * M.sqrt(1 - now * now) + nowY;
                 scroller.style.webkitTransform = 'translate(' + (hor ? top + 'px,0' : '0,' + top) + 'px) translateZ(0px)';
-                if (scrolling) TID = (window.requestAnimationFrame || setTimeout)(animate, 1);
+                if (scrolling) TID = (window.webkitRequestAnimationFrame || setTimeout)(animate, 1);
             };
         animate();
     }
