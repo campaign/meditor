@@ -5,7 +5,6 @@
     position: absolute;
     z-index: 1000;
     right: 0px;
-    bottom: 352px;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#505050), color-stop(50%,#262626), color-stop(51%,#1a1a1a), color-stop(100%,#101010), color-stop(100%,#101010), color-stop(100%,#101010));
     /*background: -webkit-gradient(linear, left top, left bottom, from(#9c9ba6), to(#585961));*/
     -webkit-box-shadow: 2px 2px 2px #505050;
