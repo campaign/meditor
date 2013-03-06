@@ -49,10 +49,41 @@
         }
     );
 
+    ns.registerUI('fontfamily', function (editor,cmdName) {
+        var opts = editor.options[cmdName.toLowerCase()],
+            fn = function (i) {
+                return i < opts.length && '<div class="mui-combox-' + cmdName + '" style="font-family:' + opts[i].val + '" value="' + opts[i].val + '" >' + opts[i].val.split(',')[0] + '</div>';
+            }, combox, btn;
+
+        btn = ui.button({
+            name: cmdName,
+            click: function () {
+                !combox && (combox = ui.combox({
+                    container: $('.mui-toolbar'),
+                    renderFn: fn,
+                    click: function (e, index, value, node) {
+                        editor.execCommand('FontFamily', value);
+                        this.singleSelect(index);
+                    }
+                }));
+                combox.toggle(this.root());
+            }
+        });
+
+        editor.on('selectionchange', function (type, causeByUi, uiReady) {
+            var state = editor.queryCommandState(cmdName);
+
+        });
+
+        return btn;
+
+
+    })
+
     //临时, 为了让按钮能正常显示.
     ns.registerUI(
         [ 'formatmatch',
-            'fontfamily', 'fontsize', 'fontcolor', 'bgcolor',
+            /*'fontfamily', */'fontsize', 'fontcolor', 'bgcolor',
             'image', 'attach',
             'touppercase', 'tolowercase',
             'subscript', 'superscript', 'source', 'outdent',
