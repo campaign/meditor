@@ -4,8 +4,11 @@
     height: 200px;
     width:150px;
     z-index: 9990;
-    border-width: 8px 8px 10px 8px;
-    -webkit-border-image: url(../images/popup.png) 16 16 20 16 repeat stretch;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#676f81), color-stop(18%,#1f293c), color-stop(19%,#0b162a), color-stop(100%,#0a162e), color-stop(100%,#0a162e), color-stop(100%,#0a162e));
+    padding: 5px;
+    border-radius: 5px;
+    border:1px solid #424242;
+    -webkit-box-shadow: 2px 2px 5px #171717, inset 0 2px 5px #636b7e;
 }
 .mui-combox-title {
     height: 30px;
@@ -45,7 +48,7 @@
     overflow: hidden;
     width: 23px;
     height: 12px;
-    top: -17px;
+    top: -12px;
     background: url(../images/popup_arrow.png) no-repeat center center;
     background-size: 23px 12px;
 }

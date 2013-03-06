@@ -49,11 +49,23 @@
         }
     );
 
-    ns.registerUI('fontfamily', function (editor,cmdName) {
-        var opts = editor.options[cmdName.toLowerCase()],
-            fn = function (i) {
-                return i < opts.length && '<div class="mui-combox-' + cmdName + '" style="font-family:' + opts[i].val + '" value="' + opts[i].val + '" >' + opts[i].val.split(',')[0] + '</div>';
-            }, combox, btn;
+    ns.registerUI('fontfamily fontsize', function (editor,cmdName) {
+        var cmd = cmdName.toLowerCase(),
+            opts = editor.options[cmd],
+            fn = null, combox, btn;
+
+        switch (cmd) {
+            case 'fontfamily':
+                fn = function (i) {
+                    return i < opts.length && '<div class="mui-combox-' + cmd + '" style="font-family:' + opts[i].val + '" value="' + opts[i].val + '" >' + opts[i].val.split(',')[0] + '</div>';};
+                break;
+            case 'fontsize':
+                fn = function (i) {
+                    return i < opts.length && '<div class="mui-combox-' + cmd + '" style="font-size:' + opts[i] + 'px;" value="' + opts[i] + 'px" >' + opts[i]+ '</div>';};
+                break;
+            case 'default':
+                break;
+        };
 
         btn = ui.button({
             name: cmdName,
@@ -62,7 +74,7 @@
                     container: $('.mui-toolbar'),
                     renderFn: fn,
                     click: function (e, index, value, node) {
-                        editor.execCommand('FontFamily', value);
+                        editor.execCommand(cmd, value);
                         this.singleSelect(index);
                     }
                 }));
@@ -72,18 +84,14 @@
 
         editor.on('selectionchange', function (type, causeByUi, uiReady) {
             var state = editor.queryCommandState(cmdName);
-
         });
 
         return btn;
-
-
     })
-
     //临时, 为了让按钮能正常显示.
     ns.registerUI(
         [ 'formatmatch',
-            /*'fontfamily', */'fontsize', 'fontcolor', 'bgcolor',
+            /*'fontfamily', *//*'fontsize'*/ 'fontcolor', 'bgcolor',
             'image', 'attach',
             'touppercase', 'tolowercase',
             'subscript', 'superscript', 'source', 'outdent',
