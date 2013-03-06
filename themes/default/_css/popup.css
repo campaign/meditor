@@ -6,6 +6,11 @@
     -webkit-border-image: url(../images/popup.png) 16 16 20 16 repeat stretch;
 }
 
+.mui-popup-title {
+    height: 30px;
+    background: #ccc;
+}
+
 .mui-popup-content {
     min-height: 150px;
     min-width: 50px;

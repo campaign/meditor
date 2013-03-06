@@ -5,6 +5,7 @@
 
         _options: {
             container:      '',
+            title:          '',
             content:        null,
             prefix:         '',
             needIscroll:    false,
@@ -18,7 +19,7 @@
             var me = this,
                 opt = me._options,
                 cls = opt.prefix ? 'mui-' +opt.prefix + '-popup' : '';
-            me._el = $('<div class="mui-popup ' + cls + '"></div>').append($('<div class="mui-popup-content ' + (cls ? cls + '-content' : '') + '"></div>')
+            me._el = $('<div class="mui-popup ' + cls + '"></div>').append($('<div class="mui-popup-title ' + (cls ? cls + '-title' : '') + '">' + opt.title + '</div>')).append($('<div class="mui-popup-content ' + (cls ? cls + '-content' : '') + '"></div>')
                 .html(opt.content)).append('<div class="mui-popup-arrow ' + (cls ? cls + '-arrow' : '') + '"></div>').appendTo(opt.container);
         },
 
@@ -81,12 +82,13 @@
             me._fitSize(node);
             opt._isShow = true;
             if(opt.needIscroll && !opt._iscrollInited) {
-                me.root().children().first().iscroll();
+                me.root().children().first().next().iscroll();
                 opt._iscrollInited  = true;
             }
             //公共索引
             me.option('stamp', Date.now());
             me._allShowedPopup.push(me);
+            me.trigger('show');
             return me;
         },
 
@@ -96,6 +98,7 @@
                 opt = me._options;
             me.root().hide();
             opt._isShow = false;
+            me.trigger('hide');
             return me;
         },
 

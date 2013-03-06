@@ -4,6 +4,7 @@
 
         _options: {
             container:      '',
+            title:          '',
             renderFn:       null,
             prefix:         '',
             needIscroll:    true,
@@ -19,14 +20,14 @@
             var me = this,
                 opt = me._options,
                 cls = opt.prefix ? 'mui-' + opt.prefix + '-popup' : '',
-                root = me._el = $('<div class="mui-combox ' + cls + '"></div>').appendTo(opt.container),
+                root = me._el = $('<div class="mui-combox ' + cls + '"></div>').append('<div class="mui-combox-title ' + (cls ? cls + '-title' : '') + '">' + opt.title + '</div>').appendTo(opt.container),
                 i = 0, j, html = '<div class="mui-combox-content ' + (cls ? cls + '-content' : '') + '"><ul>';
             while(true) {
                 j = opt.renderFn(i++);
                 if(!j) break;
                 html += '<li>' + j + '</li>';
             }
-            root.html(html + '</ul></div><div class="mui-combox-arrow ' + (cls ? cls + '-arrow' : '') + '"></div>');
+            root.append(html + '</ul></div><div class="mui-combox-arrow ' + (cls ? cls + '-arrow' : '') + '"></div>');
         },
 
         _init: function () {
@@ -34,7 +35,7 @@
                 opt = me._options,
                 proto = me.__proto__,
                 root = me.root(),
-                content = root.children().first(),
+                content = root.children().first().next(),
                 cls = 'mui-' + (opt.prefix ? opt.prefix + '-' : '') + 'combox-highlight';
 
             //highlight
@@ -170,12 +171,13 @@
             me._fitSize(node);
             opt._isShow = true;
             if(opt.needIscroll && !opt._iscrollInited) {
-                me.root().children().first().iscroll();
+                me.root().children().first().next().iscroll();
                 opt._iscrollInited  = true;
             }
             //公共索引
             me.option('stamp', Date.now());
             me._allShowedCombox.push(me);
+            me.trigger('show');
             return me;
         },
 
@@ -189,6 +191,7 @@
                 allCombox.pop();
             }
             opt._isShow = false;
+            me.trigger('hide');
             return me;
         },
 
