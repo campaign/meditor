@@ -6,7 +6,7 @@
         clip: rect(0px, auto, auto, auto);
     }
 }
-.mui-widget {
+.mui-watchrender {
     -webkit-animation-duration: 0.001s;
     -webkit-animation-name: nodeInserted;
 }

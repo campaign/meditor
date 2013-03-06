@@ -4,7 +4,8 @@
             title: '',
             content: '',
             mask: true,
-            buttonType: 3// 第一位表示是否现实确认，第二位表示是否显示取消。
+            buttonType: 3,// 第一位表示是否现实确认，第二位表示是否显示取消。
+            watchRender:true
         },
 
         _create: function(){
@@ -28,7 +29,7 @@
                 .content(opt.content)
                 .root()
                 .on('click', eventHandler)
-                .on('widgetrender', $.debounce(20, eventHandler, false))
+                .on('widgetrender', eventHandler)
                 .find('.mui-dialog-btnOk, .mui-dialog-btnCancel')
                 .highlight('mui-state-hover');
             $(window).on('ortchange', eventHandler);
