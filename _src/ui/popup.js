@@ -19,7 +19,7 @@
             var me = this,
                 opt = me._options,
                 cls = opt.prefix ? 'mui-' +opt.prefix + '-popup' : '';
-            me._el = $('<div class="mui-popup ' + cls + '"></div>').append($('<div class="mui-popup-title ' + (cls ? cls + '-title' : '') + '">' + opt.title + '</div>')).append($('<div class="mui-popup-content ' + (cls ? cls + '-content' : '') + '"></div>')
+            me._el = $('<div class="mui-popup ' + cls + '"></div>').append(opt.title ? ('<div class="mui-popup-title ' + (cls ? cls + '-title' : '') + '">' + opt.title + '</div>') : '').append($('<div class="mui-popup-content ' + (cls ? cls + '-content' : '') + '"></div>')
                 .html(opt.content)).append('<div class="mui-popup-arrow ' + (cls ? cls + '-arrow' : '') + '"></div>').appendTo(opt.container);
         },
 
@@ -82,7 +82,7 @@
             me._fitSize(node);
             opt._isShow = true;
             if(opt.needIscroll && !opt._iscrollInited) {
-                me.root().children().first().next().iscroll();
+                me.root().find('.mui-popup-content').iscroll();
                 opt._iscrollInited  = true;
             }
             //公共索引

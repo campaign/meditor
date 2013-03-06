@@ -1,7 +1,6 @@
 .mui-combox {
     display: none;
     position: absolute;
-    height: 200px;
     width:150px;
     z-index: 9990;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#676f81), color-stop(18%,#1f293c), color-stop(19%,#0b162a), color-stop(100%,#0a162e), color-stop(100%,#0a162e), color-stop(100%,#0a162e));
