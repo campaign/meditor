@@ -71,17 +71,17 @@
         _fitSize: function (node) {
             var me = this,
                 root = me.root(),
-                width = (parseInt(root.css('width')) || root[0].getBoundingClientRect().width) + 2 * parseInt(root.css('border-width')),
+                width = parseInt(root.css('width')) || root[0].getBoundingClientRect().width,
                 node = me._options._btn = node[0] || node,
                 rect = node.getBoundingClientRect(),
-                top = rect.height + 10,
-                popLeft = rect.left - (width - rect.width)/2,
-                arrLeft = width/2 - 20;
+                top = rect.height + 14,
+                popLeft = rect.left - (width - rect.width)/2 - 10,
+                arrLeft = width/2 - 10;
             if(popLeft < 0) {
                 popLeft = 0;
                 arrLeft = rect.left + rect.width/2 - 20;
             } else if (popLeft + width > window.innerWidth) {
-                popLeft -= popLeft + width - window.innerWidth;
+                popLeft -= popLeft + width - window.innerWidth + 18;
                 arrLeft = rect.left - popLeft + rect.width/2 - 20;
             }
             root.css({
@@ -165,6 +165,7 @@
         show: function (node) {
             var me = this,
                 opt = me._options;
+            me.closeAll();
             me.root().show();
             me._fitSize(node);
             opt._isShow = true;

@@ -45,7 +45,7 @@
         _eventHandler: function () {
             var me = this;
             $.later(function () {
-                me.iScroll.iScroll('refresh');
+                me.root().get(0).refresh();
             }, 100);
         },
         _getWidth: function () {
@@ -61,11 +61,11 @@
         },
         _initIscroll: function () {
             var me = this;
-            me.iScroll = me.root().css('width', me._getWidth()).iScroll({
-                vScroll: false
+            me.root().css('width', me._getWidth()).iscroll({
+                horizontal: true
             });
             $.later(function () {
-                me.iScroll.iScroll('refresh');
+                me.root().get(0).refresh();
             }, 100);
             return me;
         },
@@ -73,7 +73,7 @@
             var me = this;
             if (me._isInstance(item)) {
                 item.render(me._$scroller);
-                me.iScroll.iScroll('refresh');
+                me.root().get(0).refresh();
             }
             return me;
         },
@@ -172,13 +172,13 @@
                 $el = me.root(), $closeBtn = me._$closeBtn.root();
             me._isShow ? me.hide(function () {
                 me._toolbarW = $el.width();
-                me._$toolBox.css('visibility', 'hidden');
+                me._$toolBox.hide();
                 $closeBtn.addClass('mui-button-expand');
-                $el.on('webkitTransitionEnd', $.proxy(me._eventHandler, me)).width($closeBtn.width() + parseInt($closeBtn.css('margin-left')) + parseInt($closeBtn.css('margin-right')) + 10);
+                $el.width($closeBtn.width() + parseInt($closeBtn.css('margin-left')) + parseInt($closeBtn.css('margin-right')) + 10);
             }) : me.show(function () {
                     $closeBtn.removeClass('mui-button-expand');
                     $el.width(me._toolbarW);
-                    me._$toolBox.css('visibility', 'visible').show();
+                    me._$toolBox.show();
                 }
             );
             return this;

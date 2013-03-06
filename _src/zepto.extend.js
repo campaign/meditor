@@ -591,7 +591,7 @@ Zepto.fn.iscroll = function (opt) {
 
     (function (handler) {
         var offset = hor ? 'offsetWidth' : 'offsetHeight';
-        containerH = me[offset] - 2 * parseInt(getComputedStyle(me, '').getPropertyValue("border-width"));
+        containerH = me[offset];
         scrollerH = scroller[offset];
         bottom = M.min(0, containerH - scrollerH);
         top < bottom && roll(400, bottom);
