@@ -30,7 +30,7 @@
             'ui/toolbar.horizontal.js',
             'ui/tabs.js',
             'ui/popup.js',
-            'ui/dialog.js',
+            'ui/combox.js',
             'ui/emotion.js',
             'adapter/adapter.js',
             'adapter/buttons.js',
