@@ -6,8 +6,11 @@
     z-index: 1000;
     right: 0px;
     bottom: 352px;
-    /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b9bdc5), color-stop(50%,#283144), color-stop(51%,#131e32), color-stop(100%,#283144), color-stop(100%,#207cca), color-stop(100%,#1e2a42));*/
-    background: -webkit-gradient(linear, left top, left bottom, from(#9c9ba6), to(#585961));
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#505050), color-stop(50%,#262626), color-stop(51%,#1a1a1a), color-stop(100%,#101010), color-stop(100%,#101010), color-stop(100%,#101010));
+    /*background: -webkit-gradient(linear, left top, left bottom, from(#9c9ba6), to(#585961));*/
+    -webkit-box-shadow: 2px 2px 2px #505050;
+    border-top: 1px solid #707070;
+    border-bottom: 1px solid #0f0f0f;
 }
 
 /*
