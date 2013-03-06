@@ -1,10 +1,11 @@
-;
-(function ($, ui) {
+;(function ($, ui) {
+
     ui.define('emotion', {
         _options:{
             items:null,
             prefix:'emotion'
         },
+
         _create:function () {
             var me = this,
                 opt = me._options,
@@ -14,6 +15,7 @@
             $.each(opt.items || [], function () {
                 panels.push(me._creatPanel(this));
             });
+
             content = opt.content = $('<div></div>');
             content.append(ui.tabs({
                 items:panels
@@ -70,8 +72,7 @@
             opt.content.on('click', 'td:not(.empty)',function () {
                 var td = $(this),
                     url = td.attr('data-url');
-                me.trigger('select', [url, td.hasClass('active')]);
-                td.toggleClass('active');
+                me.trigger('select', [url, td.hasClass('active'), td]);
             }).highlight()
                 .find('.mui-btnOk, .mui-btnCancel')
                 .highlight('mui-state-hover')
@@ -79,25 +80,28 @@
                     me.trigger($(this).is('.mui-btnOk') ? 'confirm' : 'reset');
                 });
 
-            me.on('reset confirm', function (e) {
-                e.type === 'confirm' && me.value(true);
+            me.on('reset',function () {
+                this._val = [];
                 $('td.active', opt.content).removeClass('active');
-            });
+            }).on('select', $.proxy(me._toggleValue, me))
+                .on('open show', function () {
+                    me._val = [];
+                    $('td.active', opt.content).removeClass('active');
+                });
         },
 
-        value:function (reload) {
-            var ret = this._val;
+        _toggleValue:function (e, url, check, td) {
+            var values = this._val = this._val || [],
+                idx = $.inArray(url, values);
 
-            if (!ret || reload) {
-                ret = this._val = [];
-                $('td.active', this._options.content).each(function () {
-                    ret.push($(this).attr('data-url'));
-                });
-            }
+            td[check ? 'removeClass' : 'addClass']('active');
+            ~idx && values.splice(idx, 1);
+            check || values.push(url);
+        },
 
-            return ret;
+        value:function () {
+            return (this._val || []).concat();
         }
 
-    }, "popup");
-
-})(Zepto, ME.ui)
+    }, 'popup');
+})(Zepto, ME.ui);

@@ -31,6 +31,7 @@
             'ui/tabs.js',
             'ui/popup.js',
             'ui/combox.js',
+            'ui/dialog.js',
             'ui/emotion.js',
             'adapter/adapter.js',
             'adapter/buttons.js',
