@@ -26,7 +26,7 @@
                 if(!j) break;
                 html += '<li>' + j + '</li>';
             }
-            root.html(html + '</ul></div><div class="mui-combox-arrow ' + (cls ? cls + '-arrow' : '') + '"><b></b></div>');
+            root.html(html + '</ul></div><div class="mui-combox-arrow ' + (cls ? cls + '-arrow' : '') + '"></div>');
         },
 
         _init: function () {
@@ -71,23 +71,24 @@
         _fitSize: function (node) {
             var me = this,
                 root = me.root(),
-                height = parseInt(root.css('height')) || root[0].getBoundingClientRect().height,
-                width = parseInt(root.css('width')) || root[0].getBoundingClientRect().width,
+                width = (parseInt(root.css('width')) || root[0].getBoundingClientRect().width) + 2 * parseInt(root.css('border-width')),
                 node = me._options._btn = node[0] || node,
                 rect = node.getBoundingClientRect(),
-                top = rect.height + 20,
-                popLeft = Math.max(0, rect.left - (width - rect.width)/2 - 5);
+                top = rect.height + 10,
+                popLeft = rect.left - (width - rect.width)/2,
+                arrLeft = width/2 - 20;
             if(popLeft < 0) {
                 popLeft = 0;
+                arrLeft = rect.left + rect.width/2 - 20;
             } else if (popLeft + width > window.innerWidth) {
-                popLeft -= popLeft + width - window.innerWidth + 30
+                popLeft -= popLeft + width - window.innerWidth;
+                arrLeft = rect.left - popLeft + rect.width/2 - 20;
             }
-
             root.css({
                 top:        top,
                 left:       popLeft
             }).children().last().css({
-                left:       Math.min(rect.left, rect.left - popLeft)
+                left:       arrLeft
             });
             return me;
         },

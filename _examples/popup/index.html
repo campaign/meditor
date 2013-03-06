@@ -10,10 +10,6 @@
             margin: 0;
             font-size: 14px;
         }
-        body {
-            height: 500px;
-            width:700px;
-        }
         #btn {
             padding: 3px 10px;
             background: #eee;
@@ -46,7 +42,7 @@
 <script type="text/javascript">
     $(function(){
         var popup = ME.ui.popup({
-                container: $('.mui-toolbar'),   //toolbar, 传
+                container: $('.mui-toolbar'),   //toolbar
                 content:'<p class="test">some content</p>'
             });
         $('#btn').hammer('tap', function() {
