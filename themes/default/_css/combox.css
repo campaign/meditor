@@ -43,6 +43,6 @@
     width: 23px;
     height: 12px;
     top: -17px;
-    background: #fff url(../images/popup_arrow.png) no-repeat center center;
+    background: url(../images/popup_arrow.png) no-repeat center center;
     background-size: 23px 12px;
 }

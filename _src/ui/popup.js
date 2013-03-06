@@ -12,6 +12,7 @@
             _isShow:        false,
             _iscrollInited: false
         },
+        _allShowedPopup:   [],
 
         _create: function () {
             var me = this,
@@ -35,17 +36,17 @@
         _fitSize: function (node) {
             var me = this,
                 root = me.root(),
-                width = (parseInt(root.css('width')) || root[0].getBoundingClientRect().width) + 2 * parseInt(root.css('border-width')),
+                width = parseInt(root.css('width')) || root[0].getBoundingClientRect().width,
                 node = me._options._btn = node[0] || node,
                 rect = node.getBoundingClientRect(),
                 top = rect.height + 14,
                 popLeft = rect.left - (width - rect.width)/ 2,
-                arrLeft = width/2 - 20;
+                arrLeft = width/2 - 10;
             if(popLeft < 0) {
                 popLeft = 0;
                 arrLeft = rect.left + rect.width/2 - 20;
             } else if (popLeft + width > window.innerWidth) {
-                popLeft -= popLeft + width - window.innerWidth;
+                popLeft -= popLeft + width - window.innerWidth + 18;
                 arrLeft = rect.left - popLeft + rect.width/2 - 20;
             }
             root.css({
@@ -61,10 +62,21 @@
             var _index = this.root().css('z-index', index);
             return index === undefined ? _index : this;
         },
+        closeAll: function() {
+            var me = this,
+                proto = me.__proto__,
+                allCombox = proto._allShowedPopup;
+            $.each(allCombox, function(i, item) {
+                item.hide();
+            });
+            proto._allShowedPopup = [];
+            return me;
+        },
 
         show: function (node) {
             var me = this,
                 opt = me._options;
+            me.closeAll();
             me.root().show();
             me._fitSize(node);
             opt._isShow = true;
@@ -72,8 +84,12 @@
                 me.root().children().first().iscroll();
                 opt._iscrollInited  = true;
             }
+            //公共索引
+            me.option('stamp', Date.now());
+            me._allShowedPopup.push(me);
             return me;
         },
+
 
         hide: function () {
             var me = this,
