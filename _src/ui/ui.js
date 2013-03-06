@@ -6,12 +6,13 @@
  * @import core/zepto.js, core/zepto.extend.js
  */
 (function($, ns, undefined) {
-    var id = 1,
+    var _ids = {},
         _blankFn = function(){},
         _widget = function() {};
 
     function _guid(key) {
-        return id++;
+        var id = _ids[key] = (_ids[key] || 0) + 1;
+        return id;
     };
 
     //创建一个新object
@@ -66,15 +67,16 @@
          * common constructor
          */
         _createWidget: function(opts) {
-            var me = this, el;
-            me._options = $.extend({
-                theme: 'default'
+            var me = this, el, opt;
+            opt = me._options = $.extend({
+                theme: 'default',
+                watchRender: false
             }, me._options, opts);
             me._create();
             if(!(el = me.root())){
                 throw new Error('组件的_create方法里面必须创建并保存根元素');
             }
-            el.addClass('mui-widget');
+            opt.watchRender && el.addClass('mui-watchrender');
             me.trigger('create');
             me._init();
             me.trigger('init');
@@ -192,11 +194,38 @@
         }
     });
 
-    //添加render事件
-    var startEvent = $.fx.animationEnd.replace(/AnimationEnd$/, 'AnimationStart');
+})(Zepto, ME);
+
+(function($){
+    //添加widgetrender事件，保证每次都是最底层的node派送此事件.
+    var startEvent = $.fx.animationEnd.replace(/AnimationEnd$/, 'AnimationStart'),
+        pool = [],
+        interval = 10;
+
+    function add(node){
+        var i, v;
+        for(i = pool.length-1; i>=0; i--){
+            v = pool[i];
+            if($.contains(v, node)){
+                clearTimeout(v._timer);
+                pool.splice(i, 1);
+            } else if($.contains(node, v)){
+                return ;
+            }
+        }
+        node._timer = setTimeout(function(){
+            dispatch(node);
+        }, interval);
+        pool.push(node);
+    }
+
+    function dispatch(node){
+        $(node).trigger('widgetrender');
+    }
+
     $(document).on(startEvent, function(e){
         if (e.animationName == 'nodeInserted'){
-            $(e.target).trigger('widgetrender');
+            add(e.target);
         }
     });
-})(Zepto, ME);
+})(Zepto);

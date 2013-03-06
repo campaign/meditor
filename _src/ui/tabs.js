@@ -7,6 +7,7 @@
 
     ui.define('tabs', {
         _options: {
+            watchRender: true,
             active: 0,
             items:null//[{key: content}]
         },
@@ -52,7 +53,7 @@
                         break;
                 }
                 index !== undefined && me.switchTo(index);
-            }).on('widgetrender', $.debounce(15, eventHandler, false));
+            }).on('widgetrender', eventHandler);
             me._titles.highlight('mui-state-hover');
             $(window).on('ortchange', eventHandler);
         },
