@@ -98,6 +98,6 @@
             return ret;
         }
 
-    }, "popout");
+    }, "popup");
 
 })(Zepto, ME.ui)
