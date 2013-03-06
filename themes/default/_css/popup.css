@@ -23,6 +23,6 @@
     left: 50%;
     margin-left: 10px;
     top: -17px;
-    background: url(../images/popup_arrow.png) no-repeat center center;
+    background: #fff url(../images/popup_arrow.png) no-repeat center center;
     background-size: 23px 12px;
 }
