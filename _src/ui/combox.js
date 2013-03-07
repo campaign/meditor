@@ -8,13 +8,10 @@
             renderFn:       null,
             prefix:         '',
             needIscroll:    true,
+            _btn:           null,
             _isShow:        false,
-            _iscrollInited: false,
-            _lastClicked:   null
+            _iscrollInited: false
         },
-        _allShowedCombox:   [],
-        _addEventInited:    false,
-        _needCloseAll:      true,
 
         _create: function () {
             var me = this,
@@ -33,7 +30,6 @@
         _init: function () {
             var me = this,
                 opt = me._options,
-                proto = me.__proto__,
                 root = me.root(),
                 content = root.find('.mui-combox-content'),
                 cls = 'mui-' + (opt.prefix ? opt.prefix + '-' : '') + 'combox-highlight';
@@ -47,18 +43,15 @@
 
             //autohide
             content.hammer('tap', function (e) {
-                var li = opt._lastClick =  $(e.originalEvent.target).closest('li');
-                me.closeChildren(li);
-                proto._needCloseAll = false;
-                me.trigger('click', [li.index(), li.children().attr('value'), li]);
+                var li = $(e.originalEvent.target).closest('li');
+                me.trigger('select', [li.index(), li.children().attr('value'), li]);
             });
-            if(!proto._addEventInited) {
-                $('body').hammer('tap', function () {
-                    proto._needCloseAll && me.closeAll();
-                    proto._needCloseAll = true;
-                });
-                proto._addEventInited = true;
-            }
+            //点击隐藏
+            $('body').click(function (e) {
+                var target = e.target;
+                if ($.contains(root[0], target) || me._options._btn === target || $.contains(me._options._btn, target)) return;
+                me.hide();
+            });
 
             //缓存查询
             var items = root.find('li'),
@@ -67,55 +60,6 @@
                 items:      items,
                 children:   children
             });
-        },
-
-        _fitSize: function (node) {
-            var me = this,
-                root = me.root(),
-                width = parseInt(root.css('width')) || root[0].getBoundingClientRect().width,
-                node = me._options._btn = node[0] || node,
-                rect = node.getBoundingClientRect(),
-                top = rect.height + 14,
-                popLeft = rect.left - (width - rect.width)/2 - 10,
-                arrLeft = width/2 - 10;
-            if(popLeft < 0) {
-                popLeft = 0;
-                arrLeft = rect.left + rect.width/2 - 20;
-            } else if (popLeft + width > window.innerWidth) {
-                popLeft -= popLeft + width - window.innerWidth + 18;
-                arrLeft = rect.left - popLeft + rect.width/2 - 20;
-            }
-            root.css({
-                top:        top,
-                left:       popLeft
-            }).children().last().css({
-                left:       arrLeft
-            });
-            return me;
-        },
-
-        closeChildren: function (li) {
-            var me = this,
-                allCombox = me._allShowedCombox,
-                item;
-            while(item = allCombox[allCombox.length - 1]){
-                 if(item._options.stamp > me._options.stamp) {
-                     if(li && item._options._lastClicked === li[0]) break;
-                     item.hide();
-                 } else break;
-            }
-            return me;
-        },
-
-        closeAll: function() {
-            var me = this,
-                proto = me.__proto__,
-                allCombox = proto._allShowedCombox;
-            allCombox.forEach(function(item) {
-                item.hide();
-            });
-            proto._allShowedCombox = [];
-            return me;
         },
 
         select: function (index, _remove) {
@@ -143,7 +87,7 @@
             var me = this,
                 opt = me._options;
             for(var i = 0, l = opt.items.length; i < l; i++) {
-                me.unSelect(i);
+                me.select(i, true);
             }
             me.select(index);
         },
@@ -161,48 +105,9 @@
         zIndex: function (index) {
             var _index = this.root().css('z-index', index);
             return index === undefined ? _index : this;
-        },
-
-        show: function (node) {
-            var me = this,
-                opt = me._options;
-            me.closeAll();
-            me.root().show();
-            me._fitSize(node);
-            opt._isShow = true;
-            if(opt.needIscroll && !opt._iscrollInited) {
-                me.root().find('.mui-combox-content').iscroll();
-                opt._iscrollInited  = true;
-            }
-            //公共索引
-            me.option('stamp', Date.now());
-            me._allShowedCombox.push(me);
-            me.trigger('show');
-            return me;
-        },
-
-        hide: function () {
-            var me = this,
-                opt = me._options,
-                allCombox = me.__proto__._allShowedCombox;
-            me.closeChildren();
-            me.root().hide();
-            if(me === allCombox[allCombox.length - 1]) {
-                allCombox.pop();
-            }
-            opt._isShow = false;
-            me.trigger('hide');
-            return me;
-        },
-
-        toggle: function (node) {
-            var me = this,
-                proto = me.__proto__;
-            me._options._isShow ? me.hide() : me.show(node);
-            proto._needCloseAll = false;
-            return me;
         }
-    });
+
+    }, 'popup');
 
 })(Zepto);
 
