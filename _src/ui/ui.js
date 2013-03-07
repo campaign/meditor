@@ -34,7 +34,7 @@
                 return $.isFunction(fn) ? fn.apply(this, $.slice(arguments, 1)) : fn;
             }
         });
-
+        obj._options = $.extend({}, obj._options);
         $.isObject(data) && $.extend(true, obj, data);
         return Class;
     }
