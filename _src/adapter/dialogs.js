@@ -57,7 +57,7 @@
                         }
 
                     })
-                    imguploader.open();
+                    imguploader.clear().open();
                 }
             });
 

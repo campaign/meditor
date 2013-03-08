@@ -14,6 +14,6 @@ if ($fn) {
         'uploads/' . $fn,
         file_get_contents('php://input')
     );
-    echo "./uploads/$fn";
+    echo "./imguploader/uploads/$fn";
     exit();
 }
