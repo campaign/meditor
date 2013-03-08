@@ -46,6 +46,7 @@
                     imguploader = imguploader || ui.imguploader({
                         url: './imguploader/data.php',
                         confirm: function () {
+                            console.log(this.value());
                             var urls = this.value(), html;
 
                             $.each(urls, function () {

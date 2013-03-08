@@ -14,6 +14,6 @@ if ($fn) {
         'uploads/' . $fn,
         file_get_contents('php://input')
     );
-    echo "http://localhost/meditor/_examples/imguploader/uploads/$fn";
+    echo "./uploads/$fn";
     exit();
 }

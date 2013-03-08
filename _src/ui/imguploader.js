@@ -134,24 +134,24 @@
             }
         },
 
-        _uploadFiles: function (files) {
+        _uploadFiles:function (files) {
             var me = this,
                 $uploadBtn = me._$uploadBtn,
                 len = files.length, i, file, progressEvent, sucessEvent, failureEvent;
 
-            for (i = 0; file = files[i]; i++)
-                (function(file, i) {
+            for (i = 0; file = files[i]; i++) {
+                (function (file, i) {
                     var xhr = new XMLHttpRequest(),
                         $prg = $('<div class="mui-imguploader-prg"></div>');
                     if (xhr.upload) {
-                        xhr.upload.onprogress = function(e) {
+                        xhr.upload.onprogress = function (e) {
                             progressEvent = $.Event('progress');
                             me.trigger(progressEvent, [file, e]);
                             if (progressEvent.preventDefault()) return me;
                             $('#image' + file.id).parent('.mui-imguploader-file').append($prg.html((e.loaded / e.total * 100).toFixed(2) + '%'));
                         };
 
-                        xhr.onreadystatechange = function(e) {
+                        xhr.onreadystatechange = function (e) {
                             if (xhr.readyState == 4) {
                                 if (xhr.status == 200) {
                                     sucessEvent = $.Event('success');
@@ -161,13 +161,13 @@
                                         $uploadBtn.prop('disabled', true).addClass('mui-state-disable');
                                         me._files = [];
                                     }
-                                    $('#image' + file.id).attr('data-url', xhr.responseText);
+                                    $('#image' + file.id).data('url', xhr.responseText);
 
                                 } else {
                                     failureEvent = $.Event('failure');
                                     me.trigger(failureEvent, [file, e]);
                                     if (failureEvent.preventDefault()) return me;
-                                    $('#image' + file.id).attr('failed', 'failed');
+                                    $('#image' + file.id).data('failed', 'failed');
                                 }
                             }
                         };
@@ -177,6 +177,11 @@
                     }
                 })(file, i);
             }
-
-    }, 'dialog');
+        },
+        value: function () {
+            return $.map(this._tabs._getPanel().find('.mui-imguploader-file img'), function (img, k) {
+                return $(img).data('url');
+            }) || [];
+        }
+    }, 'dialog')
 })(Zepto, ME.ui);

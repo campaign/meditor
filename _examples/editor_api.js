@@ -34,6 +34,7 @@
             'ui/dialog.js',
             'ui/emotion.js',
             'ui/colorpicker.js',
+            'ui/imguploader.js',
             'adapter/adapter.js',
             'adapter/buttons.js',
             'adapter/popups.js',
