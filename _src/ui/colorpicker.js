@@ -1,6 +1,5 @@
 (function ($, ui) {
-    var splice = Array.prototype.splice,
-        COLORS = (
+    var COLORS = (
             'ffffff,000000,eeece1,1f497d,4f81bd,c0504d,9bbb59,8064a2,4bacc6,f79646,' +
             'f2f2f2,7f7f7f,ddd9c3,c6d9f0,dbe5f1,f2dcdb,ebf1dd,e5e0ec,dbeef3,fdeada,' +
             'd8d8d8,595959,c4bd97,8db3e2,b8cce4,e5b9b7,d7e3bc,ccc1d9,b7dde8,fbd5b5,' +
@@ -16,6 +15,7 @@
             $(document).one('touchend' + eventNS,function () {
                 $(document).off('touchmove' + eventNS);
             }).on('touchmove' + eventNS, function (e) {
+                    e.preventDefault();
                     e = e.touches ? e.touches[0] : e;
                     fn.call(null, e, offset);
                 });
@@ -58,8 +58,9 @@
                 me.hsl(hsl);
             }, eventNS);
 
-            me.commonDiv.on('click', 'td a', function(){
-                me.hex($(this).attr('title'));
+            me.commonDiv.on('click', 'td', function(){
+                var a = $('a', this);
+                a.length && me.hex(a.attr('title'));
             });
 
             me.preview.on('click', '.clearBtn', function(){
@@ -337,6 +338,7 @@
     }
 
     function rgb2hex(r, g, b) {
+        var ret;
         if (typeof r == 'object') {
             g = r.g;
             b = r.b;
@@ -344,7 +346,11 @@
         }
         if (r > 255 || g > 255 || b > 255 || r < 0 || g < 0 || b < 0)
             throw "Invalid color object";
-        return '#' + splice.call("000000" + ((r << 16) | (g << 8) | b).toString(16).toUpperCase(), -6).join("");
+        ret = ((r << 16) | (g << 8) | b).toString(16).toUpperCase();
+        while(ret.length<6){
+            ret = '0'+ret;
+        }
+        return '#' + ret;
     }
 
     function hex2rgb(hex) {
