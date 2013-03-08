@@ -1,15 +1,7 @@
 .mui-dialog{
-    min-height: 250px;
     min-width:415px;
 }
-.mui-tabs .mui-tabs-content{
-    min-height: 200px;
 
-}
-.mui-imguploader-tabs{
-
-
-}
 .mui-imguploader-tabs .mui-imguploader-waiting{
     position: absolute;
     top: 40%;
@@ -33,6 +25,7 @@
     border-radius: 5px;
     width: 100px;
     -webkit-box-shadow: inset 0 0 1px #000000;
+    cursor: pointer;
 }
 
 .mui-imguploader-tabs .mui-imguploader-ipt{
@@ -98,6 +91,7 @@
     line-height: 2em;
     border: none;
     margin-top: 10px;
+    cursor: pointer;
 }
 .mui-imguploader-tabs .mui-imguploader-uploadBtn.mui-state-disable{
     opacity: 0.5;
