@@ -9,6 +9,7 @@
         _options: {
             watchRender: true,
             active: 0,
+            swipe: true,
             items:null//[{key: content}]
         },
 
@@ -42,7 +43,8 @@
                 eventHandler = $.proxy(me._eventHandler, me),
                 opt = me._options;
             me._nav.on('click', eventHandler);
-            me._el.hammer('swipe', function(e){
+            me._el.on('widgetrender', eventHandler);
+            opt.swipe && me._el.hammer('swipe', function(e){
                 var index;
                 switch(e.direction){
                     case 'left':
@@ -53,7 +55,7 @@
                         break;
                 }
                 index !== undefined && me.switchTo(index);
-            }).on('widgetrender', eventHandler);
+            });
             me._titles.highlight('mui-state-hover');
             $(window).on('ortchange', eventHandler);
         },
@@ -110,8 +112,8 @@
                     from.div.removeClass('out reverse');
                     to.div.removeClass('in reverse');
                     me._content.removeClass('mui-viewport-transitioning');
-                    me.trigger('animateComplete', [to, from]);
                     me._fitToContent(to.div);
+                    me.trigger('animateComplete', [to, from]);
                 });
                 opt.active = index;
                 me.trigger('activate', [to, from]);
