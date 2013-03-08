@@ -4,7 +4,8 @@
     function _t(key){
         return {
             fontcolor: 'forecolor',
-            bgcolor: 'backcolor'
+            bgcolor: 'backcolor',
+            image: 'insertimage'
         }[key] || key;
     }
 
@@ -36,4 +37,34 @@
             return btn;
         }
     );
+
+    ns.registerUI('image', function (editor, cmdName) {
+        var cmd = _t(cmdName), imguploader,
+            btn = ui.button({
+                name: cmdName,
+                click: function () {
+                    imguploader = imguploader || ui.imguploader({
+                        url: './imguploader/data.php',
+                        confirm: function () {
+                            var urls = this.value(), html;
+
+                            $.each(urls, function () {
+                                html += '<img src="' + this + '" />';
+                            });
+                            editor.execCommand('insertHtml', html);
+                            this.hide();
+                        }
+
+                    })
+                    imguploader.open();
+                }
+            });
+
+        editor.on('selectionchange',function(){
+            var state = editor.queryCommandState(cmd);
+            btn.highlight(state == 1).enable(state != -1);
+        });
+
+        return btn;
+    })
 })(Zepto,ME);
