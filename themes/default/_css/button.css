@@ -30,8 +30,8 @@
 .mui-button-lcursorbackward span.icon:before{ content : '\25c2'}
 .mui-button-lcursorforward span.icon:before{ content : '\25b8'}
 .mui-button-mcursor span.icon:before{ content : '\261d'}
-.mui-button-rcursorbackward span.icon:before{ content : '\25b8'}
-.mui-button-rcursorforward span.icon:before{ content : '\25c2'}
+.mui-button-rcursorbackward span.icon:before{ content : '\25c2'}
+.mui-button-rcursorforward span.icon:before{ content : '\25b8'}
 
 .mui-button-bold span.icon:before { content: '\e77a'} /*粗体*/
 .mui-button-italic span.icon:before { content: '\e77b'}/*斜体*/

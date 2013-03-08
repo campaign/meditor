@@ -12,6 +12,7 @@
 
     ns.registerUI(
         'undo redo bold italic underline strikethrough ' +
+        'lcursorbackward lcursorforward mcursor rcursorbackward rcursorforward ' +
         'alignleft aligncenter alignright alignjustify ' +
         'orderedlist unorderedlist indent ' +
         'removeformat',
