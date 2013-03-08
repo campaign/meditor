@@ -1,0 +1,104 @@
+.mui-dialog{
+    min-height: 250px;
+    min-width:415px;
+}
+.mui-tabs .mui-tabs-content{
+    min-height: 200px;
+
+}
+.mui-imguploader-tabs{
+
+
+}
+.mui-imguploader-tabs .mui-imguploader-waiting{
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    background: rgba(48,48,48,0.8);
+    width: 100px;
+    height: 2em;
+    border-radius: 5px;
+    color: #ffffff;
+    line-height: 2em;
+    text-align: center;
+    font-size: 12px;
+    opacity: 1;
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: 350ms;
+    -webkit-transition-timing-function:linear;
+}
+.mui-imguploader-tabs .mui-imguploader-iptWrap{
+    position: relative;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#749cf2), color-stop(50%,#376fe0), color-stop(51%,#2260dd), color-stop(100%,#2059c7));
+    border-radius: 5px;
+    width: 100px;
+    -webkit-box-shadow: inset 0 0 1px #000000;
+}
+
+.mui-imguploader-tabs .mui-imguploader-ipt{
+    opacity: 0;
+    width: 100%;
+}
+.mui-imguploader-tabs .mui-imguploader-add{
+    position: absolute;
+    color: #ffffff;
+    font-size: 12px;
+    text-align: center;
+    line-height: 2em;
+    height: 2em;
+    width: 100px;
+    top: 0;
+    left: 0;
+}
+.mui-imguploader-tabs .mui-imguploader-thumbnails{
+    margin-top: 10px;
+    border: 1px solid #b7b9bd;
+    -webkit-box-shadow: 1px 1px 1px #ffffff;
+    padding: 5px;
+    -webkit-box-lines: multiple;
+
+}
+.mui-imguploader-tabs .mui-imguploader-file{
+    background: #ffffff;
+    border: 1px solid #b7b9bd;
+    padding: 2px;
+    margin: 0.1em;
+    position: relative;
+    display: inline-block;
+
+}
+.mui-imguploader-tabs .mui-imguploader-prg{
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background: rgba(48,48,48,0.8);
+    width: 100%;
+    height: 2em;
+    line-height: 2em;
+    font-size: 8px;
+    color: #ffffff;
+    text-align: center;
+    -webkit-text-size-adjust:none;
+}
+.mui-imguploader-tabs .mui-imguploader-file img{
+    width: 58px;
+    height: 58px;
+}
+
+.mui-imguploader-tabs .mui-imguploader-uploadBtn{
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8b8b8b), color-stop(50%,#484747), color-stop(51%,#3a3a3a), color-stop(100%,#303030));
+    border-radius: 3px;
+    width: 50px;
+    -webkit-box-shadow: inset 0 0 1px #000000, 2px 2px 2px #999999;
+    color: #ffffff;
+    text-align: center;
+    height: 2em;
+    font-size: 12px;
+    float: right;
+    line-height: 2em;
+    border: none;
+    margin-top: 10px;
+}
+.mui-imguploader-tabs .mui-imguploader-uploadBtn.mui-state-disable{
+    opacity: 0.5;
+}
