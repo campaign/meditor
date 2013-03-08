@@ -11,7 +11,7 @@
     }
 
     ns.registerUI(
-        'undo redo lcursorbackward lcursorforward mcursor rcursorforward rcursorbackward bold italic underline strikethrough ' +
+        'undo redo bold italic underline strikethrough ' +
         'alignleft aligncenter alignright alignjustify ' +
         'orderedlist unorderedlist indent ' +
         'removeformat',
@@ -73,8 +73,7 @@
                 !combox && (combox = ui.combox({
                     container: $('.mui-toolbar'),
                     renderFn: fn,
-                    select: function (e, index, value, node) {
-                        console.log(e);
+                    click: function (e, index, value, node) {
                         editor.execCommand(cmd, value);
                         this.singleSelect(index);
                     }

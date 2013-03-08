@@ -95,7 +95,7 @@
             if(this._opened){
                 body = document.body;
                 this._mask && this._mask.css({
-                    width:  body.clientWidth,
+                    width:  Math.max(body.scrollWidth, body.clientWidth),
                     height: Math.max(body.scrollHeight, body.clientHeight)-1
                 });
 

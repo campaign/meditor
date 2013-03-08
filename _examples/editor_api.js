@@ -33,9 +33,11 @@
             'ui/combox.js',
             'ui/dialog.js',
             'ui/emotion.js',
+            'ui/colorpicker.js',
             'adapter/adapter.js',
             'adapter/buttons.js',
-            'adapter/emotion.js'
+            'adapter/popups.js',
+            'adapter/dialogs.js'
 
         ],
         baseURL = '../_src/';
