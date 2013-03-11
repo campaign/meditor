@@ -19,6 +19,7 @@
     <link href="../themes/default/_css/dialog.css" rel="stylesheet"/>
     <link href="../themes/default/_css/tabs.css" rel="stylesheet"/>
     <link href="../themes/default/_css/colorpicker.css" rel="stylesheet"/>
+    <link href="../themes/default/_css/imguploader.css" rel="stylesheet"/>
     <link href="../themes/default/_css/emotion.css" rel="stylesheet"/>
     <link href="../themes/default/_css/toolbar.horizontal.css" rel="stylesheet"/>
     <link href="../themes/default/_css/ui.css" rel="stylesheet"/>
@@ -42,17 +43,22 @@
             'redo',
             {
                 type:'group',
-                name:'basic',
+                name:'cursor',
                 items:[
-                    'bold',
-                    'italic',
-                    'underline',
-                    'removeformat'
+                    'lcursorbackward',
+                    'lcursorforward',
+                    'mcursor',
+                    'rcursorbackward',
+                    'rcursorforward'
                 ]
             },
             {
                 type:'scrollbox',
                 items:[
+                    'bold',
+                    'italic',
+                    'underline',
+                    'removeformat',
                     'orderedlist',
                     'unorderedlist',
                     'indent',
@@ -73,8 +79,7 @@
                 ]
             },
             'emotion',
-            'image',
-            'attach'
+            'image'
         ]
     });
 </script>

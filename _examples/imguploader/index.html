@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>imguploader</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <script type="text/javascript" charset="utf-8" src="../../editor_config.js"></script>
+
+    <!--开发版-->
+    <!--<script type="text/javascript" charset="utf-8" src="editor_api.js"></script>-->
+    <script type="text/javascript" src="../../_src/meditor.js"></script>
+    <script type="text/javascript" src="../../_src/zepto.js"></script>
+    <script type="text/javascript" src="../../_src/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../_src/hammer.js"></script>
+    <script type="text/javascript" src="../../_src/zepto.hammer.js"></script>
+    <script type="text/javascript" src="../../_src/ui/ui.js"></script>
+    <script type="text/javascript" src="../../_src/ui/button.js"></script>
+    <script type="text/javascript" src="../../_src/ui/dialog.js"></script>
+    <script type="text/javascript" src="../../_src/ui/tabs.js"></script>
+    <script type="text/javascript" src="../../_src/ui/imguploader.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/core.css" />
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/button.css" />
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/dialog.css" />
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/imguploader.css" />
+    <link rel="stylesheet" type="text/css" href="../../themes/default/_css/ui.css" />
+
+</head>
+<body>
+<div class="test"></div>
+
+
+</body>
+<script type="text/javascript">
+
+    (function ($, ui) {
+        ui.imguploader({
+            url: 'data.php'
+        }).open();
+
+    })(Zepto, ME.ui);
+</script>
+</html>

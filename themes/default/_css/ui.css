@@ -13,3 +13,34 @@
     text-indent: 0;
     padding-left:15px;
 }
+.mui-group-cursor{
+    border-radius: 5px;
+    border:1px solid #808083;
+    -webkit-box-shadow: inset 2px 0px 3px #9e9ea1, inset -2px 0px 3px #9e9ea1;
+    background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#d1d1d1));
+}
+
+.mui-group-cursor .mui-button{
+    border:none;
+    padding: 3px 0;
+    background: none;
+}
+.mui-group-cursor .mui-button:first-child{
+    border-radius: 5px 0 0 5px;
+}
+.mui-group-cursor .mui-button:last-child{
+    border-radius: 0 5px 5px 0;
+}
+.mui-group-cursor .mui-button-mcursor{
+    color: #626262;
+}
+.mui-group-cursor .mui-button-mcursor span{
+    font-size: 18px;
+}
+.mui-group-cursor.mui-state-highlight .mui-button{
+    color: #3e8bda;
+}
+/*.mui-group-cursor .mui-button-lcursorforward{
+    -webkit-box-shadow: inset -2px 0px 3px #9e9ea1;
+
+}*/

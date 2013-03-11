@@ -12,6 +12,7 @@
 
     ns.registerUI(
         'undo redo bold italic underline strikethrough ' +
+        'lcursorbackward lcursorforward mcursor rcursorbackward rcursorforward ' +
         'alignleft aligncenter alignright alignjustify ' +
         'orderedlist unorderedlist indent ' +
         'removeformat',
@@ -48,7 +49,6 @@
             return btn;
         }
     );
-
 
     //临时, 为了让按钮能正常显示.
     ns.registerUI(
