@@ -18,17 +18,20 @@
 
 .mui-group-cursor .mui-button{
     border:none;
-    padding: 3px 0;
+    padding: 3px 0px;
     background: none;
 }
 .mui-group-cursor .mui-button:first-child{
     border-radius: 5px 0 0 5px;
+    padding-right: 5px;
 }
 .mui-group-cursor .mui-button:last-child{
     border-radius: 0 5px 5px 0;
+    padding-left: 5px;
 }
 .mui-group-cursor .mui-button-mcursor{
     color: #626262;
+    padding: 3px 0;
 }
 .mui-group-cursor .mui-button-mcursor span{
     font-size: 18px;
@@ -36,7 +39,3 @@
 .mui-group-cursor.mui-state-highlight .mui-button{
     color: #3e8bda;
 }
-/*.mui-group-cursor .mui-button-lcursorforward{
-    -webkit-box-shadow: inset -2px 0px 3px #9e9ea1;
-
-}*/
