@@ -35,6 +35,7 @@
                 { name:'timesNewRoman', val:'Times New Roman'},
                 { name:'rebuchetMS', val:'Trebuchet MS'},
                 { name:'verdana', val:'Verdana'},
+                { name:'ameiricanTypewriter', val:'Ameirican Typewriter'},
                 { name:'zapfino', val:'Zapfino'}
             ],
             'fontsize':[10, 11, 12, 14, 16, 18, 20, 24, 36]
