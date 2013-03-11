@@ -28,13 +28,11 @@
                 root = me.root();
             //点击隐藏
             $('body').click(function (e) {
-                var target = e.target,
-                    contain;
-                try{ //todo: popup未显示时，第一次点在body上会报错
-                    contain = $.contains(root[0], target) || me._options._btn === target || $.contains(me._options._btn, target)
-                }catch(e){}
-                if (contain) return;
-                me.hide();
+                if(me._options._isShow) {
+                    var target = e.target;
+                    if ($.contains(root[0], target) || me._options._btn === target || $.contains(me._options._btn, target)) return;
+                    me.hide();
+                }
             });
             $(window).on('ortchange', function() {
                 me._ortChange.call(me);
