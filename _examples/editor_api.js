@@ -25,6 +25,7 @@
             'plugins/justify.js',
             'plugins/list.js',
             'plugins/indent.js',
+            'plugins/autoheight.js',
             'ui/ui.js',
             'ui/button.js',
             'ui/toolbar.horizontal.js',
