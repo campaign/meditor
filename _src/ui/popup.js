@@ -36,6 +36,22 @@
                 if (contain) return;
                 me.hide();
             });
+            $(window).on('ortchange', function() {
+                me._ortChange.call(me);
+            });
+        },
+
+        _ortChange: function() {
+            var me = this,
+                root = me.root();
+            if(me._options._isShow) {
+                root.hide();
+                $.later(function () {
+                    root.show();
+                    me._fitSize.call(me, me._options._btn);
+                }, 20);
+            }
+            return me;
         },
 
         _fitSize: function (node) {
@@ -44,15 +60,15 @@
                 width = (parseInt(root.css('width')) || root[0].getBoundingClientRect().width) + 8,
                 node = me._options._btn = node[0] || node,
                 rect = node.getBoundingClientRect(),
-                top = rect.height + 10,
+                top = rect.height + 18,
                 popLeft = rect.left - (width - rect.width)/ 2,
-                arrLeft = width/2 - 10;
+                arrLeft = width/2 - 18;
             if(popLeft < 0) {
                 popLeft = 0;
-                arrLeft = rect.left + rect.width/2 - 12;
+                arrLeft = rect.left + rect.width/2 - 18;
             } else if (popLeft + width > window.innerWidth) {
                 popLeft -= popLeft + width - window.innerWidth + 8;
-                arrLeft = rect.left - popLeft + rect.width/2 - 12;
+                arrLeft = rect.left - popLeft + rect.width/2 - 18;
             }
             root.css({
                 top:        top,

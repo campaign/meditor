@@ -53,6 +53,10 @@
                 me.hide();
             });
 
+            $(window).on('ortchange', function() {
+                me._ortChange.call(me);
+            });
+
             //缓存查询
             var items = root.find('li'),
                 children = items.children();
