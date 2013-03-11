@@ -56,6 +56,7 @@
                                 html += '<img src="' + this + '" />';
                             });
                             editor.execCommand('insertHtml', html);
+                            editor.trigger('adjustimage');
                             this.hide();
                         }
 
