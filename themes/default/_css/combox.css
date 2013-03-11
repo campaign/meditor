@@ -1,7 +1,7 @@
 .mui-combox {
     display: none;
     position: absolute;
-    width:150px;
+    min-width:150px;
     z-index: 9990;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#525b6f), color-stop(8%,#1f293b), color-stop(9%,#0e1a2c), color-stop(100%,#081429));
     padding: 5px;
@@ -34,10 +34,10 @@
     height: 2em;
     line-height: 2em;
     border-bottom: 1px solid #ddd;
-    padding-left: 0.8em;
+    padding: 0 0.8em;
 }
 .mui-combox-selected {
-    background: url(../images/checked.png) no-repeat 95% center;
+    background: url(../images/checked.png) no-repeat 99% center;
     -webkit-background-size: 15px 15px;
 }
 
@@ -51,6 +51,7 @@
     width: 50px;
     height: 19px;
     top: -19px;
+    margin-left: -3px;
 }
 .mui-combox-arrow:after {
     position: absolute;
