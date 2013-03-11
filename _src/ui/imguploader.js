@@ -118,6 +118,7 @@
                 me._$waiting.css('opacity', 0);
                 tabs._getPanel().append($thumbnails).append(me._$uploadBtn.show().prop('disabled', false).removeClass('mui-state-disable'));
                 tabs.refresh();
+                me.refresh();
             }
         },
 

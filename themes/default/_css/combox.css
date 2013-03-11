@@ -3,22 +3,26 @@
     position: absolute;
     width:150px;
     z-index: 9990;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#676f81), color-stop(18%,#1f293c), color-stop(19%,#0b162a), color-stop(100%,#0a162e), color-stop(100%,#0a162e), color-stop(100%,#0a162e));
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#525b6f), color-stop(8%,#1f293b), color-stop(9%,#0e1a2c), color-stop(100%,#081429));
     padding: 5px;
     border-radius: 5px;
-    border:1px solid #424242;
-    -webkit-box-shadow: 2px 2px 5px #171717, inset 0 2px 5px #636b7e;
+    border:1px solid #0a0a0a;
+    -webkit-box-shadow: inset 0px 0px 1px #969ba6, 2px 2px 10px #151515;
 }
 .mui-combox-title {
-    height: 30px;
-    background: #ccc;
+    height: 1.5em;
+    line-height: 1.5em;
+    text-align: center;
+    background: transparent;
+    color: #ffffff;
 }
 .mui-combox-content {
     height: 170px;
-    width: 100%;
     border-radius: 3px;
     background: #fff;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5) inset;
+    margin-top: 5px;
+    padding: 0 2px;
 }
 
 .mui-combox ul {
@@ -27,15 +31,14 @@
 }
 .mui-combox ul li {
     list-style:none;
-    height: 30px;
-    line-height: 30px;
+    height: 2em;
+    line-height: 2em;
     border-bottom: 1px solid #ddd;
-    text-indent: 2em;
+    padding-left: 0.8em;
 }
 .mui-combox-selected {
-    background-image: url(../images/scale.png);
-    background-position: left center;
-    background-repeat: no-repeat;
+    background: url(../images/checked.png) no-repeat 95% center;
+    -webkit-background-size: 15px 15px;
 }
 
 .mui-combox-highlight {
@@ -45,9 +48,20 @@
 .mui-combox-arrow {
     position: absolute;
     overflow: hidden;
-    width: 23px;
-    height: 12px;
-    top: -12px;
-    background: url(../images/popup_arrow.png) no-repeat center center;
-    background-size: 23px 12px;
+    width: 50px;
+    height: 19px;
+    top: -19px;
+}
+.mui-combox-arrow:after {
+    position: absolute;
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #a7aab2), color-stop(40%,#545d70),color-stop(100%,#545d70));
+    border-left: 1px solid #0a0a0a;
+    border-top: 1px solid #0a0a0a;
+    -webkit-transform: rotate(45deg);
+    content: ' ';
+    display: block;
+    width: 25px;
+    height: 30px;
+    left: 2px;
+    top: 10px;
 }

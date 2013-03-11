@@ -8,11 +8,7 @@
 /*.mui-group-font{
     background: #e9e9e9;
 }*/
-.mui-combox .mui-combox-fontfamily, .mui-combox .mui-combox-fontsize{
-    text-align: left;
-    text-indent: 0;
-    padding-left:15px;
-}
+
 .mui-group-cursor{
     border-radius: 5px;
     border:1px solid #808083;
