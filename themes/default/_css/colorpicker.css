@@ -136,3 +136,9 @@
 .mui-cp-common table .the5throw td a {
     border-width: 0 1px 1px 1px;
 }
+
+.mui-colorpicker .mui-tabs-panel {
+    height: 285px;
+    padding: 15px;
+    overflow: hidden;
+}

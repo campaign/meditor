@@ -11,14 +11,14 @@
     function _initEvents(elem, fn, eventNS) {
         eventNS = eventNS || '';
         elem.parent().on('touchstart' + eventNS, function () {
-            var offset = elem.offset();
+            var offset = elem.offset(), onMove = function(e){
+                e.preventDefault();
+                e = e.touches ? e.touches[0] : e;
+                fn.call(null, e, offset);
+            };
             $(document).one('touchend' + eventNS,function () {
-                $(document).off('touchmove' + eventNS);
-            }).on('touchmove' + eventNS, function (e) {
-                    e.preventDefault();
-                    e = e.touches ? e.touches[0] : e;
-                    fn.call(null, e, offset);
-                });
+                $(document).off('touchmove', onMove);
+            }).on('touchmove', onMove);
         });
         elem.on('click' + eventNS, function (e) {
             fn.call(null, e, elem.offset());
@@ -81,7 +81,7 @@
                 preview = me.preview = $('<div class="preview">' +
                     '<div class="color"><span class="new"></span><span class="old"></span></div>' +
                     '<div class="text">' +
-                    '<p>Hex: <span class="hex"></span></p>' +
+                    '<p>HEX: <span class="hex"></span></p>' +
                     '<p>RGB: <span class="rgb"></span></p>' +
                     '<p>HSL: <span class="hsl"></span></p>' +
                     '</div><div class="clearBtn">清除颜色</div>' +

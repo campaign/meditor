@@ -73,6 +73,7 @@
             this._rendered || this.render();
             this.root().show();
             this._mask && this._mask.show();
+            $(document).on('touchmove.'+this.id(), function(e){e.preventDefault()});
             return this.trigger('open');
         },
 
@@ -83,6 +84,7 @@
             this.root().hide();
             this._mask && this._mask.hide();
             this._opened = false;
+            $(document).off('touchmove.'+this.id());
             return this.trigger('close');
         },
 
@@ -123,6 +125,7 @@
             var eventHandler = this._eventHandler;
             this._mask.remove();
             $(window).off('ortchange', eventHandler);
+            $(document).off('touchmove.'+this.id());
             return this.$super('destroy');
         },
 

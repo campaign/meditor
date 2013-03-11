@@ -15,6 +15,7 @@
                 btn = ui.button({
                     name : cmdName,
                     click:function(){
+                        var color;
                         dialog = dialog || ui.colorpicker({
                             confirm: function(){
                                 editor.execCommand(cmd, this.hex() );
@@ -23,6 +24,8 @@
                                 editor.execCommand(cmd, 'default' );
                             }
                         });
+                        color = editor.queryCommandValue(cmd);
+                        color && dialog.hex(dialog.color = color);
                         dialog.open();
                     },
                     title:cmdName
