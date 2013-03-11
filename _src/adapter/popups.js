@@ -4,16 +4,18 @@
     ns.registerUI('fontfamily fontsize', function (editor,cmdName) {
         var cmd = cmdName.toLowerCase(),
             opts = editor.options[cmd],
-            fn = null, combox, btn;
+            fn = null, combox, btn, title;
 
         switch (cmd) {
             case 'fontfamily':
                 fn = function (i) {
                     return i < opts.length && '<div class="mui-combox-' + cmd + '" style="font-family:' + opts[i].val + '" value="' + opts[i].val + '" >' + opts[i].val.split(',')[0] + '</div>';};
+                title = '字体';
                 break;
             case 'fontsize':
                 fn = function (i) {
                     return i < opts.length && '<div class="mui-combox-' + cmd + '" style="font-size:' + opts[i] + 'px;" value="' + opts[i] + 'px" >' + opts[i]+ '</div>';};
+                title = '字体大小';
                 break;
             case 'default':
                 break;
@@ -22,14 +24,15 @@
         btn = ui.button({
             name: cmdName,
             click: function () {
-                !combox && (combox = ui.combox({
+                combox = combox || ui.combox({
                     container: $('.mui-toolbar'),
+                    title: title,
                     renderFn: fn,
-                    click: function (e, index, value, node) {
+                    select: function (e, index, value, node) {
                         editor.execCommand(cmd, value);
                         this.singleSelect(index);
                     }
-                }));
+                });
                 combox.toggle(this.root());
             }
         });

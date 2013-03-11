@@ -74,8 +74,10 @@
 }
 
 .mui-button.mui-state-disable {
-    color: grey;
-    background: rgba(238, 238, 238, 0.5) !important;
+    background: rgba(238, 238, 238, 0.6) !important;
+}
+.mui-button.mui-state-disable span.icon{
+    color: #1b1b1b;
 }
 
 .mui-button.mui-state-hover {
@@ -83,6 +85,6 @@
 }
 
 .mui-button.mui-state-highlight {
-    background: rgba(80, 132, 228, 1);
     color: white;
+    background: -webkit-gradient(linear, left top, left bottom, from(#96b7ed), to(#265dc8));
 }
