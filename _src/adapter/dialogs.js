@@ -16,6 +16,7 @@
                 btn = ui.button({
                     name : cmdName,
                     click:function(){
+                        return ;
                         var color;
                         dialog = dialog || ui.colorpicker({
                             confirm: function(){
@@ -35,6 +36,10 @@
             editor.on('selectionchange',function(){
                 var state = editor.queryCommandState(cmd);
                 btn.highlight(state == 1).enable(state != -1);
+            });
+
+            btn.root().on('touchstart', function(e){
+                //document.activeElement.blur();
             });
 
             return btn;

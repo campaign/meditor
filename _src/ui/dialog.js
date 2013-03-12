@@ -24,15 +24,15 @@
         },
 
         _init: function(){
-            var opt = this._options, eventHandler = $.proxy(this._eventHandler, this);
+            var opt = this._options, eH = $.proxy(this._eventHandler, this);
             this.title(opt.title)
                 .content(opt.content)
                 .root()
-                .on('click', eventHandler)
-                .on('widgetrender', eventHandler)
+                .on('click', eH)
+                .on('widgetrender', eH)
                 .find('.mui-dialog-btnOk, .mui-dialog-btnCancel')
                 .highlight('mui-state-hover');
-            $(window).on('ortchange', eventHandler);
+            $(window).on('ortchange', eH);
         },
 
         title: function(val){

@@ -81,9 +81,9 @@
                 preview = me.preview = $('<div class="preview">' +
                     '<div class="color"><span class="new"></span><span class="old"></span></div>' +
                     '<div class="text">' +
-                    '<p>HEX: <span class="hex"></span></p>' +
-                    '<p>RGB: <span class="rgb"></span></p>' +
-                    '<p>HSL: <span class="hsl"></span></p>' +
+                        '<p>HEX: <span class="hex"></span></p>' +
+                        '<p>RGB: <span class="rgb"></span></p>' +
+                        '<p>HSL: <span class="hsl"></span></p>' +
                     '</div><div class="clearBtn">清除颜色</div>' +
                     '</div> ');
 

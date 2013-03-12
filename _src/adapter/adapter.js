@@ -20,7 +20,7 @@
 
         getEditor:function (selector, options) {
             $(selector).each(function () {
-                var meditor = $(this).data('meditor');
+                var meditor = $(this).data('meditor'), _toolbar;
                 if (meditor) {
 
                 } else {
@@ -42,11 +42,30 @@
                         return toolbarItems
                     }
 
-                    ui.toolbar({items:traversal(meditor.options.toolbars)})
+                    _toolbar = ui.toolbar({items:traversal(meditor.options.toolbars)})
                         .render($(meditor.iframe.parentNode).css({
                         overflow:'visible'
                     }))
                         .zIndex(meditor.options.zIndex);
+
+                    $(meditor.window).on('focus', function(){
+                        var h = _toolbar.root().height();
+                        setTimeout(function(){
+                            var rng = meditor.selection.getRange().cloneRange(),
+                                span, offset;
+
+                            if(rng.collapsed){
+                                span = meditor.document.createElement('span');
+                                span.innerHTML = '&nbsp;';
+
+                                rng.insertNode(span);
+                                offset = span.getBoundingClientRect();
+                                span.parentNode.removeChild(span);
+
+                                window.scrollTo(0, Math.max(1, offset.top-h));
+                            }
+                        }, 0);
+                    });
                 }
             })
         }
