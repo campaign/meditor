@@ -7,7 +7,7 @@
  * 在UE中，Editor以及所有ui实例都继承了该类，故可以在对应的ui对象以及editor对象上使用上述方法。
  */
 var EventBase = ME.EventBase = function () {};
-
+debugger
 EventBase.prototype = {
     /**
      * 注册事件监听器
