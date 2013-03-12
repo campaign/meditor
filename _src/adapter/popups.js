@@ -104,6 +104,11 @@
                 title:cmdName
             });
 
+            btn.root().on('click', function(){
+                editor.focus();
+                document.activeElement.blur();
+            });
+
             return btn;
         }
     )
