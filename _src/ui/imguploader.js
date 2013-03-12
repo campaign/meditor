@@ -48,7 +48,7 @@
             me.$super('_init');
             (me._$fileInput = opts.content.find('.mui-imguploader-ipt')).length && me._$fileInput.on('change', $.proxy(me._imgEventHandler, me)).attr('multiple', 'multiple'),
             me._$thumbnails = $('<div class="mui-imguploader-thumbnails"></div>');
-            me._$uploadBtn = $('<button class="mui-imguploader-uploadBtn">上传</button>').on('click', $.proxy(me._imgEventHandler, me));
+            me._$uploadBtn = $('<button class="mui-imguploader-uploadBtn">上传</button>').hammer().on('tap', $.proxy(me._imgEventHandler, me));
             me._$waiting = $('<div class="mui-imguploader-waiting">读取中...</div>');
 
             return me;
@@ -76,14 +76,14 @@
             var me = this,
                 target = e.target, thisFiles;
 
-            switch (e.type) {
+            switch (e.type ) {
                 case 'change':
                     me._$waiting.show().css('opacity', '1').appendTo(me._tabs._getPanel());
                     thisFiles = me.option('filter').call(me, target.files);
                     me._files = me._files.concat(thisFiles);
                     me._createThumbnails(thisFiles).trigger('select', [thisFiles]);
                     break;
-                case 'click':
+                case 'tap':
                     me._uploadFiles(me._files);
                     break;
             }
@@ -160,7 +160,7 @@
                             }
                         };
                         xhr.open("POST", me.option('url'), true);
-                        xhr.setRequestHeader("X_FILENAME", file.name);
+                        xhr.setRequestHeader("X_FILENAME", file.name === 'image.jpg'? ('image' + Date.now() + '.jpg') : file.name);
                         xhr.send(file);
                     }
                 })(file, i);
