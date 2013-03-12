@@ -99,6 +99,7 @@
     position: static;
     border: 0 none;
     background: rgba(170, 170, 170, 1);
+    -webkit-box-shadow: none;
 }
 
 /*Transition*/

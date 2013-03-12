@@ -18,6 +18,7 @@
             var el = this.root(), opt = this._options, _eH = $.proxy(this._eventHandler, this);
             el.on('click', _eH);
             opt.click && this.on('click', opt.click);
+            delete opt.click;
             this.enable(!opt.disabled).highlight(opt.highlight);
         },
 

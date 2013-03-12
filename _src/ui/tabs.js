@@ -44,7 +44,7 @@
                 opt = me._options;
             me._nav.on('click', eventHandler);
             me._el.on('widgetrender', eventHandler);
-            opt.swipe && me._el.hammer('swipe', function(e){
+            opt.swipe && me._el.hammer().on('swipe', function(e){
                 var index;
                 switch(e.direction){
                     case 'left':
