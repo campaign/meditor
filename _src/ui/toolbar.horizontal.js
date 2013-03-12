@@ -140,7 +140,6 @@
                     !me._isShow && me._$toolBox.hide();
                     break;
                 case 'tap':
-                    console.log('tap');
                     me.toggle();
                     break;
                 case 'drag':
