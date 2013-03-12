@@ -54,16 +54,14 @@
                             var rng = meditor.selection.getRange().cloneRange(),
                                 span, offset;
 
-                            if(rng.collapsed){
-                                span = meditor.document.createElement('span');
-                                span.innerHTML = '&nbsp;';
+                            span = meditor.document.createElement('span');
+                            span.innerHTML = '&nbsp;';
 
-                                rng.insertNode(span);
-                                offset = span.getBoundingClientRect();
-                                span.parentNode.removeChild(span);
+                            rng.insertNode(span);
+                            offset = span.getBoundingClientRect();
+                            span.parentNode.removeChild(span);
 
-                                window.scrollTo(0, Math.max(1, offset.top-h));
-                            }
+                            window.scrollTo(0, Math.max(1, offset.top-h));
                         }, 0);
                     });
                 }

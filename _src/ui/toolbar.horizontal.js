@@ -39,15 +39,6 @@
             me._$scroller = $scroller;
             return me;
         },
-        _init: function () {
-            $(window).on('ortchange', $.proxy(this._eventHandler, this));
-        },
-        _eventHandler: function () {
-            var me = this;
-            $.later(function () {
-                me.root().get(0).refresh();
-            }, 100);
-        },
         _getWidth: function () {
             var me = this,
                 opts = me._options,
@@ -88,25 +79,24 @@
 
     ui.define('toolbar', {
         _options: {
-            closeBtn: true,    //'swipe' || 'static',
-            items: []
+            toggleBtn: true,    //'swipe' || 'static',
+            items: [],      //toolbar各项item内容
+            offset: {      //toolbar位置偏移
+                x: 0,
+                y: 0
+            }
         },
         _isShow: true,
         _initDone: false,
         _isAnim: false,
         _win: window,
-
+        _momentumDis: 150,
         _create: function () {
             var me = this,
                 opts = me._options;
 
             me.root($('<div class="mui-toolbar"></div>').append(me._$boxWrap = $('<div class="mui-toolbar-boxwrap"></div>').append(me._$toolBox = $('<div class="mui-toolbar-toolBox"></div>'))));
-            opts.closeBtn && (me._$closeBtn = ui.button({
-                name: 'collapse',
-                click: function () {
-                    me.toggle();
-                }
-            }));
+            opts.toggleBtn && (me._$toggleBtn = $('<div class="mui-button mui-button-collapse"><span class="icon"></span></div>').appendTo(me._$boxWrap));
             return this;
         },
         _init: function () {
@@ -115,6 +105,7 @@
 
             $(document).on('scrollStop', $.proxy(me._eventHandler, me));
             $(me._win).on('ortchange', $.proxy(me._eventHandler, me));
+            me._$toggleBtn && me._$toggleBtn.hammer().on('tap drag dragend', $.proxy(me._eventHandler, me));
             return this;
         },
         _initRender: function () {
@@ -124,8 +115,7 @@
             $.each(items, function (i,item) {
                 me.addItem(item);
             });
-            me._$closeBtn.render(me._$boxWrap);
-            return me.setFix();
+            return me;
         },
         _eventHandler: function (e) {
             var me = this,
@@ -149,6 +139,18 @@
                 case 'webkitTransitionEnd':
                     !me._isShow && me._$toolBox.hide();
                     break;
+                case 'tap':
+                    me.toggle();
+                    break;
+                case 'drag':
+                    e.gesture.preventDefault();    //阻止页面原生滚动
+                    $el.css('top', e.gesture.touches[0].pageY);
+                    break;
+                case 'dragend':
+                    var top = $(me._win).scrollTop() + me.option('offset').y,
+                        dis = me._momentumDis;
+                    $el.css('top', e.gesture.touches[0].pageY < (top + dis) ? top : (top + 2 * dis));
+                    break;
                 case 'default':
                     break;
             }
@@ -169,14 +171,14 @@
         },
         toggle: function () {
             var me = this,
-                $el = me.root(), $closeBtn = me._$closeBtn.root();
+                $el = me.root(), $toggleBtn = me._$toggleBtn;
             me._isShow ? me.hide(function () {
                 me._toolbarW = $el.width();
                 me._$toolBox.hide();
-                $closeBtn.addClass('mui-button-expand');
-                $el.width($closeBtn.width() + parseInt($closeBtn.css('margin-left')) + parseInt($closeBtn.css('margin-right')) + 10);
+                $toggleBtn.addClass('mui-button-expand');
+                $el.width($toggleBtn.width() + parseInt($toggleBtn.css('margin-left')) + parseInt($toggleBtn.css('margin-right')) + 10);
             }) : me.show(function () {
-                    $closeBtn.removeClass('mui-button-expand');
+                    $toggleBtn.removeClass('mui-button-expand');
                     $el.width(me._toolbarW);
                     me._$toolBox.show();
                 }
@@ -194,17 +196,9 @@
         zIndex: function (zindex) {
             return $.isUndefined(zindex) ? this.root().css('z-index') : (this.root().css('z-index', zindex), this);
         },
-        setFix: function (pos, offset) {
-            var me = this,
-                $el = me.root();
-
-            if (pos) {
-                $el.css('top', pos.y );
-            } else {
-                pos = offset || {x:0,y:0};
-                $el.css('top', $(me._win).scrollTop() + pos.y);
-            }
-            return me;
+        setFix: function (pos) {
+            this.root().css('top', pos ? pos.y : ($(this._win).scrollTop() + this.option('offset').y));
+            return this;
         }
     });
 })(Zepto, ME.ui);
