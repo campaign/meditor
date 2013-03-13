@@ -23,11 +23,11 @@
 }
 .mui-group-cursor .mui-button:first-child{
     border-radius: 5px 0 0 5px;
-    padding-right: 5px;
+    padding-right: 10px;
 }
 .mui-group-cursor .mui-button:last-child{
     border-radius: 0 5px 5px 0;
-    padding-left: 5px;
+    padding-left: 10px;
 }
 .mui-group-cursor .mui-button-mcursor{
     color: #626262;

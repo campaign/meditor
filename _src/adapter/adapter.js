@@ -48,21 +48,35 @@
                     }))
                         .zIndex(meditor.options.zIndex);
 
+                    //当iframe获得焦点时，如果把toolbar给盖住了，就向下移动合适的距离让toolbar不被光标盖住
                     $(meditor.window).on('focus', function(){
-                        var h = _toolbar.root().height();
+                        var h = _toolbar.root().height(), gap = 5;
                         setTimeout(function(){
-                            var rng = meditor.selection.getRange().cloneRange(),
-                                span, offset;
+                            var selection = meditor.selection.getNative(),
+                                rng, offset;
 
-                            span = meditor.document.createElement('span');
-                            span.innerHTML = '&nbsp;';
+                           if(selection.rangeCount){
+                               rng = selection.getRangeAt(0);
+                               offset = rng.getClientRects()[0];
+                               offset = offset.top - offset.height/2 - gap;
+                           }
 
-                            rng.insertNode(span);
-                            offset = span.getBoundingClientRect();
-                            span.parentNode.removeChild(span);
-
-                            window.scrollTo(0, Math.max(1, offset.top-h));
+                           if(offset< h) {
+                               window.scrollTo(0, Math.max(1, window.pageYOffset + offset - h));
+                           }
                         }, 0);
+                    });
+
+                    //禁用掉click，改成tap
+                    _toolbar.root().hammer({tap: true}).on('touchstart', function(e){
+                        e.preventDefault();
+                    }).on('h_tap', function(e){
+                            $(e.target).trigger('click');
+                        });
+
+                    //滚动后失焦点，scrollStop重新获得焦点
+                    $(document).on('scrollStop', function () {
+                        meditor.focus();
                     });
                 }
             })
