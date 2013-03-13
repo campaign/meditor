@@ -105,7 +105,7 @@
 
             $(document).on('scrollStop', $.proxy(me._eventHandler, me));
             $(me._win).on('ortchange', $.proxy(me._eventHandler, me));
-            me._$toggleBtn && me._$toggleBtn.hammer().on('tap drag dragend', $.proxy(me._eventHandler, me));
+            me._$toggleBtn && me._$toggleBtn.hammer('tap drag dragend', $.proxy(me._eventHandler, me));
             return this;
         },
         _initRender: function () {
