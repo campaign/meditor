@@ -6,6 +6,7 @@
  * Time: 上午11:11
  * To change this template use File | Settings | File Templates.
  */
+error_reporting(0);
 
 $headers = apache_request_headers();
 $fn = (isset($headers['X_FILENAME']) ? $headers['X_FILENAME'] : rand(0, 100000).'.png');

@@ -90,7 +90,7 @@
         _initDone: false,
         _isAnim: false,
         _win: window,
-        _momentumDis: 150,
+        _momentumDis: 90,
         _create: function () {
             var me = this,
                 opts = me._options;
@@ -105,7 +105,10 @@
 
             $(document).on('scrollStop', $.proxy(me._eventHandler, me));
             $(me._win).on('ortchange', $.proxy(me._eventHandler, me));
-            me._$toggleBtn && me._$toggleBtn.hammer().on('tap drag dragend', $.proxy(me._eventHandler, me));
+            me._$toggleBtn && me._$toggleBtn.hammer({
+                tap: true,
+                drag: true
+            }).on('h_tap h_drag h_dragend', $.proxy(me._eventHandler, me));
             return this;
         },
         _initRender: function () {
@@ -139,14 +142,14 @@
                 case 'webkitTransitionEnd':
                     !me._isShow && me._$toolBox.hide();
                     break;
-                case 'tap':
+                case 'h_tap':
                     me.toggle();
                     break;
-                case 'drag':
+                case 'h_drag':
                     e.gesture.preventDefault();    //阻止页面原生滚动
                     $el.css('top', e.gesture.touches[0].pageY);
                     break;
-                case 'dragend':
+                case 'h_dragend':
                     var top = $(me._win).scrollTop() + me.option('offset').y,
                         dis = me._momentumDis;
                     $el.css('top', e.gesture.touches[0].pageY < (top + dis) ? top : (top + 2 * dis));
