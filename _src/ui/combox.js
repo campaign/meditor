@@ -42,7 +42,9 @@
             });
 
             //autohide
-            content.hammer('tap', function (e) {
+            content.hammer({
+                tap: true
+            }).on('h_tap', function (e) {
                 var li = $(e.originalEvent.target).closest('li');
                 me.trigger('select', [li.index(), li.children().attr('value'), li]);
             });
