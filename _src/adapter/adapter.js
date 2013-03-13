@@ -74,6 +74,11 @@
                     }).on('h_tap', function(e){
                             $(e.target).trigger('click');
                         });
+
+                    //滚动后失焦点，scrollStop重新获得焦点
+                    $(document).on('scrollStop', function () {
+                        meditor.focus();
+                    });
                 }
             })
         }
