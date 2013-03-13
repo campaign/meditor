@@ -45,7 +45,7 @@
             content.hammer({
                 tap: true
             }).on('h_tap', function (e) {
-                var li = $(e.originalEvent.target).closest('li');
+                var li = $(e.target).closest('li');
                 me.trigger('select', [li.index(), li.children().attr('value'), li]);
             });
             //点击隐藏
