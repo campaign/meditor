@@ -24,15 +24,15 @@
         },
 
         _init: function(){
-            var opt = this._options, eventHandler = $.proxy(this._eventHandler, this);
+            var opt = this._options, eH = $.proxy(this._eventHandler, this);
             this.title(opt.title)
                 .content(opt.content)
                 .root()
-                .on('click', eventHandler)
-                .on('widgetrender', eventHandler)
+                .on('click', eH)
+                .on('widgetrender', eH)
                 .find('.mui-dialog-btnOk, .mui-dialog-btnCancel')
                 .highlight('mui-state-hover');
-            $(window).on('ortchange', eventHandler);
+            $(window).on('ortchange', eH);
         },
 
         title: function(val){
@@ -73,6 +73,7 @@
             this._rendered || this.render();
             this.root().show();
             this._mask && this._mask.show();
+            $(document).on('touchmove.'+this.id(), function(e){e.preventDefault()});
             return this.trigger('open');
         },
 
@@ -83,6 +84,7 @@
             this.root().hide();
             this._mask && this._mask.hide();
             this._opened = false;
+            $(document).off('touchmove.'+this.id());
             return this.trigger('close');
         },
 
@@ -91,11 +93,11 @@
         },
 
         refresh: function(){
-            var body, round, $win, size, el;
-            if(this._opened){
+            var body, round, $win, size, el, now = Date.now();
+            if(this._opened && now - (this._lastExecTime || 0)>100){
                 body = document.body;
                 this._mask && this._mask.css({
-                    width:  body.clientWidth,
+                    width:  '100%',
                     height: Math.max(body.scrollHeight, body.clientHeight)-1
                 });
 
@@ -108,6 +110,7 @@
                     top: round($win.height() / 2) + window.pageYOffset,
                     marginTop: -round(size.height/2) +'px'
                 });
+                this._lastExecTime = now;
             }
             return this;
         },
@@ -123,6 +126,7 @@
             var eventHandler = this._eventHandler;
             this._mask.remove();
             $(window).off('ortchange', eventHandler);
+            $(document).off('touchmove.'+this.id());
             return this.$super('destroy');
         },
 

@@ -34,7 +34,7 @@
                 return $.isFunction(fn) ? fn.apply(this, $.slice(arguments, 1)) : fn;
             }
         });
-
+        obj._options = $.extend({}, obj._options);
         $.isObject(data) && $.extend(true, obj, data);
         return Class;
     }
@@ -71,7 +71,7 @@
             opt = me._options = $.extend({
                 theme: 'default',
                 watchRender: false
-            }, me._options, opts);
+            }, me._options, opts || {});
             me._create();
             if(!(el = me.root())){
                 throw new Error('组件的_create方法里面必须创建并保存根元素');

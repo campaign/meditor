@@ -596,8 +596,11 @@ Zepto.fn.iscroll = function (opt) {
         bottom = M.min(0, containerH - scrollerH);
         top < bottom && roll(400, bottom);
         if (handler) {
-            $(window).on('ortchange', arguments.callee);
-            me[handler] = that[handler] = arguments.callee;
+            var fn = arguments.callee;
+            $(window).on('ortchange', function() {
+                setTimeout(fn, 50);
+            });
+            me[handler] = that[handler] = fn;
         }
     }('refresh'));
     return this;

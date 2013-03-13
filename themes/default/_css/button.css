@@ -27,6 +27,12 @@
 .mui-button-undo span.icon:before { content: '\27f2'}/*undo*/
 .mui-button-redo span.icon:before { content: '\27f3'}/*redo*/
 
+.mui-button-lcursorbackward span.icon:before{ content : '\25c2'}
+.mui-button-lcursorforward span.icon:before{ content : '\25b8'}
+.mui-button-mcursor span.icon:before{ content : '\261d'}
+.mui-button-rcursorbackward span.icon:before{ content : '\25c2'}
+.mui-button-rcursorforward span.icon:before{ content : '\25b8'}
+
 .mui-button-bold span.icon:before { content: '\e77a'} /*粗体*/
 .mui-button-italic span.icon:before { content: '\e77b'}/*斜体*/
 .mui-button-underline span.icon:before { content: '\f0cd'}/*下划线*/
@@ -52,6 +58,7 @@
 .mui-button-collapse span.icon:before { content: '\e746'}/*收起*/
 .mui-button-expand span.icon:before { content: '\e744'}/*展开*/
 
+
 .mui-button {
     display: inline-block;
     background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#d1d1d1));
@@ -67,8 +74,10 @@
 }
 
 .mui-button.mui-state-disable {
-    color: grey;
-    background: rgba(238, 238, 238, 0.5) !important;
+    background: rgba(238, 238, 238, 0.6) !important;
+}
+.mui-button.mui-state-disable span.icon{
+    color: #1b1b1b;
 }
 
 .mui-button.mui-state-hover {
@@ -76,6 +85,6 @@
 }
 
 .mui-button.mui-state-highlight {
-    background: rgba(80, 132, 228, 1);
     color: white;
+    background: -webkit-gradient(linear, left top, left bottom, from(#96b7ed), to(#265dc8));
 }

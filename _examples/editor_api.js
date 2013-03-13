@@ -25,6 +25,8 @@
             'plugins/justify.js',
             'plugins/list.js',
             'plugins/indent.js',
+            'plugins/autoheight.js',
+            'plugins/adjustimage.js',
             'ui/ui.js',
             'ui/button.js',
             'ui/toolbar.horizontal.js',
@@ -33,9 +35,12 @@
             'ui/combox.js',
             'ui/dialog.js',
             'ui/emotion.js',
+            'ui/colorpicker.js',
+            'ui/imguploader.js',
             'adapter/adapter.js',
             'adapter/buttons.js',
-            'adapter/emotion.js'
+            'adapter/popups.js',
+            'adapter/dialogs.js'
 
         ],
         baseURL = '../_src/';

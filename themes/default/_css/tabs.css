@@ -49,9 +49,9 @@
     text-align: center;
     display: inline-block;
     color: #4a4a4a;
-    font-size: 16px;
-    height: 35px;
-    line-height: 35px;
+    font-size: 14px;
+    height: 2em;
+    line-height: 2em;
     white-space:nowrap;/*内容不换行*/
     cursor: pointer;
     padding: 0 10px;
@@ -69,6 +69,8 @@
     background: #fff;
     border: solid #c9c9c9;
     border-width: 0 1px;
+    border-bottom:2px solid #2f6be0;
+    -webkit-box-shadow: 2px 2px 2px #7b7b7b;
 }
 .mui-tabs-content .mui-tabs-panel {
     padding: 1em;
@@ -97,6 +99,7 @@
     position: static;
     border: 0 none;
     background: rgba(170, 170, 170, 1);
+    -webkit-box-shadow: none;
 }
 
 /*Transition*/

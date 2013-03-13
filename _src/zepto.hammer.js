@@ -1,20 +1,85 @@
-(function($){
-    $.fn.hammer = function(eventNames,fn){
+(function($) {
+    'use strict';
 
-        return this.each(function(){
+    // no Zepto!
+    if(!$) {
+        return;
+    }
 
-            var hammer = $(this).data('hammer');
-            if(!hammer){
-                hammer = new Hammer(this);
-                $(this).data('hammer',hammer)
-            }
+    /**
+     * bind dom events
+     * this overwrites addEventListener
+     * @param   {HTMLElement}   element
+     * @param   {String}        eventTypes
+     * @param   {Function}      handler
+     */
+    Hammer.event.bindDom = function(element, eventTypes, handler) {
+        $(element).on(eventTypes, handler);
+    };
 
-            $.each(eventNames.split(/\s+/),function(i,eventName){
-                hammer['on'+eventName] = fn ? function(ev){
-                    fn.call(this,$.Event(eventName, ev))
-                } : null;
-            });
+    /**
+     * the methods are called by the instance, but with the jquery plugin
+     * we use the jquery event methods instead.
+     * @this    {Hammer.Instance}
+     * @return  {jQuery}
+     */
+    Hammer.Instance.prototype.on = function(types, handler) {
+        return $(this.element).on(types, handler);
+    };
+    Hammer.Instance.prototype.off = function(types, handler) {
+        return $(this.element).off(types, handler);
+    };
 
+
+    /**
+     * trigger events
+     * this is called by the gestures to trigger an event like 'tap'
+     * @this    {Hammer.Instance}
+     * @param   {String}    gesture
+     * @param   {Object}    eventData
+     * @return  {jQuery}
+     */
+    Hammer.Instance.prototype.trigger = function(gesture, eventData){
+        return $(eventData.srcEvent.target).trigger({
+            type: 'h_'+gesture,
+            gesture: eventData
         });
     };
-})(Zepto);
+
+
+    /**
+     * jQuery plugin
+     * create instance of Hammer and watch for gestures,
+     * and when called again you can change the options
+     * @param   {Object}    [options={}]
+     * @return  {jQuery}
+     */
+    $.fn.hammer = function(options) {
+
+        defaultOptions = defaultOptions || (function(){
+            var opt = {}, name;
+            for(name in Hammer.gestures) {
+                if(Hammer.gestures.hasOwnProperty(name)) {
+                    opt[Hammer.gestures[name].name] = false;
+                }
+            }
+            return opt;
+        })();
+
+        return this.each(function() {
+            var el = $(this);
+            var inst = el.data('hammer');
+            // start new hammer instance
+            if(!inst) {
+                el.data('hammer', Hammer(this, $.extend({}, defaultOptions, options || {})));
+            }
+            // change the options
+            else if(inst && options) {
+                Hammer.utils.extend(inst.options, options);
+            }
+        });
+    };
+
+    var defaultOptions;
+
+})(window.Zepto || false);

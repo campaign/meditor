@@ -21,7 +21,7 @@
             position: absolute;
             top:50px;
             height: 30px;
-            padding-left: 50px;
+            padding-left: 150px;
         }
     </style>
     <script type="text/javascript" src="../../_src/zepto.js"></script>
@@ -30,7 +30,9 @@
     <script type="text/javascript" src="../../_src/zepto.extend.js"></script>
     <script type="text/javascript" src="../../_src/meditor.js"></script>
     <script type="text/javascript" src="../../_src/ui/ui.js"></script>
+    <script type="text/javascript" src="../../_src/ui/popup.js"></script>
     <script type="text/javascript" src="../../_src/ui/combox.js"></script>
+    <link rel="stylesheet" href="../../themes/default/_css/popup.css" />
     <link rel="stylesheet" href="../../themes/default/_css/combox.css" />
 </head>
 <body>
@@ -42,7 +44,7 @@
     $(function(){
         combox1 = ME.ui.combox({
                         container:$('.mui-toolbar'),
-                        click: function (e, index, value, node) {
+                        select: function (e, index, value, node) {
                             this.singleSelect(value);
                         },
                         renderFn: function (index) {

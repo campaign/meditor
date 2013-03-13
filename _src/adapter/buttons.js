@@ -49,45 +49,6 @@
         }
     );
 
-    ns.registerUI('fontfamily fontsize', function (editor,cmdName) {
-        var cmd = cmdName.toLowerCase(),
-            opts = editor.options[cmd],
-            fn = null, combox, btn;
-
-        switch (cmd) {
-            case 'fontfamily':
-                fn = function (i) {
-                    return i < opts.length && '<div class="mui-combox-' + cmd + '" style="font-family:' + opts[i].val + '" value="' + opts[i].val + '" >' + opts[i].val.split(',')[0] + '</div>';};
-                break;
-            case 'fontsize':
-                fn = function (i) {
-                    return i < opts.length && '<div class="mui-combox-' + cmd + '" style="font-size:' + opts[i] + 'px;" value="' + opts[i] + 'px" >' + opts[i]+ '</div>';};
-                break;
-            case 'default':
-                break;
-        };
-
-        btn = ui.button({
-            name: cmdName,
-            click: function () {
-                !combox && (combox = ui.combox({
-                    container: $('.mui-toolbar'),
-                    renderFn: fn,
-                    click: function (e, index, value, node) {
-                        editor.execCommand(cmd, value);
-                        this.singleSelect(index);
-                    }
-                }));
-                combox.toggle(this.root());
-            }
-        });
-
-        editor.on('selectionchange', function (type, causeByUi, uiReady) {
-            var state = editor.queryCommandState(cmdName);
-        });
-
-        return btn;
-    })
     //临时, 为了让按钮能正常显示.
     ns.registerUI(
         [ 'formatmatch',
@@ -109,4 +70,35 @@
             return btn;
         }
     );
-})(Zepto, ME)
+})(Zepto, ME);
+
+(function($, ns){
+    var ui = ns.ui;
+
+    ns.registerUI('mcursor', function(editor, cmdName){
+        return ui.button({
+            name : cmdName,
+            title:cmdName
+        });
+    });
+
+    ns.registerUI('lcursorbackward lcursorforward rcursorbackward rcursorforward',
+    function(editor, cmdName){
+        var dir = /backward$/.test(cmdName)?'left':'right',
+            cmd = 'moverange',
+            end = /^rcursor/.test(cmdName),
+            btn = ui.button({
+                name : cmdName,
+                click:function(){
+                    editor.execCommand(cmd, dir, end);
+                },
+                title:cmdName
+            });
+
+        editor.on('selectionchange',function(){
+            var state = editor.queryCommandState(cmd, dir, end);
+            btn.highlight(state == 1).enable(state != -1);
+        });
+        return btn;
+    });
+})(Zepto, ME);
