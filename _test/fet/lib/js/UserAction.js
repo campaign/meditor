@@ -1385,6 +1385,664 @@ var UserAction = {
                 }
             }, 20);
         }).attr('src', srcpath);
+    },
+    getChildHTML:function ( co ) {
+
+        var h = co.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t\u200b\ufeff]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h.replace( /\u200B/g, '' );
+    },
+
+    browser:(function () {
+        var win = window;
+
+        var numberify = function ( s ) {
+            var c = 0;
+            return parseFloat( s.replace( /\./g, function () {
+                return (c++ == 1) ? '' : '.';
+            } ) );
+        },
+
+            nav = win && win.navigator,
+
+            o = {
+
+                /**
+                 * Internet Explorer version number or 0. Example: 6
+                 *
+                 * @property ie
+                 * @type float
+                 * @static
+                 */
+                ie:0,
+
+                /**
+                 * Opera version number or 0. Example: 9.2
+                 *
+                 * @property opera
+                 * @type float
+                 * @static
+                 */
+                opera:0,
+
+                /**
+                 * Gecko engine revision number. Will evaluate to 1 if Gecko is
+                 * detected but the revision could not be found. Other browsers will
+                 * be 0. Example: 1.8
+                 *
+                 * <pre>
+                 * Firefox 1.0.0.4: 1.7.8   &lt;-- Reports 1.7
+                 * Firefox 1.5.0.9: 1.8.0.9 &lt;-- 1.8
+                 * Firefox 2.0.0.3: 1.8.1.3 &lt;-- 1.81
+                 * Firefox 3.0   &lt;-- 1.9
+                 * Firefox 3.5   &lt;-- 1.91
+                 * </pre>
+                 *
+                 * @property gecko
+                 * @type float
+                 * @static
+                 */
+                gecko:0,
+
+                /**
+                 * AppleWebKit version. KHTML browsers that are not WebKit browsers
+                 * will evaluate to 1, other browsers 0. Example: 418.9
+                 *
+                 * <pre>
+                 * Safari 1.3.2 (312.6): 312.8.1 &lt;-- Reports 312.8 -- currently the
+                 *                                   latest available for Mac OSX 10.3.
+                 * Safari 2.0.2:         416     &lt;-- hasOwnProperty introduced
+                 * Safari 2.0.4:         418     &lt;-- preventDefault fixed
+                 * Safari 2.0.4 (419.3): 418.9.1 &lt;-- One version of Safari may run
+                 *                                   different versions of webkit
+                 * Safari 2.0.4 (419.3): 419     &lt;-- Tiger installations that have been
+                 *                                   updated, but not updated
+                 *                                   to the latest patch.
+                 * Webkit 212 nightly:   522+    &lt;-- Safari 3.0 precursor (with native SVG
+                 *                                   and many major issues fixed).
+                 * Safari 3.0.4 (523.12) 523.12  &lt;-- First Tiger release - automatic update
+                 *                                   from 2.x via the 10.4.11 OS patch
+                 * Webkit nightly 1/2008:525+    &lt;-- Supports DOMContentLoaded event.
+                 *                                   yahoo.com user agent hack removed.
+                 * </pre>
+                 *
+                 * http://en.wikipedia.org/wiki/Safari_version_history
+                 *
+                 * @property webkit
+                 * @type float
+                 * @static
+                 */
+                webkit:0,
+
+                /**
+                 * Chrome will be detected as webkit, but this property will also be
+                 * populated with the Chrome version number
+                 *
+                 * @property chrome
+                 * @type float
+                 * @static
+                 */
+                chrome:0,
+
+                safari:0,
+
+                firefox:0,
+
+                maxthon:0,
+                maxthonIE:0,
+
+                /**
+                 * The mobile property will be set to a string containing any
+                 * relevant user agent information when a modern mobile browser is
+                 * detected. Currently limited to Safari on the iPhone/iPod Touch,
+                 * Nokia N-series devices with the WebKit-based browser, and Opera
+                 * Mini.
+                 *
+                 * @property mobile
+                 * @type string
+                 * @static
+                 */
+                mobile:null,
+
+                /**
+                 * Adobe AIR version number or 0. Only populated if webkit is
+                 * detected. Example: 1.0
+                 *
+                 * @property air
+                 * @type float
+                 */
+                air:0,
+
+                /**
+                 * Google Caja version number or 0.
+                 *
+                 * @property caja
+                 * @type float
+                 */
+                caja:nav && nav.cajaVersion,
+
+                /**
+                 * Set to true if the pagebreak appears to be in SSL
+                 *
+                 * @property secure
+                 * @type boolean
+                 * @static
+                 */
+                secure:false,
+
+                /**
+                 * The operating system. Currently only detecting windows or
+                 * macintosh
+                 *
+                 * @property os
+                 * @type string
+                 * @static
+                 */
+                os:null
+
+            },
+
+            ua = nav && nav.userAgent,
+
+            loc = win && win.location,
+
+            href = loc && loc.href,
+
+            m;
+
+        o.secure = href && (href.toLowerCase().indexOf( "https" ) === 0);
+
+        if ( ua ) {
+
+            if ( (/windows|win32/i).test( ua ) ) {
+                o.os = 'windows';
+            } else if ( (/macintosh/i).test( ua ) ) {
+                o.os = 'macintosh';
+            } else if ( (/rhino/i).test( ua ) ) {
+                o.os = 'rhino';
+            }
+
+            // Modern KHTML browsers should qualify as Safari X-Grade
+            if ( (/KHTML/).test( ua ) ) {
+                o.webkit = 1;
+            }
+            if ( window.external && /(\d+\.\d)/.test( external.max_version ) ) {
+
+                o.maxthon = parseFloat( RegExp['\x241'] );
+                if ( /MSIE/.test( ua ) ) {
+                    o.maxthonIE = 1;
+                    o.maxthon = 0;
+                }
+
+            }
+            // Modern WebKit browsers are at least X-Grade
+            m = ua.match( /AppleWebKit\/([^\s]*)/ );
+            if ( m && m[1] ) {
+                o.webkit = numberify( m[1] );
+
+                // Mobile browser check
+                if ( / Mobile\//.test( ua ) ) {
+                    o.mobile = "Apple"; // iPhone or iPod Touch
+                } else {
+                    m = ua.match( /NokiaN[^\/]*|Android \d\.\d|webOS\/\d\.\d/ );
+                    if ( m ) {
+                        o.mobile = m[0]; // Nokia N-series, Android, webOS,
+                        // ex:
+                        // NokiaN95
+                    }
+                }
+
+                var m1 = ua.match( /Safari\/([^\s]*)/ );
+                if ( m1 && m1[1] ) // Safari
+                    o.safari = numberify( m1[1] );
+                m = ua.match( /Chrome\/([^\s]*)/ );
+                if ( o.safari && m && m[1] ) {
+                    o.chrome = numberify( m[1] ); // Chrome
+                } else {
+                    m = ua.match( /AdobeAIR\/([^\s]*)/ );
+                    if ( m ) {
+                        o.air = m[0]; // Adobe AIR 1.0 or better
+                    }
+                }
+            }
+
+            if ( !o.webkit ) { // not webkit
+                // @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316;
+                // fi; U;
+                // try get firefox and it's ver
+                // ssr)
+                m = ua.match( /Opera[\s\/]([^\s]*)/ );
+                if ( m && m[1] ) {
+                    m = ua.match( /Version[\s\/]([^\s]*)/ );
+                    o.opera = numberify( m[1] );
+                    m = ua.match( /Opera Mini[^;]*/ );
+                    if ( m ) {
+                        o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
+                    }
+                } else { // not opera or webkit
+                    m = ua.match( /MSIE\s([^;]*)/ );
+                    if ( m && m[1] ) {
+                        o.ie = numberify( m[1] );
+                    } else { // not opera, webkit, or ie
+                        m = ua.match( /Gecko\/([^\s]*)/ );
+                        if ( m ) {
+                            o.gecko = 1; // Gecko detected, look for revision
+                            m = ua.match( /rv:([^\s\)]*)/ );
+                            if ( m && m[1] ) {
+                                o.gecko = numberify( m[1] );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return o;
+    }
+        )
+        (),
+    getHTML:function ( co ) {
+        var div = document.createElement( 'div' ), h;
+        if ( !co )
+            return 'null';
+        div.appendChild( co.cloneNode( true ) );
+        h = div.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t\u200b\ufeff]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore
+        // attribs on IE
+        return h;
+    },
+    getIndex:function ( node ) {
+        var childNodes = node.parentNode.childNodes, i = 0;
+        while ( childNodes[i] !== node )
+            i++;
+        return i;
+    },
+    checkResult:function ( range, sc, ec, so, eo, collapsed, descript ) {
+        descript = descript ? descript : '';
+        equal( range.collapsed, collapsed, "check collapsed --" + descript );
+        ok( range.startContainer === sc, "check startContainer--" + descript );
+        ok( range.endContainer === ec, "check endContainer--" + descript );
+        equal( range.startOffset, so, "check startOffset--" + descript );
+        equal( range.endOffset, eo, "check endOffset--" + descript );
+    },
+    isSameRange:function ( rangeA, rangeB, descript ) {
+        descript = descript ? descript : '';
+        equal( rangeA.collapsed, rangeB.collapsed, "check collapsed --" + descript );
+        ok( rangeA.document === rangeB.document, "check document--" + descript );
+        ok( rangeA.startContainer === rangeB.startContainer, "check startContainer--" + descript );
+        ok( rangeA.endContainer === rangeB.endContainer, "check endContainer--" + descript );
+        equal( rangeA.startOffset, rangeB.startOffset, "check startOffset--" + descript );
+        equal( rangeA.endOffset, rangeB.endOffset, "check endOffset--" + descript );
+    },
+    manualDeleteFillData:function ( node ) {
+        var childs = node.childNodes;
+        for ( var i = 0; i < childs.length; i++ ) {
+            var fillData = childs[i];
+            if ( (fillData.nodeType == 3) && ( fillData.data == domUtils.fillChar ) ) {
+                domUtils.remove( fillData );
+                fillData = null;
+
+            }
+            else
+                this.manualDeleteFillData( fillData );
+        }
+
+
+    },
+    cssStyleToDomStyle:function ( cssName ) {
+        var test = document.createElement( 'div' ).style,
+            cssFloat = test.cssFloat != undefined ? 'cssFloat'
+                : test.styleFloat != undefined ? 'styleFloat'
+                : 'float',
+            cache = { 'float':cssFloat };
+
+        function replacer( match ) {
+            return match.charAt( 1 ).toUpperCase();
+        }
+
+    //        return function( cssName ) {
+        return cache[cssName] || (cache[cssName] = cssName.replace( /-./g, replacer ) );
+    //        };
+    },
+    isSameStyle:function ( elementA, elementB ) {
+    //        var styleA = elementA.style.cssText,
+    //            styleB = elementB.style.cssText;
+    //        if ( this.browser.ie && this.browser.version == 6 ) {
+    //            styleA = styleA.toLowerCase();
+    //            styleB = styleB.toLowerCase();
+    //        }
+    //        if ( !styleA && !styleB ) {
+    //            return true;
+    //        } else if ( !styleA || !styleB ) {
+    //            return false;
+    //        }
+    //        var styleNameMap = {},
+    //            record = [],
+    //            exit = {};
+    //        styleA.replace( /[\w-]+\s*(?=:)/g, function ( name ) {
+    //            styleNameMap[name] = record.push( name );
+    //        } );
+    //        try {
+    //            styleB.replace( /[\w-]+\s*(?=:)/g, function ( name ) {
+    //                var index = styleNameMap[name];
+    //                if ( index ) {
+    ////                    name = this.cssStyleToDomStyle( name );
+    //                    if ( elementA.style[name] !== elementB.style[name] ) {
+    //                        throw exit;
+    //                    }
+    //                    record[index - 1] = '';
+    //                } else {
+    //                    throw exit;
+    //                }
+    //            } );
+    //        } catch ( ex ) {
+    //            if ( ex === exit ) {
+    //                return false;
+    //            }
+    //        }
+    //        return !record.join( '' );
+        function indexOf(array, item, at) {
+            for(var i=at||0,l = array.length;i<l;i++){
+                if(array[i] === item){
+                    return i;
+                }
+            }
+            return -1;
+        }
+        var styleA = elementA.style.cssText.replace(/( ?; ?)/g,';').replace(/( ?: ?)/g,':'),
+            styleB = elementB.style.cssText.replace(/( ?; ?)/g,';').replace(/( ?: ?)/g,':');
+        if(ua.browser.opera){
+            styleA = elementA.style;
+            styleB = elementB.style;
+            if(styleA.length != styleB.length)
+                return 0;
+            for(var p in styleA){
+                if(/^(\d+|csstext)$/i.test(p))
+                    continue;
+                if(styleA[p] != styleB[p])
+                    return 0;
+            }
+            return 1;
+        }
+
+
+        if(!styleA || !styleB){
+            return styleA == styleB ? 1: 0;
+        }
+        styleA = styleA.split(';');
+        styleB = styleB.split(';');
+
+        if(styleA.length != styleB.length)
+            return 0;
+        for(var j =0;j<styleB.length;j++){
+            if(styleB[j].toLowerCase().indexOf("color")>-1&&styleB[j].toLowerCase().indexOf("rgb")>-1){
+                var color = this.formatColor(styleB[j].substr(styleB[j].indexOf("rgb"),styleB[j].length));
+                styleB[j] = styleB[j].replace(styleB[j].substr(styleB[j].indexOf("rgb"),styleB[j].length),color);
+            }
+        }
+        for(var i = 0,ci;ci=styleA[i++];){
+            if(ci.toLowerCase().indexOf("color")>-1&&ci.toLowerCase().indexOf("rgb")>-1){
+                var color = this.formatColor(ci.substr(ci.indexOf("rgb"),ci.length));
+                ci = ci.replace(ci.substr(ci.indexOf("rgb"),ci.length),color);
+            }
+            if(indexOf(styleB,ci) == -1){
+
+                return 0;
+
+            }//styleA[0].substr(styleA[0].indexOf("rga"),styleA[0].length)
+        }
+        return 1;
+    },
+
+
+    formatColor:function(color) {
+        var reg1 = /^\#[\da-f]{6}$/i,
+            reg2 = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/,
+            keyword = {
+                black: '#000000',
+                silver: '#c0c0c0',
+                gray: '#808080',
+                white: '#ffffff',
+                maroon: '#800000',
+                red: '#ff0000',
+                purple: '#800080',
+                fuchsia: '#ff00ff',
+                green: '#008000',
+                lime: '#00ff00',
+                olive: '#808000',
+                yellow: '#ffff0',
+                navy: '#000080',
+                blue: '#0000ff',
+                teal: '#008080',
+                aqua: '#00ffff'
+            };
+        if(reg1.test(color)) {
+            // #RRGGBB 直接返回
+            return color;
+        } else if(reg2.test(color)) {
+            // 非IE中的 rgb(0, 0, 0)
+            for (var s, i=1, color="#"; i<4; i++) {
+                s = parseInt(RegExp["\x24"+ i]).toString(16);
+                color += ("00"+ s).substr(s.length);
+            }
+            return color;
+        } else if(/^\#[\da-f]{3}$/.test(color)) {
+            // 简写的颜色值: #F00
+            var s1 = color.charAt(1),
+                s2 = color.charAt(2),
+                s3 = color.charAt(3);
+            return "#"+ s1 + s1 + s2 + s2 + s3 + s3;
+        }else if(keyword[color])
+            return keyword[color];
+
+        return "";
+
+    },
+    hasSameAttrs:function ( nodeA, nodeB ) {
+        if ( nodeA.tagName != nodeB.tagName )
+            return 0;
+        var thisAttribs = nodeA.attributes,
+            otherAttribs = nodeB.attributes;
+        if ( thisAttribs.length != otherAttribs.length )
+            return 0;
+        if ( thisAttribs.length == 0 )
+            return 1;
+        var attrA, attrB;
+        for ( var i = 0; attrA = thisAttribs[i++]; ) {
+            if ( attrA.nodeName == 'style' ) {
+                if ( this.isSameStyle( nodeA, nodeB ) ) {
+                    continue
+                } else {
+                    return 0;
+                }
+            }
+            if ( !ua.browser.ie || attrA.specified ) {
+                attrB = nodeB.attributes[attrA.nodeName];
+                if ( !attrB ) {
+                    return 0;
+                }
+            }
+            return 1;
+        }
+        return 1;
+    },
+    /**
+     *清除空Text节点
+     */
+
+    clearWhiteNode:function(node){
+        for(var i=0;i<node.childNodes.length;i++){
+            var tmpNode = node.childNodes[i];
+    //            debugger;
+            if(tmpNode.nodeType==3 && !tmpNode.length){
+                tmpNode.parentNode.removeChild(tmpNode);
+                i--;
+            }
+        }
+    },
+    /**
+     *检查两个节点（包含所有子节点）是否具有相同的属性
+     */
+    flag:true,
+        checkAllChildAttribs:function ( nodeA, nodeB ) {
+        var k = nodeA.childNodes.length;
+        if ( k != nodeB.childNodes.length ){
+            if(ua.browser.opera){
+                this.clearWhiteNode(nodeA);
+                k = nodeA.childNodes.length;
+                if ( k != nodeB.childNodes.length )
+                    this.flag = false;
+            }
+            else
+                this.flag = false;
+        }
+        if ( !this.flag )
+            return this.flag;
+        while ( k ) {
+            var tmpNodeA = nodeA.childNodes[k - 1];
+            var tmpNodeB = nodeB.childNodes[k - 1];
+            k--;
+
+            if ( tmpNodeA.nodeType == 3 || tmpNodeB.nodeType == 3 || tmpNodeA.nodeType == 8 || tmpNodeB.nodeType == 8 )
+                continue;
+            if ( !this.hasSameAttrs( tmpNodeA, tmpNodeB ) ) {
+                this.flag = false;
+                break;
+
+            }
+
+            this.checkAllChildAttribs( tmpNodeA, tmpNodeB );
+        }
+        return this.flag;
+    },
+    haveSameAllChildAttribs:function ( nodeA, nodeB ) {
+        this.flag = true;
+        return this.checkAllChildAttribs( nodeA, nodeB );
+    },
+        /*查看传入的html是否与传入的元素ele具有相同的style*/
+        checkHTMLSameStyle:function ( html, doc, ele, descript ) {
+        var tagEle = doc.createElement( ele.tagName );
+        tagEle.innerHTML = html;
+        /*会有一些不可见字符，在比较前提前删掉*/
+        this.manualDeleteFillData( ele );
+        ok( this.haveSameAllChildAttribs( ele, tagEle ), descript );
+    //        ok(this.equalsNode(ele.innerHMTL,html),descript);
+    },
+
+
+    equalsNode:function ( na, nb ) {
+        function compare( nodeA, nodeB ) {
+            if ( nodeA.nodeType != nodeB.nodeType ) {
+                return 0;
+            }
+            if ( nodeA.nodeType == 3 ) {
+                return  nodeA.nodeValue == nodeB.nodeValue
+            }
+            if ( domUtils.isSameElement( nodeA, nodeB ) ) {
+                if ( !nodeA.firstChild && !nodeB.firstChild ) {
+                    return 1;
+                }
+                if ( nodeA.firstChild && !nodeB.firstChild || !nodeA.firstChild && nodeB.firstChild ) {
+                    return 0
+                }
+                for ( var i = 0, ai, bi; ai = nodeA.childNodes[i], bi = nodeB.childNodes[i++]; ) {
+
+                    if ( !compare( ai, bi ) ) {
+                        return 0
+                    }
+                }
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        return compare( domUtils.createElement( document, 'div', {
+            'innerHTML':na
+        } ), domUtils.createElement( document, 'div', {
+            'innerHTML':nb
+        } ) );
+    },
+
+
+    getSelectedText:function () {
+        if ( window.getSelection ) {
+            // This technique is the most likely to be standardized.
+            // getSelection() returns a Selection object, which we do not document.
+            return window.getSelection().toString();
+        }
+        else if ( document.getSelection ) {
+            // This is an older, simpler technique that returns a string
+            return document.getSelection();
+        }
+        else if ( document.selection ) {
+            // This is the IE-specific technique.
+            // We do not document the IE selection property or TextRange objects.
+            return document.selection.createRange().text;
+        }
+    },
+    findPosition:function ( oElement ) {
+        var x2 = 0;
+        var y2 = 0;
+        var width = oElement.offsetWidth;
+        var height = oElement.offsetHeight;
+        if ( typeof( oElement.offsetParent ) != 'undefined' ) {
+            for ( var posX = 0, posY = 0; oElement; oElement = oElement.offsetParent ) {
+                posX += oElement.offsetLeft;
+                posY += oElement.offsetTop;
+            }
+            x2 = posX + width;
+            y2 = posY + height;
+            return [ posX, posY , x2, y2];
+
+        } else {
+            x2 = oElement.x + width;
+            y2 = oElement.y + height;
+            return [ oElement.x, oElement.y, x2, y2];
+        }
+    },
+
+    checkElementPath:function ( arr1, arr2, descript ) {
+        if ( !descript )
+            descript = '';
+        var index = arr1.length;
+        if ( index != arr2.length )
+            ok( false, '路径深度不相同' );
+        else {
+
+            while ( index > 0 )
+                equal( arr1[--index ], arr2[index ], descript + '---第' + index + '个元素' + arr1[index] );
+        }
+    },
+    getBrowser:function () {
+        var browser = "";
+        if ( this.browser.ie == 6 )
+            browser = 'ie6';
+        if ( this.browser.ie == 7 )
+            browser = 'ie7';
+        if ( this.browser.ie == 8 )
+            browser = 'ie8';
+        if ( this.browser.ie == 9 )
+            browser = 'ie9';
+        if ( this.browser.safari )
+            browser = 'safari';
+        if ( this.browser.firefox )
+            browser = 'firefox';
+        if ( this.browser.chrome )
+            browser = 'chrome';
+        if ( this.browser.maxthon ) {
+            browser = 'maxthon';
+        }
+        if ( this.browser.maxthonIE )
+            browser = 'maxIE';
+        if ( this.browser.opera )
+            browser = 'opera';
+        return browser;
     }
 };
 var ua = UserAction;
