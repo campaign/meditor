@@ -49,19 +49,21 @@
                         .zIndex(meditor.options.zIndex);
 
                     $(meditor.window).on('focus', function(){
-                        var h = _toolbar.root().height();
+                        var h = _toolbar.root().height(), gap = 5;
                         setTimeout(function(){
-                            var rng = meditor.selection.getRange().cloneRange(),
-                                span, offset;
+                            var selection = meditor.selection.getNative(),
+                                rng, offset;
 
-                            span = meditor.document.createElement('span');
-                            span.innerHTML = '&nbsp;';
+                           if(selection.rangeCount){
+                               rng = selection.getRangeAt(0);
+                               offset = rng.getClientRects()[0];
+                               console.log(offset);
+                               offset = offset.top - offset.height/2 - gap;
+                           }
 
-                            rng.insertNode(span);
-                            offset = span.getBoundingClientRect();
-                            span.parentNode.removeChild(span);
-
-                            window.scrollTo(0, Math.max(1, offset.top-h));
+                           if(offset< h) {
+                               window.scrollTo(0, Math.max(1, window.pageYOffset + offset - h));
+                           }
                         }, 0);
                     });
                 }
