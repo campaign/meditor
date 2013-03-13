@@ -58,7 +58,6 @@
                            if(selection.rangeCount){
                                rng = selection.getRangeAt(0);
                                offset = rng.getClientRects()[0];
-                               console.log(offset);
                                offset = offset.top - offset.height/2 - gap;
                            }
 
