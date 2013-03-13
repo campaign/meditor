@@ -48,18 +48,6 @@
                 var li = $(e.target).closest('li');
                 me.trigger('select', [li.index(), li.children().attr('value'), li]);
             });
-            //点击隐藏
-            $('body').click(function (e) {
-                if(me._options._isShow) {
-                    var target = e.target;
-                    if ($.contains(root[0], target) || me._options._btn === target || $.contains(me._options._btn, target)) return;
-                    me.hide();
-                }
-            });
-
-            $(window).on('ortchange', function() {
-                me._ortChange.call(me);
-            });
 
             //缓存查询
             var items = root.find('li'),
@@ -68,6 +56,8 @@
                 items:      items,
                 children:   children
             });
+
+            return me.$super('_init');
         },
 
         select: function (index, _remove) {
