@@ -110,8 +110,8 @@
                     top: round($win.height() / 2) + window.pageYOffset,
                     marginTop: -round(size.height/2) +'px'
                 });
+                this._lastExecTime = now;
             }
-            this._lastExecTime = now;
             return this;
         },
 

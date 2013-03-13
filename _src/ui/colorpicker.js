@@ -58,7 +58,7 @@
                 me.hsl(hsl);
             }, eventNS);
 
-            me.commonDiv.on('click', 'td', function(){
+            me.commonDiv.hammer({tap: true}).on('h_tap', 'td', function(e){
                 var a = $('a', this);
                 a.length && me.hex(a.attr('title'));
             });
