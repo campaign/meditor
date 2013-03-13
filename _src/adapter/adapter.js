@@ -48,6 +48,7 @@
                     }))
                         .zIndex(meditor.options.zIndex);
 
+                    //当iframe获得焦点时，如果把toolbar给盖住了，就向下移动合适的距离让toolbar不被光标盖住
                     $(meditor.window).on('focus', function(){
                         var h = _toolbar.root().height(), gap = 5;
                         setTimeout(function(){
@@ -66,6 +67,13 @@
                            }
                         }, 0);
                     });
+
+                    //禁用掉click，改成tap
+                    _toolbar.root().hammer({tap: true}).on('touchstart', function(e){
+                        e.preventDefault();
+                    }).on('h_tap', function(e){
+                            $(e.target).trigger('click');
+                        });
                 }
             })
         }
