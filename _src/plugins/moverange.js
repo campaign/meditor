@@ -9,20 +9,14 @@ ME.plugins['moverange'] = function(){
             rng.shrinkBoundary();
             address = rng.createAddress();
             try{
+                rng.shrinkBoundary();
                 if(rng.collapsed){
-                    rng.shrinkBoundary();
-                    rng.startOffset = rng.startOffset + (dir == 'left' ? -1 : 1);
+                    rng.startOffset += (dir == 'left' ? -1 : 1);
                     rng.collapse(true);
-                    rng.select();
                 }else{
-                    rng.shrinkBoundary();
-                    if(end){
-                        rng.endOffset = rng.endOffset + (dir == 'left' ? -1 : 1);
-                    }else{
-                        rng.startOffset = rng.startOffset + (dir == 'left' ? -1 : 1);
-                    }
-                    rng.select();
+                    rng[end?'endOffset':'startOffset'] += (dir == 'left' ? -1 : 1);
                 }
+                rng.select();
             }catch(e){
                 rng.moveToAddress(address).select()
             }

@@ -126,10 +126,11 @@ class Testcase
 
 
         $testdir = ConfigTest::$testdir;
+        $srcdir = ConfigTest:: $srcdir[0];
 
         $caselist = array();
-        $caselist = array_merge( $caselist , getAllFiles( $testdir , "\\.js$" , "fet" ) );
-
+//        $caselist = array_merge( $caselist , getAllFiles( $testdir , "\\.js$" , "fet" ) );
+        $caselist = getSameFile( $srcdir , $testdir );//只显示在_src下有对应文件的用例
         foreach ( $caselist as $caseitem ) {
             if ( !preg_match( "/import\\.js/" , $caseitem ) ) {
 
