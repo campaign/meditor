@@ -97,7 +97,7 @@
             for(var i = 0, l = opt.items.length; i < l; i++) {
                 me.select(i, true);
             }
-            me.select(index);
+            return me.select(index);
         },
 
         label: function (index, label) {
