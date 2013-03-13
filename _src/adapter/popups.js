@@ -28,9 +28,9 @@
                     container: $('.mui-toolbar'),
                     title: title,
                     renderFn: fn,
-                    select: function (e, index, value, node) {
+                    select: function (e, index, value) {
+                        this.singleSelect(index).hide();
                         editor.execCommand(cmd, value);
-                        this.singleSelect(index);
                     }
                 });
                 combox.toggle(this.root());
