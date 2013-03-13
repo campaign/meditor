@@ -28,7 +28,6 @@
                 root = me.root();
             //点击隐藏
             $(document).click(function (e) {
-                debugger;
                 if(me._options._isShow) {
                     var target = e.target;
                     if ($.contains(root[0], target) || me._options._btn === target || $.contains(me._options._btn, target)) return;
