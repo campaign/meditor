@@ -44,13 +44,15 @@
                 opt = me._options;
             me._nav.on('click', eventHandler);
             me._el.on('widgetrender', eventHandler);
-            opt.swipe && me._el.hammer().on('swipe', function(e){
+            opt.swipe && me._el.hammer({
+                swipe: true
+            }).on('h_swipeleft h_swiperight', function(e){
                 var index;
-                switch(e.direction){
-                    case 'left':
+                switch(e.type){
+                    case 'h_swipeleft':
                         index = opt.active + 1;
                         break;
-                    case 'right':
+                    case 'h_swiperight':
                         index = opt.active - 1;
                         break;
                 }
