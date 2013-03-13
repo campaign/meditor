@@ -234,7 +234,7 @@
             me.window = doc.defaultView || doc.parentWindow;
             me.iframe = me.window.frameElement;
             me.body = doc.body;
-            //domUtils.on(me.body,'touchend',function(){me.selection.getRange().select()});
+            domUtils.on(me.body,'touchend',function(){me.selection.getRange().select()});
             //设置编辑器最小高度
             me.setHeight(options.height);
             me.selection = new ME.Selection(doc);
