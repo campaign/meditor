@@ -4,7 +4,7 @@
     ns.registerUI('fontfamily fontsize', function (editor,cmdName) {
         var cmd = cmdName.toLowerCase(),
             opts = editor.options[cmd],
-            fn = null, combox, btn, title;
+            fn = null, combox, btn, title, isBind;
 
         switch (cmd) {
             case 'fontfamily':
@@ -31,6 +31,14 @@
                     select: function (e, index, value) {
                         this.singleSelect(index).hide();
                         editor.execCommand(cmd, value);
+                    },
+                    show: function () {
+                        if (!isBind) {
+                            editor.on('touchstart', function () {
+                                combox.hide();
+                            });
+                            isBind = true;
+                        }
                     }
                 });
                 combox.toggle(this.root());
