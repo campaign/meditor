@@ -48,7 +48,9 @@
             me.$super('_init');
             (me._$fileInput = opts.content.find('.mui-imguploader-ipt')).length && me._$fileInput.on('change', $.proxy(me._imgEventHandler, me)).attr('multiple', 'multiple'),
             me._$thumbnails = $('<div class="mui-imguploader-thumbnails"></div>');
-            me._$uploadBtn = $('<button class="mui-imguploader-uploadBtn">上传</button>').hammer().on('tap', $.proxy(me._imgEventHandler, me));
+            me._$uploadBtn = $('<button class="mui-imguploader-uploadBtn">上传</button>').hammer({
+                tap: true
+            }).on('h_tap', $.proxy(me._imgEventHandler, me));
             me._$waiting = $('<div class="mui-imguploader-waiting">读取中...</div>');
 
             return me;
@@ -83,7 +85,7 @@
                     me._files = me._files.concat(thisFiles);
                     me._createThumbnails(thisFiles).trigger('select', [thisFiles]);
                     break;
-                case 'tap':
+                case 'h_tap':
                     me._uploadFiles(me._files);
                     break;
             }

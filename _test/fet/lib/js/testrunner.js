@@ -122,12 +122,17 @@ var QUnit = {
 			}
 
 			try {
-				setTimeout(function() {
+                if (config.stopCount == 1) {
+                    setTimeout(function() {
+                        callback.call(testEnvironment);
+                        if (config.stopCount == 1) {
+                            start();
+                        }
+                    }, 100);
+                }
+                else{
                     callback.call(testEnvironment);
-                    if (config.stopCount == 1) {
-                        start();
-                    }
-                }, 100);
+                }
 				
 			} catch(e) {
 				fail("Test " + name + " died, exception and test follows", e, callback);
