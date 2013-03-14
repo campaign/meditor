@@ -69,7 +69,7 @@
         _init:function () {
             var me = this, opt = this._options;
             this.$super('_init');
-            opt.content.on('click', 'td:not(.empty)',function () {
+            opt.content.on('h_tap', 'td:not(.empty)',function () {
                 var td = $(this),
                     url = td.attr('data-url');
                 me.trigger('select', [url, td.hasClass('active'), td]);
@@ -88,6 +88,8 @@
                     me._val = [];
                     $('td.active', opt.content).removeClass('active');
                 });
+
+            opt.content.find('.mui-tabs').hammer({tap: true});
         },
 
         _toggleValue:function (e, url, check, td) {
