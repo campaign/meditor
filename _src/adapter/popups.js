@@ -54,7 +54,7 @@
     var ui = ns.ui;
 
     function getEmotion(editor){
-        var pop;
+        var pop, isBind;
         return pop = ui.emotion({
             container: $('.mui-toolbar'),
             items: [
@@ -92,6 +92,11 @@
                 });
                 editor.execCommand( 'inserthtml', html );
                 pop.hide();
+            },
+            show: function(){
+                isBind = isBind || (editor.on('touchstart', function(){
+                    pop.hide();
+                }), true);
             }
         });
     }
