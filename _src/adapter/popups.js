@@ -45,10 +45,6 @@
             }
         });
 
-        editor.on('selectionchange', function (type, causeByUi, uiReady) {
-            var state = editor.queryCommandState(cmdName);
-        });
-
         return btn;
     })
 })(Zepto, ME);
