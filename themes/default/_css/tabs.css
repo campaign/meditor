@@ -70,7 +70,7 @@
     border: solid #c9c9c9;
     border-width: 0 1px;
     border-bottom:2px solid #2f6be0;
-    -webkit-box-shadow: 2px 2px 2px #7b7b7b;
+    -webkit-box-shadow: 2px 1px 2px #7b7b7b;
 }
 .mui-tabs-content .mui-tabs-panel {
     padding: 1em;
