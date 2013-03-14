@@ -47,7 +47,7 @@
                 $.later(function () {
                     root.show();
                     me._fitSize.call(me, me._options._btn);
-                }, 20);
+                }, 150);
             }
             return me;
         },
