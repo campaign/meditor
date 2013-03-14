@@ -7,7 +7,9 @@
         me.on('adjustimage', function(){
             $('img:not(.adjustimage-processed)', me.document)
                 .addClass('adjustimage-processed')
-                .css('maxWidth', '80%');
+                .css('maxWidth', '80%').on('load', function(){
+                    me.trigger('contentchange');
+                });
         });
 
     };
