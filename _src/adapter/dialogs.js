@@ -39,7 +39,8 @@
 
             btn.root().on('click', function(){
                 editor.focus();
-                document.activeElement.blur();
+                editor.iframe.blur();
+                //document.activeElement.blur();
             });
 
             return btn;
@@ -77,7 +78,8 @@
 
         btn.root().on('click', function(){
             editor.focus();
-            document.activeElement.blur();
+            editor.iframe.blur();
+            //document.activeElement.blur();
         });
 
         return btn;

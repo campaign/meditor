@@ -27,7 +27,7 @@
             var me = this,
                 root = me.root();
             //点击隐藏
-            $('body').click(function (e) {
+            $(document).on('touchstart', function (e) {
                 if(me._options._isShow) {
                     var target = e.target;
                     if ($.contains(root[0], target) || me._options._btn === target || $.contains(me._options._btn, target)) return;
@@ -47,7 +47,7 @@
                 $.later(function () {
                     root.show();
                     me._fitSize.call(me, me._options._btn);
-                }, 20);
+                }, 150);
             }
             return me;
         },

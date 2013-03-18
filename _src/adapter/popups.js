@@ -4,7 +4,7 @@
     ns.registerUI('fontfamily fontsize', function (editor,cmdName) {
         var cmd = cmdName.toLowerCase(),
             opts = editor.options[cmd],
-            fn = null, combox, btn, title;
+            fn = null, combox, btn, title, isBind;
 
         switch (cmd) {
             case 'fontfamily':
@@ -28,17 +28,21 @@
                     container: $('.mui-toolbar'),
                     title: title,
                     renderFn: fn,
-                    select: function (e, index, value, node) {
+                    select: function (e, index, value) {
+                        this.singleSelect(index).hide();
                         editor.execCommand(cmd, value);
-                        this.singleSelect(index);
+                    },
+                    show: function () {
+                        if (!isBind) {
+                            editor.on('touchstart', function () {
+                                combox.hide();
+                            });
+                            isBind = true;
+                        }
                     }
                 });
                 combox.toggle(this.root());
             }
-        });
-
-        editor.on('selectionchange', function (type, causeByUi, uiReady) {
-            var state = editor.queryCommandState(cmdName);
         });
 
         return btn;
@@ -50,7 +54,7 @@
     var ui = ns.ui;
 
     function getEmotion(editor){
-        var pop;
+        var pop, isBind;
         return pop = ui.emotion({
             container: $('.mui-toolbar'),
             items: [
@@ -88,6 +92,11 @@
                 });
                 editor.execCommand( 'inserthtml', html );
                 pop.hide();
+            },
+            show: function(){
+                isBind = isBind || (editor.on('touchstart', function(){
+                    pop.hide();
+                }), true);
             }
         });
     }

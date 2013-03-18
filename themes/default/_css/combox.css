@@ -32,6 +32,7 @@
 .mui-combox ul li {
     list-style:none;
     height: 2em;
+    white-space: nowrap;
     line-height: 2em;
     border-bottom: 1px solid #ddd;
     padding: 0 0.8em;
@@ -51,7 +52,7 @@
     width: 50px;
     height: 19px;
     top: -19px;
-    margin-left: -3px;
+    margin-left: 2px;
 }
 .mui-combox-arrow:after {
     position: absolute;

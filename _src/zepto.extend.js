@@ -598,7 +598,7 @@ Zepto.fn.iscroll = function (opt) {
         if (handler) {
             var fn = arguments.callee;
             $(window).on('ortchange', function() {
-                setTimeout(fn, 50);
+                setTimeout(fn, 150);
             });
             me[handler] = that[handler] = fn;
         }

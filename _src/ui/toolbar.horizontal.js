@@ -80,17 +80,18 @@
     ui.define('toolbar', {
         _options: {
             toggleBtn: true,    //'swipe' || 'static',
-            items: [],      //toolbar各项item内容
-            offset: {      //toolbar位置偏移
-                x: 0,
-                y: 0
-            }
+            items: []      //toolbar各项item内容
         },
         _isShow: true,
         _initDone: false,
         _isAnim: false,
         _win: window,
+        _vlh : {
+            portrait: 520,
+            landscape: 180
+        },
         _momentumDis: 90,
+        _isDragToBottom: false,
         _create: function () {
             var me = this,
                 opts = me._options;
@@ -150,9 +151,10 @@
                     $el.css('top', e.gesture.touches[0].pageY);
                     break;
                 case 'h_dragend':
-                    var top = $(me._win).scrollTop() + me.option('offset').y,
-                        dis = me._momentumDis;
-                    $el.css('top', e.gesture.touches[0].pageY < (top + dis) ? top : (top + 2 * dis));
+                    var top = $(me._win).scrollTop(),
+                        dis = me._vlh[$.getOrientation()];
+                    me._isDragToBottom = e.gesture.touches[0].pageY > (top + dis / 2);
+                    $el.css('top', me._isDragToBottom ? (top + dis) : top);
                     break;
                 case 'default':
                     break;
@@ -200,7 +202,14 @@
             return $.isUndefined(zindex) ? this.root().css('z-index') : (this.root().css('z-index', zindex), this);
         },
         setFix: function (pos) {
-            this.root().css('top', pos ? pos.y : ($(this._win).scrollTop() + this.option('offset').y));
+            var $el = this.root(), top;
+
+            if (pos) {
+                $el.css('top', pos.y);
+            } else {
+                top = $(this._win).scrollTop();
+                $el.css('top', this._isDragToBottom ? Math.min(top + this._vlh[$.getOrientation()], Math.max(top, parseInt($el.css('top')))) : top);
+            }
             return this;
         }
     });

@@ -48,22 +48,34 @@
                     }))
                         .zIndex(meditor.options.zIndex);
 
-                    $(meditor.window).on('focus', function(){
-                        var h = _toolbar.root().height();
+                    //当iframe获得焦点时，如果把toolbar给盖住了，就向下移动合适的距离让toolbar不被光标盖住
+                    var handler = $.debounce(250, function(){
+                        var h = _toolbar.root().height(), gap = 5,
+                            selection = meditor.selection.getNative(),
+                            rng, offset;
+
+                        if(selection.rangeCount){
+                            rng = selection.getRangeAt(0);
+                            offset = rng.getClientRects()[0];
+                            offset = offset.top - offset.height/2 - gap;
+                        }
+
+                        if(offset && offset< h) {
+                            window.scrollTo(0, Math.max(1, window.pageYOffset + offset - h));
+                        }
+                    }, true);
+                    meditor.on('focus selectstart', function(){
                         setTimeout(function(){
-                            var rng = meditor.selection.getRange().cloneRange(),
-                                span, offset;
-
-                            span = meditor.document.createElement('span');
-                            span.innerHTML = '&nbsp;';
-
-                            rng.insertNode(span);
-                            offset = span.getBoundingClientRect();
-                            span.parentNode.removeChild(span);
-
-                            window.scrollTo(0, Math.max(1, offset.top-h));
+                            handler();
                         }, 0);
                     });
+
+                    //禁用掉click，改成tap
+                    _toolbar.root().hammer({tap: true}).on('touchstart', function(e){
+                        e.preventDefault();
+                    }).on('h_tap', function(e){
+                            $(e.target).trigger('click');
+                        });
                 }
             })
         }
