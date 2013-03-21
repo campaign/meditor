@@ -1385,6 +1385,438 @@ var UserAction = {
                 }
             }, 20);
         }).attr('src', srcpath);
+    },
+
+    getHTML:function ( co ) {
+        var div = document.createElement( 'div' ), h;
+        if ( !co )
+            return 'null';
+        div.appendChild( co.cloneNode( true ) );
+        h = div.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t\u200b\ufeff]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore
+        // attribs on IE
+        return h;
+    },
+    getChildHTML:function ( co ) {
+
+        var h = co.innerHTML.toLowerCase();
+
+        h = h.replace( /[\r\n\t\u200b\ufeff]/g, '' ); // Remove line feeds and tabs
+        h = h.replace( / (\w+)=([^\"][^\s>]*)/gi, ' $1="$2"' ); // Restore attribs on IE
+
+        return h.replace( /\u200B/g, '' );
+    },
+    getIndex:function ( node ) {
+        var childNodes = node.parentNode.childNodes, i = 0;
+        while ( childNodes[i] !== node )
+            i++;
+        return i;
+    },
+    checkResult:function ( range, sc, ec, so, eo, collapsed, descript ) {
+        descript = descript ? descript : '';
+        equal( range.collapsed, collapsed, "check collapsed --" + descript );
+        ok( range.startContainer === sc, "check startContainer--" + descript );
+        ok( range.endContainer === ec, "check endContainer--" + descript );
+        equal( range.startOffset, so, "check startOffset--" + descript );
+        equal( range.endOffset, eo, "check endOffset--" + descript );
+    },
+    isSameRange:function ( rangeA, rangeB, descript ) {
+        descript = descript ? descript : '';
+        equal( rangeA.collapsed, rangeB.collapsed, "check collapsed --" + descript );
+        ok( rangeA.document === rangeB.document, "check document--" + descript );
+        ok( rangeA.startContainer === rangeB.startContainer, "check startContainer--" + descript );
+        ok( rangeA.endContainer === rangeB.endContainer, "check endContainer--" + descript );
+        equal( rangeA.startOffset, rangeB.startOffset, "check startOffset--" + descript );
+        equal( rangeA.endOffset, rangeB.endOffset, "check endOffset--" + descript );
+    },
+    manualDeleteFillData:function ( node ) {
+        var childs = node.childNodes;
+        for ( var i = 0; i < childs.length; i++ ) {
+            var fillData = childs[i];
+            if ( (fillData.nodeType == 3) && ( fillData.data == domUtils.fillChar ) ) {
+                domUtils.remove( fillData );
+                fillData = null;
+
+            }
+            else
+                this.manualDeleteFillData( fillData );
+        }
+
+
+    },
+    cssStyleToDomStyle:function ( cssName ) {
+        var test = document.createElement( 'div' ).style,
+            cssFloat = test.cssFloat != undefined ? 'cssFloat'
+                : test.styleFloat != undefined ? 'styleFloat'
+                : 'float',
+            cache = { 'float':cssFloat };
+
+        function replacer( match ) {
+            return match.charAt( 1 ).toUpperCase();
+        }
+
+//        return function( cssName ) {
+        return cache[cssName] || (cache[cssName] = cssName.replace( /-./g, replacer ) );
+//        };
+    },
+    isSameStyle:function ( elementA, elementB ) {
+//        var styleA = elementA.style.cssText,
+//            styleB = elementB.style.cssText;
+//        if ( this.browser.ie && this.browser.version == 6 ) {
+//            styleA = styleA.toLowerCase();
+//            styleB = styleB.toLowerCase();
+//        }
+//        if ( !styleA && !styleB ) {
+//            return true;
+//        } else if ( !styleA || !styleB ) {
+//            return false;
+//        }
+//        var styleNameMap = {},
+//            record = [],
+//            exit = {};
+//        styleA.replace( /[\w-]+\s*(?=:)/g, function ( name ) {
+//            styleNameMap[name] = record.push( name );
+//        } );
+//        try {
+//            styleB.replace( /[\w-]+\s*(?=:)/g, function ( name ) {
+//                var index = styleNameMap[name];
+//                if ( index ) {
+////                    name = this.cssStyleToDomStyle( name );
+//                    if ( elementA.style[name] !== elementB.style[name] ) {
+//                        throw exit;
+//                    }
+//                    record[index - 1] = '';
+//                } else {
+//                    throw exit;
+//                }
+//            } );
+//        } catch ( ex ) {
+//            if ( ex === exit ) {
+//                return false;
+//            }
+//        }
+//        return !record.join( '' );
+        function indexOf(array, item, at) {
+            for(var i=at||0,l = array.length;i<l;i++){
+                if(array[i] === item){
+                    return i;
+                }
+            }
+            return -1;
+        }
+        var styleA = elementA.style.cssText.replace(/( ?; ?)/g,';').replace(/( ?: ?)/g,':'),
+            styleB = elementB.style.cssText.replace(/( ?; ?)/g,';').replace(/( ?: ?)/g,':');
+        if(this.browser.opera){
+            styleA = elementA.style;
+            styleB = elementB.style;
+            if(styleA.length != styleB.length)
+                return 0;
+            for(var p in styleA){
+                if(/^(\d+|csstext)$/i.test(p))
+                    continue;
+                if(styleA[p] != styleB[p])
+                    return 0;
+            }
+            return 1;
+        }
+
+
+        if(!styleA || !styleB){
+            return styleA == styleB ? 1: 0;
+        }
+        styleA = styleA.split(';');
+        styleB = styleB.split(';');
+
+        if(styleA.length != styleB.length)
+            return 0;
+        for(var j =0;j<styleB.length;j++){
+            if(styleB[j].toLowerCase().indexOf("color")>-1&&styleB[j].toLowerCase().indexOf("rgb")>-1){
+                var color = this.formatColor(styleB[j].substr(styleB[j].indexOf("rgb"),styleB[j].length));
+                styleB[j] = styleB[j].replace(styleB[j].substr(styleB[j].indexOf("rgb"),styleB[j].length),color);
+            }
+        }
+        for(var i = 0,ci;ci=styleA[i++];){
+            if(ci.toLowerCase().indexOf("color")>-1&&ci.toLowerCase().indexOf("rgb")>-1){
+                var color = this.formatColor(ci.substr(ci.indexOf("rgb"),ci.length));
+                ci = ci.replace(ci.substr(ci.indexOf("rgb"),ci.length),color);
+            }
+            if(indexOf(styleB,ci) == -1){
+
+                return 0;
+
+            }//styleA[0].substr(styleA[0].indexOf("rga"),styleA[0].length)
+        }
+        return 1;
+    },
+
+
+    formatColor:function(color) {
+        var reg1 = /^\#[\da-f]{6}$/i,
+            reg2 = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/,
+            keyword = {
+                black: '#000000',
+                silver: '#c0c0c0',
+                gray: '#808080',
+                white: '#ffffff',
+                maroon: '#800000',
+                red: '#ff0000',
+                purple: '#800080',
+                fuchsia: '#ff00ff',
+                green: '#008000',
+                lime: '#00ff00',
+                olive: '#808000',
+                yellow: '#ffff0',
+                navy: '#000080',
+                blue: '#0000ff',
+                teal: '#008080',
+                aqua: '#00ffff'
+            };
+        if(reg1.test(color)) {
+            // #RRGGBB 直接返回
+            return color;
+        } else if(reg2.test(color)) {
+            // 非IE中的 rgb(0, 0, 0)
+            for (var s, i=1, color="#"; i<4; i++) {
+                s = parseInt(RegExp["\x24"+ i]).toString(16);
+                color += ("00"+ s).substr(s.length);
+            }
+            return color;
+        } else if(/^\#[\da-f]{3}$/.test(color)) {
+            // 简写的颜色值: #F00
+            var s1 = color.charAt(1),
+                s2 = color.charAt(2),
+                s3 = color.charAt(3);
+            return "#"+ s1 + s1 + s2 + s2 + s3 + s3;
+        }else if(keyword[color])
+            return keyword[color];
+
+        return "";
+
+    },
+    hasSameAttrs:function ( nodeA, nodeB ) {
+        if ( nodeA.tagName != nodeB.tagName )
+            return 0;
+        var thisAttribs = nodeA.attributes,
+            otherAttribs = nodeB.attributes;
+        if ( thisAttribs.length != otherAttribs.length )
+            return 0;
+        if ( thisAttribs.length == 0 )
+            return 1;
+        var attrA, attrB;
+        for ( var i = 0; attrA = thisAttribs[i++]; ) {
+            if ( attrA.nodeName == 'style' ) {
+                if ( this.isSameStyle( nodeA, nodeB ) ) {
+                    continue
+                } else {
+                    return 0;
+                }
+            }
+            if ( !ua.browser.ie || attrA.specified ) {
+                attrB = nodeB.attributes[attrA.nodeName];
+                if ( !attrB ) {
+                    return 0;
+                }
+            }
+            return 1;
+        }
+        return 1;
+    },
+    /**
+     *清除空Text节点
+     */
+
+    clearWhiteNode:function(node){
+        for(var i=0;i<node.childNodes.length;i++){
+            var tmpNode = node.childNodes[i];
+//            debugger;
+            if(tmpNode.nodeType==3 && !tmpNode.length){
+                tmpNode.parentNode.removeChild(tmpNode);
+                i--;
+            }
+        }
+    },
+    /**
+     *检查两个节点（包含所有子节点）是否具有相同的属性
+     */
+    flag:true,
+    checkAllChildAttribs:function ( nodeA, nodeB ) {
+        var k = nodeA.childNodes.length;
+        if ( k != nodeB.childNodes.length ){
+            if(ua.browser.opera){
+                this.clearWhiteNode(nodeA);
+                k = nodeA.childNodes.length;
+                if ( k != nodeB.childNodes.length )
+                    this.flag = false;
+            }
+            else
+                this.flag = false;
+        }
+        if ( !this.flag )
+            return this.flag;
+        while ( k ) {
+            var tmpNodeA = nodeA.childNodes[k - 1];
+            var tmpNodeB = nodeB.childNodes[k - 1];
+            k--;
+
+            if ( tmpNodeA.nodeType == 3 || tmpNodeB.nodeType == 3 || tmpNodeA.nodeType == 8 || tmpNodeB.nodeType == 8 )
+                continue;
+            if ( !this.hasSameAttrs( tmpNodeA, tmpNodeB ) ) {
+                this.flag = false;
+                break;
+
+            }
+
+            this.checkAllChildAttribs( tmpNodeA, tmpNodeB );
+        }
+        return this.flag;
+    },
+    haveSameAllChildAttribs:function ( nodeA, nodeB ) {
+        this.flag = true;
+        return this.checkAllChildAttribs( nodeA, nodeB );
+    },
+    /*查看传入的html是否与传入的元素ele具有相同的style*/
+    checkHTMLSameStyle:function ( html, doc, ele, descript ) {
+        var tagEle = doc.createElement( ele.tagName );
+        tagEle.innerHTML = html;
+        /*会有一些不可见字符，在比较前提前删掉*/
+        this.manualDeleteFillData( ele );
+        ok( this.haveSameAllChildAttribs( ele, tagEle ), descript );
+//        ok(this.equalsNode(ele.innerHMTL,html),descript);
+    },
+
+
+    equalsNode:function ( na, nb ) {
+        function compare( nodeA, nodeB ) {
+            if ( nodeA.nodeType != nodeB.nodeType ) {
+                return 0;
+            }
+            if ( nodeA.nodeType == 3 ) {
+                return  nodeA.nodeValue == nodeB.nodeValue
+            }
+            if ( domUtils.isSameElement( nodeA, nodeB ) ) {
+                if ( !nodeA.firstChild && !nodeB.firstChild ) {
+                    return 1;
+                }
+                if ( nodeA.firstChild && !nodeB.firstChild || !nodeA.firstChild && nodeB.firstChild ) {
+                    return 0
+                }
+                for ( var i = 0, ai, bi; ai = nodeA.childNodes[i], bi = nodeB.childNodes[i++]; ) {
+
+                    if ( !compare( ai, bi ) ) {
+                        return 0
+                    }
+                }
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        return compare( domUtils.createElement( document, 'div', {
+            'innerHTML':na
+        } ), domUtils.createElement( document, 'div', {
+            'innerHTML':nb
+        } ) );
+    },
+
+
+    getSelectedText:function () {
+        if ( window.getSelection ) {
+            // This technique is the most likely to be standardized.
+            // getSelection() returns a Selection object, which we do not document.
+            return window.getSelection().toString();
+        }
+        else if ( document.getSelection ) {
+            // This is an older, simpler technique that returns a string
+            return document.getSelection();
+        }
+        else if ( document.selection ) {
+            // This is the IE-specific technique.
+            // We do not document the IE selection property or TextRange objects.
+            return document.selection.createRange().text;
+        }
+    },
+    findPosition:function ( oElement ) {
+        var x2 = 0;
+        var y2 = 0;
+        var width = oElement.offsetWidth;
+        var height = oElement.offsetHeight;
+        if ( typeof( oElement.offsetParent ) != 'undefined' ) {
+            for ( var posX = 0, posY = 0; oElement; oElement = oElement.offsetParent ) {
+                posX += oElement.offsetLeft;
+                posY += oElement.offsetTop;
+            }
+            x2 = posX + width;
+            y2 = posY + height;
+            return [ posX, posY , x2, y2];
+
+        } else {
+            x2 = oElement.x + width;
+            y2 = oElement.y + height;
+            return [ oElement.x, oElement.y, x2, y2];
+        }
+    },
+
+    checkElementPath:function ( arr1, arr2, descript ) {
+        if ( !descript )
+            descript = '';
+        var index = arr1.length;
+        if ( index != arr2.length )
+            ok( false, '路径深度不相同' );
+        else {
+
+            while ( index > 0 )
+                equal( arr1[--index ], arr2[index ], descript + '---第' + index + '个元素' + arr1[index] );
+        }
+    },
+    getBrowser:function () {
+        var browser = "";
+        if ( this.browser.ie == 6 )
+            browser = 'ie6';
+        if ( this.browser.ie == 7 )
+            browser = 'ie7';
+        if ( this.browser.ie == 8 )
+            browser = 'ie8';
+        if ( this.browser.ie == 9 )
+            browser = 'ie9';
+        if ( this.browser.safari )
+            browser = 'safari';
+        if ( this.browser.firefox )
+            browser = 'firefox';
+        if ( this.browser.chrome )
+            browser = 'chrome';
+        if ( this.browser.maxthon ) {
+            browser = 'maxthon';
+        }
+        if ( this.browser.maxthonIE )
+            browser = 'maxIE';
+        if ( this.browser.opera )
+            browser = 'opera';
+        return browser;
+    },
+    getFloatStyle:function ( ele ) {
+        if ( this.browser.ie )
+            return ele.style['styleFloat'];
+        else
+            return ele.style['cssFloat'];
+    },
+
+    readTxt:function(name,f){
+        var args = {};
+        args['name']='./txt/'+name;
+        $.ajax( {
+            url: 'read.php',
+            type:'post',
+            data:args,
+            success:function ( msg ) {
+                f(msg);
+            },
+            error:function ( xhr, msg ) {
+                f(null);
+            }
+        } );
     }
 };
 var ua = UserAction;

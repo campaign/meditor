@@ -5,7 +5,7 @@ test( "_setDefaultContent--focus", function() {
     var editor = te.obj[1];
     editor._setDefaultContent('hello');
     setTimeout(function(){
-        editor.fireEvent('focus');
+        editor.trigger('focus');
         var br = ua.browser.ie?'':'<br>';
         equal(ua.getChildHTML(editor.body),'<p>'+br+'</p>','focus');
         start();
@@ -17,7 +17,7 @@ test( "_setDefaultContent--firstBeforeExecCommand", function() {
     var editor = te.obj[1];
     editor._setDefaultContent('hello');
     setTimeout(function(){
-        editor.fireEvent('firstBeforeExecCommand');
+        editor.trigger('firstBeforeExecCommand');
         var br = ua.browser.ie?'':'<br>';
         equal(ua.getChildHTML(editor.body),'<p>'+br+'</p>','firstBeforeExecCommand');
         start();
@@ -26,12 +26,11 @@ test( "_setDefaultContent--firstBeforeExecCommand", function() {
 } );
 
 test( "render-- element", function() {
-    var editor = new baidu.editor.Editor( {'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':false} );
+    var editor = new ME.Editor( {'UEDITOR_HOME_URL':'../../../','autoFloatEnabled':false} );
     var div = document.body.appendChild( document.createElement( 'div' ) );
     equal( div.innerHTML, "", "before render" );
     editor.render( div );
     equal( div.firstChild.tagName.toLocaleLowerCase(), 'iframe', 'check iframe' );
-    ok( /baidu_editor_/.test( div.firstChild.id ), 'check iframe id' );
     te.dom.push( div );
 } );
 
@@ -40,18 +39,17 @@ test( "render-- elementid", function() {
     var div = te.dom[0];
     editor.render( div.id );
     equal( div.firstChild.tagName.toLocaleLowerCase(), 'iframe', 'check iframe' );
-    ok( /baidu_editor_/.test( div.firstChild.id ), 'check iframe id' );
 } );
 
 test( "render-- options", function() {
     var options = {'initialContent':'<span class="span">xxx</span><div>xxx<p></p></div>','UEDITOR_HOME_URL':'../../../',autoClearinitialContent:false,'autoFloatEnabled':false};
-    var editor = new baidu.editor.Editor( options );
+    var editor = new ME.Editor( options );
     stop();
     setTimeout(function(){
         var div = document.body.appendChild( document.createElement( 'div' ) );
         editor.render( div );
         /*会自动用p标签包围*/
-        var space = baidu.editor.browser.ie ? '&nbsp;' : '<br>';
+        var space = ua.browser.ie ? '&nbsp;' : '<br>';
         equal( ua.getChildHTML( editor.body ), '<p><span class="span">xxx</span></p><div>xxx<p>'+space+'</p></div>', 'check initialContent' );
         te.dom.push( div );
         start();
@@ -59,7 +57,7 @@ test( "render-- options", function() {
 } );
 
 //test( 'destroy', function() {
-////    var editor = new baidu.editor.Editor( {'autoFloatEnabled':false} );
+////    var editor = new ME.Editor( {'autoFloatEnabled':false} );
 //    var editor = new UE.ui.Editor( {'autoFloatEnabled':false} );
 //    editor.key = 'ed';
 //    var div = document.body.appendChild( document.createElement( 'div' ) );
@@ -127,10 +125,10 @@ test("setContent", function() {
     var div = te.dom[0];
     editor.focus();
     expect(2);
-    editor.addListener("beforesetcontent", function() {
+    editor.on("beforesetcontent", function() {
         ok(true, "beforesetcontent");
     });
-    editor.addListener("aftersetcontent", function() {
+    editor.on("aftersetcontent", function() {
         ok(true, "aftersetcontent");
     });
     var html = '<span><span></span><strong>xx</strong><em>em</em><em></em><u></u></span><div>xxxx</div>';
@@ -147,10 +145,10 @@ test("setContent 追加", function() {
     var div = te.dom[0];
     editor.focus();
     expect(2);
-    editor.addListener("beforesetcontent", function() {
+    editor.on("beforesetcontent", function() {
         ok(true, "beforesetcontent");
     });
-    editor.addListener("aftersetcontent", function() {
+    editor.on("aftersetcontent", function() {
         ok(true, "aftersetcontent");
     });
     var html = '<span><span></span><strong>xx</strong><em>em</em><em></em><u></u></span><div>xxxx</div>';
@@ -175,7 +173,7 @@ test("setContent 追加", function() {
 
 test("focus(false)",function(){
     var editor = te.obj[1];
-    var range = new baidu.editor.dom.Range( editor.document );
+    var range = new ME.Range( editor.document );
     editor.setContent("<p>hello1</p><p>hello2</p>");
     editor.focus(false);
     if(ua.browser.gecko){
@@ -192,7 +190,7 @@ test("focus(false)",function(){
 
 test("focus(true)",function(){
     var editor = te.obj[1];
-    var range = new baidu.editor.dom.Range( editor.document );
+    var range = new ME.Range( editor.document );
     editor.setContent("<p>hello1</p><p>hello2</p>");
     editor.focus(true);
     if(ua.browser.gecko){
@@ -214,7 +212,7 @@ test("_initEvents,_proxyDomEvent--click", function() {
     editor.focus();
     expect(1);
     stop();
-    editor.addListener('click', function() {
+    editor.on('click', function() {
         ok(true, 'click event dispatched');
         start();
     });
@@ -225,7 +223,7 @@ test("_initEvents,_proxyDomEvent--click", function() {
 //    var editor = te.obj[1];
 //
 //    expect(1);   stop();
-//    editor.addListener('focus', function() {
+//    editor.on('focus', function() {
 //        ok(true, 'focus event dispatched');
 //        start();
 //    });
@@ -242,10 +240,10 @@ test("_initEvents,_proxyDomEvent--click", function() {
 //    editor.focus();
 //    expect( 2 );
 //    stop();
-//    editor.addListener( 'beforeselectionchange', function() {
+//    editor.on( 'beforeselectionchange', function() {
 //        ok( true, 'before selection change' );
 //    } );
-//    editor.addListener( 'selectionchange', function() {
+//    editor.on( 'selectionchange', function() {
 //        ok( true, 'selection changed' );
 //    } );
 //
@@ -273,7 +271,7 @@ test("queryCommandState", function() {
     editor.focus();
     editor.setContent("<p><b>xxx</b>xxx</p>");
     var p = editor.document.getElementsByTagName('p')[0];
-    var r = new baidu.editor.dom.Range(editor.document);
+    var r = new ME.Range(editor.document);
     r.setStart(p.firstChild, 0).setEnd(p.firstChild, 1).select();
     equal(editor.queryCommandState('bold'), 1, '加粗状态为1');
     r.setStart(p, 1).setEnd(p, 2).select();
@@ -284,7 +282,7 @@ test("queryCommandValue", function() {
     var editor = te.obj[1];
     editor.focus();
     editor.setContent('<p style="text-align:left">xxx</p>');
-    var range = new baidu.editor.dom.Range(editor.document);
+    var range = new ME.Range(editor.document);
     var p = editor.document.getElementsByTagName("p")[0];
     range.selectNode(p).select();
     equal(editor.queryCommandValue('justify'), 'left', 'text align is left');
@@ -296,7 +294,7 @@ test("execCommand", function() {
     editor.focus();
     editor.setContent("<p>xx</p><p>xxx</p>");
     var doc = editor.document;
-    var range = new baidu.editor.dom.Range(doc);
+    var range = new ME.Range(doc);
     var p = doc.getElementsByTagName('p')[1];
     range.setStart(p, 0).setEnd(p, 1).select();
     editor.execCommand('justify', 'right');
@@ -385,8 +383,8 @@ test('2个实例采用2个配置文件', function() {
     expect(6);
     /*动态加载js需要时间，用这个editor_config.js覆盖默认的配置文件*/
     setTimeout(function() {
-        var editor1 = new baidu.editor.Editor({'UEDITOR_HOME_URL':'../../../','initialContent':'欢迎使用ueditor','autoFloatEnabled':false});
-        var editor2 = new baidu.editor.Editor(UEDITOR_CONFIG2);
+        var editor1 = new ME.Editor({'UEDITOR_HOME_URL':'../../../','initialContent':'欢迎使用ueditor','autoFloatEnabled':false});
+        var editor2 = new ME.Editor(UEDITOR_CONFIG2);
         var div1 = document.body.appendChild(document.createElement('div'));
         var div2 = document.body.appendChild(document.createElement('div'));
         editor2.render(div2);
@@ -409,7 +407,7 @@ test('绑定事件',function(){
     document.onmouseover = function(event){ok( true, "mouseover is fired" );};
     document.onkeydown = function(event){ok( true, "keydown is fired" );};
     document.onkeyup = function(event){ok( true, "keyup is fired" );};
-    var editor = new baidu.editor.Editor({'autoFloatEnabled':false});
+    var editor = new ME.Editor({'autoFloatEnabled':false});
     var div = document.body.appendChild(document.createElement('div'));
     editor.render(div);
     editor.ready(function(){
