@@ -123,7 +123,7 @@ test( ' 选中文本设置前景色为默认', function() {
 //            te.presskey( '', 'e' );
 //            editor.focus();
 //            setTimeout( function() {
-//                var br = baidu.editor.browser.ie ? '' : '<br />';
+//                var br = ua.browser.ie ? '' : '<br />';
 //                ua.manualDeleteFillData( editor.body );
 //                equal( editor.getContent(), '<p>e' + br + '</p>' );
 //            start();
@@ -185,7 +185,7 @@ test( 'trace 810：闭合时设置删除线会改变文本前景色', function()
             range = editor.selection.getRange();
             range.insertNode( editor.document.createTextNode( 'hey' ) );
             /*ff下会自动加一个空的设置了style的span，比较时不作考虑*/
-            if ( baidu.editor.dom.domUtils.isEmptyNode( editor.body.firstChild.lastChild ) && baidu.editor.browser.gecko )
+            if ( ME.domUtils.isEmptyNode( editor.body.firstChild.lastChild ) && ua.browser.gecko )
                 editor.body.firstChild.removeChild( editor.body.firstChild.lastChild );
             var color = ua.browser.ie&&ua.browser.ie<9 ? '' : 'color: rgb(255, 0, 0)';
             var html = '<span style="color: rgb(153, 230, 0)">你好<span style="color: rgb(255, 0, 0)">hello</span></span><span style="color: rgb(153, 230, 0)"><span style="color: rgb(255, 0, 0)"><span style="text-decoration: line-through;' + color + '">hey</span></span></span>';
@@ -211,7 +211,7 @@ test( 'trace 809：闭合时改变前景色和删除线，再输入文本', func
             p1.innerHTML = '<span style="color: rgb(255, 0, 0); text-decoration: line-through; ">你好</span><span style="color: rgb(255, 0, 0); "><span style="color: rgb(0, 255, 0); text-decoration: underline; ">​hey</span></span>';
             ua.manualDeleteFillData( editor.body );
             /*ff下会自动加一个空的设置了style的span，比较时不作考虑*/
-            if ( baidu.editor.dom.domUtils.isEmptyNode( editor.body.firstChild.lastChild ) && baidu.editor.browser.gecko )
+            if ( ME.domUtils.isEmptyNode( editor.body.firstChild.lastChild ) && ua.browser.gecko )
                 editor.body.firstChild.removeChild( editor.body.firstChild.lastChild );
             ok( ua.haveSameAllChildAttribs( editor.body.firstChild, p1 ), '检查新输入的文本下划线和颜色是否正确' );
 
